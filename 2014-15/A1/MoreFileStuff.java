@@ -20,7 +20,7 @@ public class MoreFileStuff {
 	 * @param hexStr - A two digit hexadecimal string
 	 * @return - the decimal value in base ten of that hexadecimal
 	 **/
-	private static int hexToByte(String hexStr) {
+	private static int hexToByte(final String hexStr) {
 		
 		if (isValidHexString(hexStr)) {
 			
@@ -37,7 +37,7 @@ public class MoreFileStuff {
 	 * @param hexStr - A hexadecimal String
 	 * @return true if valid 2 digit hex string, false otherwise
 	 **/
-	private static boolean isValidHexString(String hexStr) {
+	private static boolean isValidHexString(final String hexStr) {
 
 		if ( hexStr != null && hexStr.length() == 2) {
 
@@ -107,7 +107,7 @@ public class MoreFileStuff {
 				} // while
 
 
-				System.out.println("Byte to change: "+byteIndexSelected);
+				System.out.println("Change byte at index: "+byteIndexSelected);
 				String hexStr = null;
 
 				// Gets a two digit hexadecimal number from the user
@@ -117,7 +117,7 @@ public class MoreFileStuff {
 				}
 
 				int newByteValue = hexToByte(hexStr);
-				System.out.println("Valid Hex Number entered: "+ hexStr + " = " + newByteValue );
+				System.out.println("Hex Number entered: "+ hexStr + " = " + newByteValue );
 
 				try {
 					// Change Byte value in file
@@ -141,7 +141,7 @@ public class MoreFileStuff {
 	 * @param - a single hex digit
 	 * @return - The decimal representation of that digit, -1 if this fails
 	 **/
-	private static int hexDigitToIntVal(char digit) {
+	private static int hexDigitToIntVal(final char digit) {
 		
 		switch (digit) {
 
@@ -223,6 +223,7 @@ public class MoreFileStuff {
 
 	}
 
+	/* Deterministic primality test */
 	public static boolean isPrime(final long n) {
 
 			/* Simple cases (which covers 2/3 of possible factors of n) */
