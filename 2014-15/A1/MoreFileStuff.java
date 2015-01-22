@@ -3,7 +3,7 @@
  * @author William Fiset & Micah Stairs
  * COMP 2631 (Winter 2015) Data Structures and Algorithms II
  * Assignment #1
- * Due: Feburary, 2, 2015 
+ * Due: February, 2, 2015 
  * 
  **/
 
@@ -15,16 +15,19 @@ import java.io.*;
 public class MoreFileStuff {
 
 	/* Opens up a JFileChooser for the user to choose a file from their file system */
-	public static File selectFile () {
+	private static File selectFile () {
 
 		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Please choose a file");
 		int returnVal = fileChooser.showOpenDialog(null);
 
+		// User has finished selecting file
 		if(returnVal == JFileChooser.APPROVE_OPTION) 
 			return fileChooser.getSelectedFile();
 		return null;
 		
-	}
+	} // selectFile
+
 
 	/** 
 	 * This method:
@@ -35,12 +38,61 @@ public class MoreFileStuff {
 	 */
 	public static void modifyBtyes() {
 
-	}
+		File selectedFile = selectFile();
+
+		if (selectedFile != null) {
+			while (1 > 0) {
+				
+				long byteIndexSelected = -2; 
+				long bytesInFile = selectedFile.length();
+				
+				// Gets the byte the user wishes the change in the file they selected
+				while ( byteIndexSelected < 0 || byteIndexSelected > bytesInFile ) {
+					
+					String userInput = JOptionPane.showInputDialog( null, "Please enter the index of the byte you wish to manipulate in the range: [0, bytesInFile-1] " );
+
+					try {
+						byteIndexSelected = Integer.valueOf(userInput);
+					} catch (Exception e) {
+						// User entered invalid input
+						byteIndexSelected = -2;
+					}
+
+				} // while
+
+				if (byteIndexSelected == -1) break
+				System.out.println("Byte to change: "+byteIndexSelected);
+				
+								
+
+			} // outer while loop
+		} 
+
+	} // modifyBtyes
 
 	public static void main(String[] args) {
 
 		modifyBtyes();
 
-	}
+	} // main
 
-}
+} // MoreFileStuff
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
