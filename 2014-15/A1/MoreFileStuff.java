@@ -181,6 +181,8 @@ public class MoreFileStuff {
 	/* Runs tests against methods created */
 	public static void runTests() {
 
+			/* hexToByte tests */
+
 		// Valid input
 		System.out.println( hexToByte("4A") == 74 ? "PASS" : "FAIL" );
 		System.out.println( hexToByte("4a") == 74 ? "PASS" : "FAIL" );
@@ -198,7 +200,51 @@ public class MoreFileStuff {
 		System.out.println( hexToByte("F%") == -1 ? "PASS" : "FAIL" );
 		System.out.println( hexToByte("004") == -1 ? "PASS" : "FAIL" );
 
+			/* isPrime tests */
+
+		// Primes
+		System.out.println( isPrime(2) ? "PASS" : "FAIL" );
+		System.out.println( isPrime(3) ? "PASS" : "FAIL" );
+		System.out.println( isPrime(5) ? "PASS" : "FAIL" );
+		System.out.println( isPrime(7) ? "PASS" : "FAIL" );
+		System.out.println( isPrime(5915587277L) ? "PASS" : "FAIL" );
+		System.out.println( isPrime(9576890767L) ? "PASS" : "FAIL" );
+		System.out.println( isPrime(3367900313L) ? "PASS" : "FAIL" );
+		System.out.println( isPrime(2860486313L) ? "PASS" : "FAIL" );
+
+		// Non-Primes
+		System.out.println( !isPrime(1) ? "PASS" : "FAIL" );
+		System.out.println( !isPrime(4)? "PASS" : "FAIL" );
+		System.out.println( !isPrime(6) ? "PASS" : "FAIL" );
+		System.out.println( !isPrime(3367900323L) ? "PASS" : "FAIL" );
+		System.out.println( !isPrime(3367902313L) ? "PASS" : "FAIL" );
+		System.out.println( !isPrime(9367902313L) ? "PASS" : "FAIL" );
+		System.out.println( !isPrime(8102412317L) ? "PASS" : "FAIL" );
+
 	}
+
+	public static boolean isPrime(final long n) {
+
+			/* Simple cases (which covers 2/3 of possible factors of n) */
+
+		if (n < 2)
+			return false;
+		if (n == 2 || n == 3)
+			return true;
+		if (n % 2 == 0 || n % 3 == 0)
+			return false;
+
+			/* Check the remaining 1/3 possible factors of n */
+		
+		int limit = (int) Math.sqrt(n);
+
+		for (int i = 5; i <= limit; i += 6)
+			if (n % i == 0 || n % (i + 2) == 0)
+				return false;
+
+		return true;
+
+	} 
 
 	public static void main(String[] args) {
 
