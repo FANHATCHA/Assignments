@@ -32,7 +32,11 @@ public class MoreFileStuff {
 		return -1;
 	}
 
-	/* Determines whether or not hexStr is a valid two digit hexadecimal value */
+	/** 
+	 * Determines whether or not hexStr is a valid two digit hexadecimal value 
+	 * @param hexStr - A hexadecimal String
+	 * @return true if valid 2 digit hex string, false otherwise
+	 **/
 	private static boolean isValidHexString(String hexStr) {
 
 		if ( hexStr != null && hexStr.length() == 2) {
@@ -53,9 +57,10 @@ public class MoreFileStuff {
 		return false;
 	}
 
-
-
-	/* Opens up a JFileChooser for the user to choose a file from their file system */
+	/** 
+	 * Opens up a JFileChooser for the user to choose a file from their file system 
+	 * @return A file the user selected on there computer and null if they didn't choose anything
+	 */
 	private static File selectFile () {
 
 		JFileChooser fileChooser = new JFileChooser();
@@ -74,7 +79,7 @@ public class MoreFileStuff {
 	 * This method:
 	 * - Prompts the user for the name of an input file
 	 * - Prompts the user for the index of a byte to be modified in the file they chose
-	 * - Then prompts user for a new byte value to be placed in that location
+	 * - Then prompts user for a new byte value to be replaced at that location
 	 * @return void 
 	 */
 	public static void modifyBytes() {
@@ -124,9 +129,7 @@ public class MoreFileStuff {
 
 				} catch (Exception error) {
 					error.printStackTrace();
-				}
-
-				
+				} // try block end
 
 			} // outer while loop
 		} 
