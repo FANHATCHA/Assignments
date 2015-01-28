@@ -1,9 +1,8 @@
 /**
- *
  * @author William Fiset and Micah Stairs
  * COMP 2631 (Winter 2015) Data Structures and Algorithms II
  * Assignment #1
- * Due: February, 2, 2015 
+ * Due: February 2, 2015 
  * 
  **/
 
@@ -187,7 +186,7 @@ public class MoreFileStuff {
 
 		if (selectedFile != null) {
 
-				/* Scan in input */
+				/* Set up scanner */
 
 			Scanner sc = null;
 
@@ -198,18 +197,35 @@ public class MoreFileStuff {
 				return null;
 			}
 
-			String str = sc.nextLine();
+				/* Check line by line */
 
-				/* Chop off everything up to (and including) the decimal point */
+			String str = "";
 
-			str = str.substring(str.indexOf('.') + 1);
+			while (sc.hasNextLine()) {
 
-				/* Search for prime, returning the result */
+				str += sc.nextLine();
 
-			return searchForPrime(sc.nextLine(), 10);
+					/* Chop off everything up to (and including) the decimal point */
 
-		} else
-			return null;
+				str = str.substring(str.indexOf('.') + 1);
+
+					/* Search for prime, and return result if one was found */
+
+				String result = searchForPrime(str, 10);
+
+				if (result != null)
+					return result;
+
+					/* Only save the last 9 digits */
+				
+				if (str.length() > 9)
+					str = str.substring(str.length() - 9);
+
+			}
+
+		}
+
+		return null;
 
 	}
 
@@ -271,16 +287,11 @@ public class MoreFileStuff {
 
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setDialogTitle("Please select a file");
-		int returnVal = fileChooser.showOpenDialog(null);
+		fileChooser.showOpenDialog(null);
 
-			/* User has finished selecting a file */
+			/* Return file (or null if they hit cancel) */
 
-		if(returnVal == JFileChooser.APPROVE_OPTION) 
-			return fileChooser.getSelectedFile();
-
-			/* User did not select a file (pressed cancel) */
-
-		return null;
+		return fileChooser.getSelectedFile();
 		
 	}
 
