@@ -19,7 +19,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		// frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		frame.setSize(500, 500);
+		// frame.setSize(500, 500);
 		// Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		//frame.setLocation(	(dim.width/2) - (frame.getSize().width/2),
 		//					(dim.height/2) - (frame.getSize().height/2) );
@@ -40,26 +40,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 	cPane.add( canvas, BorderLayout.CENTER );
 
 	}
-
-	/** 
-	 * Opens up a JFileChooser for the user to choose a file from their file system 
-	 * @return - a file that the user selected on their computer, or null if they didn't choose anything
-	 */
-	private static File selectFile (String prompt) {
-
-		// Prompt user to select a file 
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setDialogTitle(prompt);
-		int returnVal = fileChooser.showOpenDialog(null);
-
-		// User has finished selecting a file 
-		if(returnVal == JFileChooser.APPROVE_OPTION) 
-			return fileChooser.getSelectedFile();
-
-		// User did not select a file (pressed cancel) 
-		return null;
-		
-	} 
 
 	private void addMenu () {
 
@@ -107,31 +87,44 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	}
 
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent event) {
 
-	 	switch (e.getActionCommand()) {
 
-	 		case "Save":
-	 			
-	 			break;
+		try {
 
-	 		case "Save As":
-	 			
-	 			break;
+		 	switch (event.getActionCommand()) {
 
-	 		case "Open":
-	 			
-	 			break;
+		 		case "Save":
+		 			
+		 			break;
 
-	 		case "Close":
+		 		case "Save As":
+		 			
+		 			break;
 
-	 			break;
+		 		case "Open":
+		 			
+		 			bmp = new Bitmap(selectFile("Pick your .BMP"));
+		 			repaint();
+		 			pack();
+		 			break;
 
-	 		case "Quit":
-	 			System.exit(0);
-	 			break;
+		 		case "Close":
 
-	 	}
+		 			bmp = null;
+		 			repaint();
+		 			pack();
+		 			break;
+
+		 		case "Quit":
+		 			System.exit(0);
+		 			break;
+
+		 	}
+
+		 } catch(IOException e) {
+
+		 }
 	 }
 
 
@@ -157,7 +150,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed( ActionEvent e) {
 
-					System.out.println("Flip");
+					bmp.flip();
+					pack();
+					repaint();
 
 				}
 			}
@@ -167,7 +162,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed( ActionEvent e) {
 
-					System.out.println("blur");
+					bmp.blur(1);
+					pack();
+					repaint();
 
 				}
 			}
@@ -177,7 +174,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed( ActionEvent e) {
 
-					System.out.println("enhanceButton");
+					bmp.enhanceColor("red");
+					pack();
+					repaint();
 
 				}
 			}
@@ -187,7 +186,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed( ActionEvent e) {
 
-					System.out.println("combine");
+					System.out.println("Combine - not yet implemented");
 
 				}
 			}
@@ -202,20 +201,54 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 	}
 
 	 	@Override public Dimension getPreferredSize() {
-	 		
-	 		return bmp == null 	? new Dimension(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT)
-	 							: new Dimension(bmp.getWidth(), bmp.getHeight());
+
+	 		return bmp == null 	? new Dimension(DEFAULT_CANVAS_WIDTH + PADDING*2, DEFAULT_CANVAS_HEIGHT + PADDING*2)
+	 							: new Dimension(bmp.getWidth() + PADDING*2, bmp.getHeight() + PADDING*2);
 	 	
 	 	}
 
-	 	@Override protected void paintComponent( Graphics g ) {
+	 	@Override protected void paintComponent(Graphics g) {
+
 	 		super.paintComponent(g);
-	 		System.out.println("paintComponent");
-	 		g.setColor(Color.BLACK);
-	 		g.fillRect( 100, 100, DEFAULT_CANVAS_WIDTH - 100, DEFAULT_CANVAS_HEIGHT - 100 );
+
+	 		// Draw blank canvas
+	 		if (bmp == null) {
+	 			g.setColor(Color.LIGHT_GRAY);
+		 		g.fillRect(
+		 			PADDING,
+		 			PADDING,
+		 			bmp == null ? DEFAULT_CANVAS_WIDTH : bmp.getWidth(),
+		 			bmp == null ? DEFAULT_CANVAS_HEIGHT : bmp.getHeight()
+		 		);
+	 		}
+
+	 		// Draw image
+	 		else
+	 			g.drawImage(bmp.getImage(), PADDING, PADDING, null);
 
 	 	}
 	 }
+
+	 /** 
+	 * Opens up a JFileChooser for the user to choose a file from their file system 
+	 * @return - a file that the user selected on their computer, or null if they didn't choose anything
+	 */
+	private static File selectFile (String prompt) {
+
+		// Prompt user to select a file 
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle(prompt);
+		int returnVal = fileChooser.showOpenDialog(null);
+
+		// User has finished selecting a file 
+		if(returnVal == JFileChooser.APPROVE_OPTION) 
+			return fileChooser.getSelectedFile();
+
+		// User did not select a file (pressed cancel) 
+		return null;
+		
+	} 
+
 
 }
 

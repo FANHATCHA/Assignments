@@ -6,6 +6,7 @@ public class Bitmap {
 
 	static final int HEADER_SIZE = 54;
 	static final int DIMENSION_INDEX = 18;
+	static final int MAX_RGB_VALUE = 255;
 	
 	private int dataOffset;
 	private int width;
@@ -34,6 +35,7 @@ public class Bitmap {
 
 			/* Import header information */
 
+		header = new int[HEADER_SIZE];
 		for (int i = 0; i < HEADER_SIZE; i++)
 			header[i] = input.read();
 
@@ -169,7 +171,11 @@ public class Bitmap {
 					blue *= 1.5;
 
 				// Create new pixel
-				pixels[y][x] = new Color(red, green, blue);
+				pixels[y][x] = new Color(
+					Math.min(red, MAX_RGB_VALUE),
+					Math.min(green, MAX_RGB_VALUE),
+					Math.min(blue, MAX_RGB_VALUE)
+				);
 				
 			}
 
@@ -181,7 +187,7 @@ public class Bitmap {
 
 		for (int y = 0; y < height; y++)
 			for (int x = 0; x < width; x++)
-				image.setRGB(x, y, pixels[y][x].getRGB());
+				image.setRGB(x, y, pixels[height - y - 1][x].getRGB());
 
 		return image;
 	}
