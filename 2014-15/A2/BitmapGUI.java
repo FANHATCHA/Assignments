@@ -22,10 +22,12 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	private static final int DEFAULT_CANVAS_HEIGHT = 550; 
 	private static final int DEFAULT_CANVAS_WIDTH =  700;
-	private static final int PADDING = 75;
 	private static final String TITLE = "BitmapHacker";
 
 		/* Variables */
+
+	private static int horizontal_padding = 75;
+	private static int vertical_padding = 75;
 
 	private File mostRecentInputFile;
 	private Bitmap bmp;
@@ -35,6 +37,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	private JMenuItem closeMenuItem, saveMenuItem, saveAsMenuItem;
 	private JButton flipButton, blurButton, enhanceButton, combineButton;
+
+	private Canvas canvas;
 
 	public static void main(String[] args) {
 		
@@ -55,7 +59,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 			/* Add a canvas to the center of the window */
 
-		Canvas canvas = new Canvas();
+		canvas = new Canvas();
 
 	 	Container cPane = this.getContentPane();
 	 	cPane.add( canvas, BorderLayout.CENTER);
@@ -65,11 +69,52 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 	addMenu();
 		addButtons();
 		updateTitle();
+		trackWindowSize();
 
 			/* Show the user our wonderful GUI */
 
 		pack();
 		setVisible(true);
+
+	}
+
+	private void trackWindowSize() {
+
+
+		this.addComponentListener(new ComponentListener() {
+
+		    @Override public void componentResized(ComponentEvent e) {
+
+		    	if (bmp == null) {
+
+			    	horizontal_padding = ( (e.getComponent()).getWidth() - DEFAULT_CANVAS_WIDTH ) / 2;
+			    	vertical_padding   = ( (e.getComponent()).getHeight() - DEFAULT_CANVAS_HEIGHT) / 2;	
+			    	// System.out.println(horizontal_padding);
+			    	// System.out.println(vertical_padding);
+
+		    	} else {
+			    	horizontal_padding = ( (e.getComponent()).getWidth() - bmp.getWidth()) / 2;
+			    	vertical_padding   = ( (e.getComponent()).getHeight() - bmp.getHeight()) / 2;
+		    	}
+
+		        pack();
+		        repaint();
+
+		    }
+
+		    @Override public void componentHidden(ComponentEvent e) {
+		    	
+		    }
+
+			@Override public void componentMoved(ComponentEvent e) {
+
+			}
+
+			@Override public void componentShown(ComponentEvent e)  {
+
+			}
+
+		});
 
 	}
 
@@ -338,8 +383,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 	*/
 	 	@Override public Dimension getPreferredSize() {
 
-	 		return bmp == null 	? new Dimension(DEFAULT_CANVAS_WIDTH + PADDING*2, DEFAULT_CANVAS_HEIGHT + PADDING*2)
-	 							: new Dimension(bmp.getWidth() + PADDING*2, bmp.getHeight() + PADDING*2);
+	 		return bmp == null 	? new Dimension(DEFAULT_CANVAS_WIDTH + horizontal_padding*2, DEFAULT_CANVAS_HEIGHT + vertical_padding*2)
+	 							: new Dimension(bmp.getWidth() + horizontal_padding*2, bmp.getHeight() + vertical_padding*2);
 	 	
 	 	}
 
@@ -356,18 +401,13 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	 		if (bmp == null) {
 	 			g.setColor(Color.LIGHT_GRAY);
-		 		g.fillRect(
-		 			PADDING,
-		 			PADDING,
-		 			bmp == null ? DEFAULT_CANVAS_WIDTH : bmp.getWidth(),
-		 			bmp == null ? DEFAULT_CANVAS_HEIGHT : bmp.getHeight()
-		 		);
+		 		g.fillRect( horizontal_padding, vertical_padding, DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT );
 	 		}
 
 	 			/* Draw image */
 
 	 		else
-	 			g.drawImage(bmp.getImage(), PADDING, PADDING, null);
+	 			g.drawImage(bmp.getImage(), horizontal_padding, vertical_padding, null);
 
 	 	}
 	 }
