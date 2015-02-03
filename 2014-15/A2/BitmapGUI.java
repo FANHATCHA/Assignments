@@ -5,6 +5,10 @@ import java.awt.event.*;
 
 public class BitmapGUI extends JFrame implements ActionListener {
 
+	private static final int DEFAULT_CANVAS_HEIGHT = 550; 
+	private static final int DEFAULT_CANVAS_WIDTH =  700;
+	private static final int PADDING = 75;
+
 	private File mostRecentInputFile;
 	private Bitmap bmp;
 	private boolean modified;
@@ -22,9 +26,18 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		
 		frame.addMenu();
 		frame.addButtons();
-		frame.setTitle("This is the title");
-
+		frame.setTitle("BitMapHacker!");
+		frame.pack();
 		frame.setVisible(true);
+
+	}
+
+	public BitmapGUI () {
+
+		Canvas canvas = new Canvas();
+
+	 	Container cPane = this.getContentPane();
+	 	cPane.add( canvas, BorderLayout.CENTER );
 
 	}
 
@@ -184,13 +197,23 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	 private class Canvas extends JPanel {
 
-	 	public Dimension getPreferredSize() {
-	 		// Get width and height of bmp?
-	 		return null;
+	 	public Canvas () {
+	 		setVisible(true);
 	 	}
 
-	 	public void paintComponent( Graphics g ) {
+	 	@Override public Dimension getPreferredSize() {
+	 		
+	 		return bmp == null 	? new Dimension(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT)
+	 							: new Dimension(bmp.getWidth(), bmp.getHeight());
+	 	
+	 	}
+
+	 	@Override protected void paintComponent( Graphics g ) {
 	 		super.paintComponent(g);
+	 		System.out.println("paintComponent");
+	 		g.setColor(Color.BLACK);
+	 		g.fillRect( 100, 100, DEFAULT_CANVAS_WIDTH - 100, DEFAULT_CANVAS_HEIGHT - 100 );
+
 	 	}
 	 }
 

@@ -20,7 +20,7 @@ public class Bitmap {
 
 	}
 	
-	public int getwidth() {
+	public int getWidth() {
 		return width;
 	}
 	
