@@ -7,6 +7,7 @@ public class Bitmap {
 	static final int HEADER_SIZE = 54;
 	static final int DIMENSION_INDEX = 18;
 	static final int MAX_RGB_VALUE = 255;
+	static final int MIN_RGB_VALUE = 0;
 	
 	private int dataOffset;
 	private int width;
@@ -54,10 +55,12 @@ public class Bitmap {
 			
 			// Read in the row of pixels
 			for (int x = 0; x < width; x++) {
+
 				int blue = getInt(input, 1);
 				int green = getInt(input, 1);
 				int red = getInt(input, 1);
-				pixels[y][x] = new Color(red, green, blue);
+
+				pixels[y][x] = makeValidColor(red, green, blue);
 			}
 			
 			// Skip past padding
@@ -169,11 +172,7 @@ public class Bitmap {
 					blue *= 1.5;
 
 				// Create new pixel
-				pixels[y][x] = new Color(
-					Math.min(red, MAX_RGB_VALUE),
-					Math.min(green, MAX_RGB_VALUE),
-					Math.min(blue, MAX_RGB_VALUE)
-				);
+				pixels[y][x] = makeValidColor(red, green, blue);
 				
 			}
 
@@ -209,6 +208,16 @@ public class Bitmap {
 		
 		return total;
 		
+	}
+
+	private static Color makeValidColor(int red, int green, int blue) {
+
+		red = Math.max(MIN_RGB_VALUE, Math.min(red, MAX_RGB_VALUE));
+		green = Math.max(MIN_RGB_VALUE, Math.min(green, MAX_RGB_VALUE));
+		blue = Math.max(MIN_RGB_VALUE, Math.min(blue, MAX_RGB_VALUE));
+
+		return new Color(red, green, blue);
+
 	}
 
 }
