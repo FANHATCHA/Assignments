@@ -4,12 +4,15 @@ import java.awt.image.*;
 
 public class Bitmap {
 
-	static final int HEADER_SIZE = 54;
-	static final int DIMENSION_INDEX = 18;
-	static final int MAX_RGB_VALUE = 255;
-	static final int MIN_RGB_VALUE = 0;
-	
-	private int dataOffset;
+		/* Constants */
+
+	private static final int DIMENSIONS_INDEX = 18;
+	private static final int MAX_RGB_VALUE = 255;
+	private static final int MIN_RGB_VALUE = 0;
+	private static final int DATA_OFFSET = 54;
+
+		/* Instance Variables */
+
 	private int width;
 	private int height;
 	private int numPaddingBytes;
@@ -20,27 +23,39 @@ public class Bitmap {
 		readBitmap(file);
 	}
 	
+	/**
+	* Get the width of the image.
+	* @return width
+	*/
 	public int getWidth() {
 		return width;
 	}
 	
+	/**
+	* Get the height of the image.
+	* @return height
+	*/
 	public int getHeight() {
 		return height;
 	}
 	
+	/**
+	* Read in the .BMP from file, storing all needed information.
+	* @param file - the input file
+	*/
 	public void readBitmap(File file) throws IOException {
 
 		RandomAccessFile input = new RandomAccessFile(file, "r");
 
 			/* Import header information */
 
-		header = new int[HEADER_SIZE];
-		for (int i = 0; i < HEADER_SIZE; i++)
+		header = new int[DATA_OFFSET];
+		for (int i = 0; i < DATA_OFFSET; i++)
 			header[i] = input.read();
 
 			/* Retrieve dimension information */
 		
-		input.seek(DIMENSION_INDEX);
+		input.seek(DIMENSIONS_INDEX);
 		width = getInt(input, 4);
 		height = getInt(input, 4);
 		numPaddingBytes = width % 4;
@@ -49,7 +64,7 @@ public class Bitmap {
 
 		pixels = new Color[height][width];
 
-		input.seek(HEADER_SIZE);
+		input.seek(DATA_OFFSET);
 
 		for (int y = 0; y < height; y++) {
 			
@@ -73,13 +88,17 @@ public class Bitmap {
 
 	}
 
+	/**
+	* Output image into a .BMP file.
+	* @param file - the output file
+	*/
 	public void writeBitmap(File file) throws IOException {
 
 		RandomAccessFile output = new RandomAccessFile(file, "rw");
 
 			/* Write header information */
 		
-		for (int i = 0; i < HEADER_SIZE; i++)
+		for (int i = 0; i < DATA_OFFSET; i++)
 			output.write(header[i]);
 
 			/* Write pixel information */
@@ -103,6 +122,9 @@ public class Bitmap {
 
 	}
 	
+	/**
+	* Flip the image vertically.
+	*/
 	public void flip() {
 
 		Color[][] newPixels = new Color[height][width];
@@ -114,7 +136,26 @@ public class Bitmap {
 		pixels = newPixels;
 
 	}
+
+	/**
+	* Flip the image horizontally.
+	*/
+	public void flipHorizontally() {
+
+		Color[][] newPixels = new Color[height][width];
+		
+		for (int y = 0; y < height; y++)
+			for (int x = 0; x < width; x++)
+				newPixels[y][x] = pixels[y][width - x - 1];
+
+		pixels = newPixels;
+
+	}
 	
+	/**
+	* Blur the image.
+	* @param range - a positive integer (strength of the blur)
+	*/
 	public void blur(int range) {
 
 		Color[][] newPixels = new Color[height][width];
@@ -124,6 +165,8 @@ public class Bitmap {
 				
 				int count = 0;
 				int red = 0, green = 0, blue = 0;
+
+					/* Calculate blurred pixel from neighbors */
 
 				for (int yOffset = -range; yOffset <= range; yOffset++)
 					for (int xOffset = -range; xOffset <= range; xOffset++) {
@@ -144,7 +187,8 @@ public class Bitmap {
 
 					}
 				
-				// Create the averaged pixel
+					/* Create the blurred pixel */
+				
 				newPixels[y][x] = new Color(red/count, green/count, blue/count);
 
 			}
@@ -158,12 +202,14 @@ public class Bitmap {
 		for (int y = 0; y < height; y++)
 			for (int x = 0; x < width; x++) {
 
-				// Get original values
+					/* Get original values */
+
 				int red = pixels[y][x].getRed();
 				int green = pixels[y][x].getGreen();
 				int blue = pixels[y][x].getBlue();
 				
-				// Modify preferred color component
+					/* Modify preferred color component */
+
 				if (color.equals("red"))
 					red *= 1.5;
 				else if (color.equals("green"))
@@ -171,13 +217,18 @@ public class Bitmap {
 				else if (color.equals("blue"))
 					blue *= 1.5;
 
-				// Create new pixel
+					/* Create new pixel */
+
 				pixels[y][x] = makeValidColor(red, green, blue);
 				
 			}
 
 	}
 	
+	/**
+	* Generate a BufferedImage of the bitmap.
+	* @return the generated BufferedImage
+	*/
 	public BufferedImage getImage() {
 
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -210,6 +261,14 @@ public class Bitmap {
 		
 	}
 
+	/**
+	* Given RGB values, create a Color (ensuring no bad values will be passed through,
+	* which would cause an error).
+	* @param red - the red component
+	* @param green - the green component
+	* @param blue - the blue component
+	* @return color
+	*/
 	private static Color makeValidColor(int red, int green, int blue) {
 
 		red = Math.max(MIN_RGB_VALUE, Math.min(red, MAX_RGB_VALUE));
