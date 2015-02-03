@@ -16,9 +16,7 @@ public class Bitmap {
 	private Color[][] pixels;
 	
 	public Bitmap(File file) throws IOException {
-		
 		readBitmap(file);
-
 	}
 	
 	public int getWidth() {

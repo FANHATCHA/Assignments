@@ -94,19 +94,35 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		 	switch (event.getActionCommand()) {
 
-		 		case "Save":
-		 			
-		 			break;
-
 		 		case "Save As":
+		 			
+		 			File newFile = selectFile("Pick your .BMP");
+
+		 			if (newFile == null)
+		 				break;
+		 			else
+		 				mostRecentInputFile = newFile;
+
+		 		case "Save":
+
+		 			bmp.writeBitmap(mostRecentInputFile);
+		 			modified = false;
 		 			
 		 			break;
 
 		 		case "Open":
 		 			
-		 			bmp = new Bitmap(selectFile("Pick your .BMP"));
-		 			repaint();
-		 			pack();
+		 			File openedFile = selectFile("Pick your .BMP");
+
+		 			if (openedFile != null) {
+		 				
+		 				bmp = new Bitmap(mostRecentInputFile = openedFile);
+		 				modified = false;
+		 				repaint();
+		 				pack();
+		 			
+		 			}
+
 		 			break;
 
 		 		case "Close":
@@ -117,6 +133,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 			break;
 
 		 		case "Quit":
+
 		 			System.exit(0);
 		 			break;
 
@@ -151,6 +168,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				public void actionPerformed( ActionEvent e) {
 
 					bmp.flip();
+					modified = true;
 					pack();
 					repaint();
 
@@ -163,6 +181,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				public void actionPerformed( ActionEvent e) {
 
 					bmp.blur(1);
+					modified = true;
 					pack();
 					repaint();
 
@@ -175,6 +194,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				public void actionPerformed( ActionEvent e) {
 
 					bmp.enhanceColor("red");
+					modified = true;
 					pack();
 					repaint();
 
@@ -187,6 +207,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				public void actionPerformed( ActionEvent e) {
 
 					System.out.println("Combine - not yet implemented");
+					// modified = true;
 
 				}
 			}
@@ -238,14 +259,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		// Prompt user to select a file 
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setDialogTitle(prompt);
-		int returnVal = fileChooser.showOpenDialog(null);
+		fileChooser.showOpenDialog(null);
 
 		// User has finished selecting a file 
-		if(returnVal == JFileChooser.APPROVE_OPTION) 
-			return fileChooser.getSelectedFile();
-
-		// User did not select a file (pressed cancel) 
-		return null;
+		return fileChooser.getSelectedFile();
 		
 	} 
 
