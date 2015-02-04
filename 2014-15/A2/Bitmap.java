@@ -122,6 +122,50 @@ public class Bitmap implements Cloneable {
 
 	}
 	
+	private float luminance(int r, int g, int b) {
+		return (r+g+b)/3.0f;
+	}
+
+	/**
+	* Edge Detection.
+	* Default: precision = 15.0f;
+	*/
+	public void edgeDetection ( final float precision ) {
+		
+		Color[][] newPixels = new Color[height][width];
+
+		for (int y = 0; y < height; y++ ) {
+			for (int x = 0; x < width; x++) {
+				
+				if (y < height-1 && x < width-1) {
+					
+					Color px = pixels[y][x];
+					Color rightPx = pixels[y][x+1];
+					Color belowPx  = pixels[y+1][x];
+
+					float lumCur   = luminance(px.getRed(), px.getGreen(), px.getBlue());
+					float lumRight = luminance(rightPx.getRed(), rightPx.getGreen(), rightPx.getBlue());
+					float lumBelow = luminance(belowPx.getRed(), belowPx.getGreen(), belowPx.getBlue());
+
+					if ( Math.abs(lumRight - lumCur) > precision && Math.abs(lumBelow - lumCur) > precision ) {
+						newPixels[y][x] = Color.BLACK;
+					} else {
+						newPixels[y][x] = Color.WHITE;
+					}
+				
+				} else {
+					newPixels[y][x] = Color.WHITE;
+				}
+
+
+			}
+		}
+
+		System.out.println("Loop Runs");
+
+		pixels = newPixels;
+	}
+
 	/**
 	* Flip the image vertically.
 	*/

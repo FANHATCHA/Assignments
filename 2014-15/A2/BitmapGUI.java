@@ -382,7 +382,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					if (bmp != null) {
 						
 						saveTempImage();
-
 						bmp.flipVertically();
 
 						imageWasModified();
