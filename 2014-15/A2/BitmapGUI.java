@@ -26,15 +26,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		/* Constants */
 
-	private static final int DEFAULT_CANVAS_HEIGHT = 300;
-	private static final int DEFAULT_CANVAS_WIDTH  = 300;
-	private static final String TITLE              = "BitmapHacker";
-	private static final int DEFAULT_PADDING       = 75; 
-
+	private static final String TITLE = "BitmapHacker";
+	
 		/* Variables */
-
-	private static int horizontal_padding = 75;
-	private static int vertical_padding = 75;
 
 	private File mostRecentInputFile;
 	private boolean modified;
@@ -43,7 +37,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		/* Components */
 
 	private JMenuItem closeMenuItem, saveMenuItem, saveAsMenuItem;
-	private JButton flipButton, blurButton, enhanceButton, combineButton, redoButton, undoButton;
+	private JButton flipButton, blurButton, enhanceButton, combineButton, rotateButton,
+					redoButton, undoButton;
 
 	private Canvas canvas;
 
@@ -104,6 +99,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		blurButton.setEnabled(true);
 		enhanceButton.setEnabled(true);
 		combineButton.setEnabled(true);
+		rotateButton.setEnabled(true);
 
 		updateUndoRedoButtons();
 
@@ -116,8 +112,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		blurButton.setEnabled(false);
 		enhanceButton.setEnabled(false);
 		combineButton.setEnabled(false);
-		// redoButton.setEnabled(false);
-		// undoButton.setEnabled(false);
+		rotateButton.setEnabled(false);
 
 		updateUndoRedoButtons();
 
@@ -210,16 +205,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		this.addComponentListener(new ComponentAdapter() {
 		    @Override public void componentResized(ComponentEvent e) {
 
-		    	int width = (bmp == null) ? DEFAULT_CANVAS_WIDTH : bmp.getWidth();
-		    	int height = (bmp == null) ? DEFAULT_CANVAS_HEIGHT : bmp.getHeight();
-		    	
-		    	canvas.setSize(
-		    		Math.max(width, canvas.getWidth()),
-		    		Math.max(height, canvas.getHeight())
-		    	);
-
-			    horizontal_padding = (canvas.getWidth() - width) / 2;
-			    vertical_padding   = (canvas.getHeight() - height) / 2;	
+		    	canvas.refreshSize();
 
 		        pack();
 		        repaint();
@@ -323,12 +309,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					bmp = new Bitmap(mostRecentInputFile = openedFile);
 					enableButtons();
 					modified = false;
-					canvas.setSize(
-		    			Math.max(bmp.getWidth(), canvas.getWidth()),
-		    			Math.max(bmp.getHeight(), canvas.getHeight())
-		    		);
-					horizontal_padding = (canvas.getWidth() - bmp.getWidth()) / 2;
-			    	vertical_padding   = (canvas.getHeight() - bmp.getHeight()) / 2;	
+					canvas.refreshSize();	
 
 				 }
 
@@ -391,18 +372,21 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		blurButton = new JButton("Blur");
 		enhanceButton = new JButton("Enhance");
 		combineButton = new JButton("Combine");
+		rotateButton = new JButton("Rotate");
 
 		// Set all disabled since there is not image yet
 		flipButton.setEnabled(false);
 		blurButton.setEnabled(false);
 		enhanceButton.setEnabled(false);
 		combineButton.setEnabled(false);
+		rotateButton.setEnabled(false);
 
 		// Add buttons to the screen
 		buttonPanel.add(flipButton);
 		buttonPanel.add(blurButton);
 		buttonPanel.add(enhanceButton);
 		buttonPanel.add(combineButton);
+		buttonPanel.add(rotateButton);
 
 		cPane.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -480,6 +464,30 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					// updateUndoRedoButtons();
 					// imageWasModified();
 					// repaint();
+
+				}
+			}
+		);
+
+		rotateButton.addActionListener(
+			new ActionListener () {
+				public void actionPerformed( ActionEvent e) {
+
+					if (bmp != null ) {
+						
+						saveTempImage();
+
+						bmp.rotateCounterClockwise();
+
+						canvas.refreshSize();
+						pack();
+
+						imageWasModified();
+						redoStack.clear();
+						updateUndoRedoButtons();
+						repaint();
+
+					} 
 
 				}
 			}
@@ -563,8 +571,23 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	/** PRIVATE INNER CLASS **/
 	private class Canvas extends JPanel {
 
+
+			/* Constants */
+		
+		private final int DEFAULT_HEIGHT  = 300;
+		private final int DEFAULT_WIDTH   = 300;
+		private final int DEFAULT_PADDING = 75; 
+
+			/* Variables */
+
+		private int horizontal_padding, vertical_padding;
+
 	 	public Canvas () {
+
 	 		setVisible(true);
+	 		horizontal_padding = DEFAULT_PADDING;
+	 		vertical_padding = DEFAULT_PADDING;
+
 	 	}
 
 	 	/**
@@ -573,7 +596,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 	*/
 	 	@Override public Dimension getPreferredSize() {
 
-	 		return bmp == null 	? new Dimension(DEFAULT_CANVAS_WIDTH + horizontal_padding*2, DEFAULT_CANVAS_HEIGHT + vertical_padding*2)
+	 		return bmp == null 	? new Dimension(DEFAULT_WIDTH + horizontal_padding*2, DEFAULT_HEIGHT + vertical_padding*2)
 	 							: new Dimension(bmp.getWidth() + horizontal_padding*2, bmp.getHeight() + vertical_padding*2);
 	 	
 	 	}
@@ -591,13 +614,25 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 		// System.out.println(horizontal_padding + " " + vertical_padding);
 	 		if (bmp == null) {
 	 			g.setColor(Color.LIGHT_GRAY);
-		 		g.fillRect(horizontal_padding, vertical_padding, DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT);
+		 		g.fillRect(horizontal_padding, vertical_padding, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	 		}
 
 	 			/* Draw image */
 
 	 		else
 	 			g.drawImage(bmp.getImage(), horizontal_padding, vertical_padding, null);
+
+	 	}
+
+	 	public void refreshSize() {
+	 		
+	 		int width = (bmp == null) ? DEFAULT_WIDTH : bmp.getWidth();
+		    int height = (bmp == null) ? DEFAULT_HEIGHT : bmp.getHeight();
+
+	 		setSize(Math.max(width, getWidth()), Math.max(height, getHeight()));
+
+			horizontal_padding = (getWidth() - width) / 2;
+			vertical_padding   = (getHeight() - height) / 2;
 
 	 	}
 	 }

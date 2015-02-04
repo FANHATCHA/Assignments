@@ -151,6 +151,41 @@ public class Bitmap implements Cloneable {
 		pixels = newPixels;
 
 	}
+
+	/**
+	* Rotate the image by 90 degrees counter-clockwise.
+	*/
+	public void rotateCounterClockwise() {
+
+			/* Update image properties */
+
+		int oldHeight = height;
+		int oldWidth = width;
+
+		width = oldHeight;
+		height = oldWidth;
+		numPaddingBytes = width % 4;
+
+			/* Update header information */
+
+		// Switch height and width values
+		for (int i = 0; i < 4; i++) {
+			int temp = header[DIMENSIONS_INDEX + i];
+			header[DIMENSIONS_INDEX + i] = header[DIMENSIONS_INDEX + i + 4];
+			header[DIMENSIONS_INDEX + 4 + i] = temp;
+		}
+
+			/* Rotate image */
+
+		Color[][] newPixels = new Color[height][width];
+		
+		for (int y = 0; y < oldHeight; y++)
+			for (int x = 0; x < oldWidth; x++)
+				newPixels[x][y] = pixels[oldHeight - y - 1][x];
+
+		pixels = newPixels;
+
+	}
 	
 	/**
 	* Blur the image.
