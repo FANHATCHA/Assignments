@@ -137,6 +137,33 @@ public class Bitmap implements Cloneable {
 
 	}
 
+	// factor is in range [0.0,1.0]
+	public void grayscale(float factor) {
+
+		Color[][] newPixels = new Color[height][width];
+
+		for (int y = 0; y < height; y++)
+			for (int x = 0; x < width; x++) {
+
+					/* Calculate grayscale (based on specified factor) */
+				
+				int total = pixels[y][x].getRed() + pixels[y][x].getGreen() + pixels[y][x].getBlue();
+				float avg = total/3.0f;
+
+				float red   = (avg * factor) + (pixels[y][x].getRed()   * (1.0f - factor));
+				float green = (avg * factor) + (pixels[y][x].getGreen() * (1.0f - factor));
+				float blue  = (avg * factor) + (pixels[y][x].getBlue()  * (1.0f - factor));
+				
+					/* Create the grayscaled pixel */
+				
+				newPixels[y][x] = makeValidColor((int) red, (int) green, (int) blue);
+
+			}
+
+		pixels = newPixels;
+
+	}
+
 	/**
 	* Flip the image horizontally.
 	*/
@@ -224,7 +251,7 @@ public class Bitmap implements Cloneable {
 				
 					/* Create the blurred pixel */
 				
-				newPixels[y][x] = new Color(red/count, green/count, blue/count);
+				newPixels[y][x] = makeValidColor(red/count, green/count, blue/count);
 
 			}
 
