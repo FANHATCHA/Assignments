@@ -125,7 +125,7 @@ public class Bitmap implements Cloneable {
 	/**
 	* Flip the image vertically.
 	*/
-	public void flip() {
+	public void flipVertically() {
 
 		Color[][] newPixels = new Color[height][width];
 		

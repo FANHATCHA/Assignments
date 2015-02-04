@@ -10,11 +10,10 @@ import java.util.*;
 
 	-For "Save As" button, the user should be able to type in a new file name
 	(currently the user is only able to overwrite another file (at least on Mac OS))
-	-Application needs to start in the center of the screen
 	-Options for the effects need to be made available for the user
-	-4 buttons at the bottom need to be enabled/disabled appropriately
-	
 	- Filter JChooser to only select bmp files
+	-Fix Undo/Redo feature
+	-Add combine feature
 
 */
 
@@ -23,13 +22,14 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		/* Constants */
 
 	private static final int DEFAULT_CANVAS_HEIGHT = 550; 
-	private static final int DEFAULT_CANVAS_WIDTH  =  700;
+	private static final int DEFAULT_CANVAS_WIDTH  = 700;
 	private static final String TITLE              = "BitmapHacker";
+	private static final int DEFAULT_PADDING       = 75; 
 
 		/* Variables */
 
 	private static int horizontal_padding = 75;
-	private static int vertical_padding   = 75;
+	private static int vertical_padding = 75;
 
 	private File mostRecentInputFile;
 	private boolean modified;
@@ -138,13 +138,16 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	} // saveTempImage
 
 	private void setFilePointer(int newIndex) {
-		if (newIndex < 0) {
-			currentFilePointer = 0;
-		} else if (newIndex >= tempBMPFiles.size()) {
-			currentFilePointer = tempBMPFiles.size()-1;
-		} else {
-			currentFilePointer = newIndex;
-		}
+
+		currentFilePointer = Math.max(0, Math.min(newIndex, tempBMPFiles.size() - 1));
+
+		// if (newIndex < 0) {
+		// 	currentFilePointer = 0;
+		// } else if (newIndex >= tempBMPFiles.size()) {
+		// 	currentFilePointer = tempBMPFiles.size() - 1;
+		// } else {
+		// 	currentFilePointer = newIndex;
+		// }
 
 	}
 
@@ -172,12 +175,17 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		undoButton.addActionListener(
 			new ActionListener () {
-				public void actionPerformed( ActionEvent e) {
+				public void actionPerformed( ActionEvent event) {
 					
 					System.out.println("Undo Called " + currentFilePointer + " " + tempBMPFiles.size() );
 					if (bmp != null && currentFilePointer >= 0) {
 
-						bmp = tempBMPFiles.get(currentFilePointer);
+						try {
+							bmp = (Bitmap) tempBMPFiles.get(currentFilePointer).clone();
+						} catch (CloneNotSupportedException e) {
+							System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
+						}
+
 						setFilePointer(--currentFilePointer);
 
 						imageWasModified();
@@ -194,7 +202,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		redoButton.addActionListener(
 			new ActionListener () {
-				public void actionPerformed( ActionEvent e) {
+				public void actionPerformed( ActionEvent event) {
 
 					System.out.println("Redo Called " + currentFilePointer + " " + tempBMPFiles.size() );
 
@@ -225,28 +233,17 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		this.addComponentListener(new ComponentAdapter() {
 		    @Override public void componentResized(ComponentEvent e) {
+
+		    	int width = (bmp == null) ? DEFAULT_CANVAS_WIDTH : bmp.getWidth();
+		    	int height = (bmp == null) ? DEFAULT_CANVAS_HEIGHT : bmp.getHeight();
 		    	
-		    	if (bmp == null) {
+		    	canvas.setSize(
+		    		Math.max(width, canvas.getWidth()),
+		    		Math.max(height, canvas.getHeight())
+		    	);
 
-		    		canvas.setSize(
-		    			Math.max(DEFAULT_CANVAS_WIDTH, canvas.getWidth()),
-		    			Math.max(DEFAULT_CANVAS_HEIGHT, canvas.getHeight())
-		    		);
-
-			    	horizontal_padding = (canvas.getWidth() - DEFAULT_CANVAS_WIDTH ) / 2;
-			    	vertical_padding   = (canvas.getHeight() - DEFAULT_CANVAS_HEIGHT) / 2;	
-
-		    	} else {
-
-		    		canvas.setSize(
-		    			Math.max(bmp.getWidth(), canvas.getWidth()),
-		    			Math.max(bmp.getHeight(), canvas.getHeight())
-		    		);
-
-			    	horizontal_padding = (canvas.getWidth() - bmp.getWidth()) / 2;
-			    	vertical_padding   = (canvas.getHeight() - bmp.getHeight()) / 2;
-
-		    	}
+			    horizontal_padding = (canvas.getWidth() - width) / 2;
+			    vertical_padding   = (canvas.getHeight() - height) / 2;	
 
 		        pack();
 		        repaint();
@@ -349,6 +346,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					bmp = new Bitmap(mostRecentInputFile = openedFile);
 					enableButtons();
 					modified = false;
+					horizontal_padding = DEFAULT_PADDING;
+					vertical_padding = DEFAULT_PADDING;
 
 				 }
 
@@ -431,7 +430,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					if (bmp != null) {
 						
 						saveTempImage();
-						bmp.flip();
+						bmp.flipVertically();
 
 						imageWasModified();
 						repaint();
@@ -553,7 +552,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	    		// Delete .tmpFolder?
 	    		System.out.println("Perform System cleanup???");
-				
 
 			}
 		}));
@@ -587,10 +585,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 		super.paintComponent(g);
 
 	 			/* Draw blank canvas */
-
+	 		// System.out.println(horizontal_padding + " " + vertical_padding);
 	 		if (bmp == null) {
 	 			g.setColor(Color.LIGHT_GRAY);
-		 		g.fillRect( horizontal_padding, vertical_padding, DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT );
+		 		g.fillRect(horizontal_padding, vertical_padding, DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT);
 	 		}
 
 	 			/* Draw image */
@@ -602,18 +600,3 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
