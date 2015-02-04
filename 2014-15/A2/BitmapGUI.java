@@ -1,5 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.filechooser.*;
 import java.io.*;
 import java.awt.event.*;
 import java.util.*;
@@ -11,9 +12,12 @@ import java.util.*;
 	-For "Save As" button, the user should be able to type in a new file name
 	(currently the user is only able to overwrite another file (at least on Mac OS))
 	-Options for the effects need to be made available for the user
-	- Filter JChooser to only select bmp files
-	-Fix Undo/Redo feature
-	-Add combine feature
+
+	-Effect ideas:
+		-Combine
+		-Edge detection (Will)
+		-Pixelize (Will)
+		-Swirl??
 
 */
 
@@ -21,15 +25,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		/* Constants */
 
-	private static final int DEFAULT_CANVAS_HEIGHT = 300;
-	private static final int DEFAULT_CANVAS_WIDTH  = 300;
-	private static final String TITLE              = "BitmapHacker";
-	private static final int DEFAULT_PADDING       = 75; 
-
+	private static final String TITLE = "BitmapHacker";
+	
 		/* Variables */
-
-	private static int horizontal_padding = 75;
-	private static int vertical_padding = 75;
 
 	private File mostRecentInputFile;
 	private boolean modified;
@@ -37,13 +35,14 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		/* Components */
 
-	private JMenuItem closeMenuItem, saveMenuItem, saveAsMenuItem;
-	private JButton flipButton, blurButton, enhanceButton, combineButton, redoButton, undoButton;
+	private JMenuItem closeMenuItem, saveMenuItem, saveAsMenuItem, undoAllMenuItem, undoMenuItem, redoMenuItem;
+	private JButton flipButton, blurButton, enhanceButton, combineButton, rotateButton, grayscaleButton,
+					undoButton, redoButton;
 
 	private Canvas canvas;
 
-	private ArrayList <Bitmap> tempBMPFiles = new ArrayList <Bitmap> ();
-	private int currentFilePointer = -1; // There does not exist an image to start with
+	private Stack<Bitmap> 	undoStack = new Stack<Bitmap>(),
+							redoStack = new Stack<Bitmap>();
 
 	public static void main(String[] args) {
 		
@@ -52,9 +51,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	}
 
 	public BitmapGUI () {
-
-			/* Ensure our application will be closed when the user presses the "X" */
-
 
 			/* Add a canvas to the center of the window */
 
@@ -67,7 +63,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	 	addMenu();
 		addButtons();
-		addUndoRedoButtons();
 
 		trackWindowSize();
 
@@ -81,7 +76,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	/** Set some default GUI Properties **/
 	private void setGUIproperties() {
-
+		
+		// Ensure our application will be closed when the user presses the "X" */
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Sets screen location in the center of the screen (Works only after calling pack)
@@ -101,8 +97,11 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		blurButton.setEnabled(true);
 		enhanceButton.setEnabled(true);
 		combineButton.setEnabled(true);
-		redoButton.setEnabled(true);
-		undoButton.setEnabled(true);
+		rotateButton.setEnabled(true);
+		grayscaleButton.setEnabled(true);
+
+		updateUndoRedoButtons();
+
 
 	}
 
@@ -112,8 +111,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		blurButton.setEnabled(false);
 		enhanceButton.setEnabled(false);
 		combineButton.setEnabled(false);
-		redoButton.setEnabled(false);
-		undoButton.setEnabled(false);
+		rotateButton.setEnabled(false);
+		grayscaleButton.setEnabled(false);
+
+		updateUndoRedoButtons();
 
 	}
 
@@ -126,9 +127,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		if (bmp != null) {
 			try {
 
-				tempBMPFiles.add( (Bitmap) bmp.clone() );
-				++currentFilePointer;
-				System.out.println("Stored bmp files: " + tempBMPFiles.size() );
+				undoStack.push((Bitmap) bmp.clone());
+
+				// System.out.println("Stored bmp files: ");
 
 			} catch (CloneNotSupportedException e) {
 				System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
@@ -136,91 +137,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		}
 
 	} // saveTempImage
-
-	private void setFilePointer(int newIndex) {
-
-		if (newIndex < 0)
-			currentFilePointer = 0;
-		else if (newIndex >= tempBMPFiles.size())
-			currentFilePointer = tempBMPFiles.size() - 1;
-		else
-			currentFilePointer = newIndex;
-		
-	}
-
-	/**
-	 * Handle all actions involving the undo/redo buttons
-	 **/
-	private void addUndoRedoButtons() {
-
-		Container cPane = this.getContentPane();
-
-		JPanel buttonPanel = new JPanel( );
-
-		undoButton = new JButton("Undo");
-		redoButton = new JButton("Redo");
-
-		undoButton.setEnabled(false);
-		redoButton.setEnabled(false);
-
-		buttonPanel.add(undoButton);
-		buttonPanel.add(redoButton);
-
-		cPane.add(buttonPanel, BorderLayout.NORTH);
-
-
-		undoButton.addActionListener(
-			new ActionListener () {
-				public void actionPerformed( ActionEvent event) {
-					
-					System.out.println("Undo Called " + currentFilePointer + " " + tempBMPFiles.size() );
-					if (bmp != null && currentFilePointer >= 0) {
-
-						try {
-							bmp = (Bitmap) tempBMPFiles.get(currentFilePointer).clone();
-						} catch (CloneNotSupportedException e) {
-							System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
-						}
-
-						setFilePointer(--currentFilePointer);
-
-						imageWasModified();
-						repaint();
-
-						// canvas.repaint();
-					} 
-
-
-				}
-			}
-		);
-
-
-		redoButton.addActionListener(
-			new ActionListener () {
-				public void actionPerformed( ActionEvent event) {
-
-					System.out.println("Redo Called " + currentFilePointer + " " + tempBMPFiles.size() );
-
-					if (bmp != null && currentFilePointer < tempBMPFiles.size() ) {
-						
-						setFilePointer(++currentFilePointer);
-						bmp = tempBMPFiles.get(currentFilePointer);
-
-						imageWasModified();
-						repaint();
-
-						// canvas.repaint();
-						
-					}
-
-
-				}
-			}
-		);		
-
-
-	} // addUndoRedoButtons
 
 	/**
 	 * Currently not being used because we are trying to find a better way to center the canvas on the screen
@@ -230,16 +146,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		this.addComponentListener(new ComponentAdapter() {
 		    @Override public void componentResized(ComponentEvent e) {
 
-		    	int width = (bmp == null) ? DEFAULT_CANVAS_WIDTH : bmp.getWidth();
-		    	int height = (bmp == null) ? DEFAULT_CANVAS_HEIGHT : bmp.getHeight();
-		    	
-		    	canvas.setSize(
-		    		Math.max(width, canvas.getWidth()),
-		    		Math.max(height, canvas.getHeight())
-		    	);
-
-			    horizontal_padding = (canvas.getWidth() - width) / 2;
-			    vertical_padding   = (canvas.getHeight() - height) / 2;	
+		    	canvas.refreshSize();
 
 		        pack();
 		        repaint();
@@ -260,13 +167,15 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		JMenuItem menuItem;
 		JMenu menu;
 
+			/* File Menu */
+
 		menu = new JMenu("File");
 		menu.getAccessibleContext().setAccessibleDescription("File");
 		menuBar.add(menu);
 
-		menuItem = new JMenuItem("Open");
+		menuItem = new JMenuItem("Open...");
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-		menuItem.getAccessibleContext().setAccessibleDescription("Load");
+		menuItem.getAccessibleContext().setAccessibleDescription("Open...");
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
@@ -277,9 +186,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		saveMenuItem.setEnabled(false);
 		menu.add(saveMenuItem);
 
-		saveAsMenuItem = new JMenuItem("Save As");
+		saveAsMenuItem = new JMenuItem("Save As...");
 		saveAsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
-		saveAsMenuItem.getAccessibleContext().setAccessibleDescription("Save As");
+		saveAsMenuItem.getAccessibleContext().setAccessibleDescription("Save As...");
 		saveAsMenuItem.addActionListener(this);
 		saveAsMenuItem.setEnabled(false);
 		menu.add(saveAsMenuItem);
@@ -299,6 +208,35 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
+			/* Edit Menu */
+
+		menu = new JMenu("Edit");
+		menu.getAccessibleContext().setAccessibleDescription("Edit");
+		menuBar.add(menu);
+
+		undoMenuItem = new JMenuItem("Undo");
+		undoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK));
+		undoMenuItem.getAccessibleContext().setAccessibleDescription("Undo");
+		undoMenuItem.addActionListener(this);
+		undoMenuItem.setEnabled(false);
+		menu.add(undoMenuItem);
+
+		undoAllMenuItem = new JMenuItem("Undo All");
+		undoAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
+		undoAllMenuItem.getAccessibleContext().setAccessibleDescription("Undo All");
+		undoAllMenuItem.addActionListener(this);
+		undoAllMenuItem.setEnabled(false);
+		menu.add(undoAllMenuItem);
+
+		menu.addSeparator();
+
+		redoMenuItem = new JMenuItem("Redo");
+		redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
+		redoMenuItem.getAccessibleContext().setAccessibleDescription("Redo");
+		redoMenuItem.addActionListener(this);
+		redoMenuItem.setEnabled(false);
+		menu.add(redoMenuItem);
+
 		this.setJMenuBar(menuBar);
 
 	}
@@ -314,7 +252,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		 	switch (event.getActionCommand()) {
 
-		 		case "Save As":
+		 		case "Save As...":
 		 			
 		 			File newFile = selectFile("Pick your .BMP");
 
@@ -327,27 +265,22 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		 			bmp.writeBitmap(mostRecentInputFile);
 		 			modified = false;
-		 			
 		 			break;
 
-				case "Open":
+				case "Open...":
 				 
 				 File openedFile = selectFile("Pick your .BMP");
 
 				 if (openedFile != null) {
 
 				 	// Method for this?
-				 	tempBMPFiles.clear();
+				 	redoStack.clear();
+				 	undoStack.clear();
 				 	saveTempImage();
 					bmp = new Bitmap(mostRecentInputFile = openedFile);
 					enableButtons();
 					modified = false;
-					canvas.setSize(
-		    		Math.max(bmp.getWidth(), canvas.getWidth()),
-		    		Math.max(bmp.getHeight(), canvas.getHeight())
-		    		);
-					horizontal_padding = (canvas.getWidth() - bmp.getWidth()) / 2;
-			    	vertical_padding   = (canvas.getHeight() - bmp.getHeight()) / 2;	
+					canvas.refreshSize();	
 
 				 }
 
@@ -356,6 +289,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 		case "Close":
 
 		 			// Method for this?
+		 			redoStack.clear();
+				 	undoStack.clear();
 		 			disableButtons();
 		 			bmp = null;
 		 			break;
@@ -365,6 +300,20 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 			System.exit(0);
 		 			break;
 
+		 		case "Undo":
+
+		 			undo();
+		 			break;
+
+		 		case "Undo All":
+
+		 			undoAll();
+		 			break;
+
+		 		case "Redo":
+
+		 			redo();
+		 			break;
 		 	}
 
 		 } catch(IOException e) {
@@ -372,6 +321,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 }
 
 		 	/* Refresh screen */
+
 		 pack();
 		 repaint();
 
@@ -407,18 +357,21 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		blurButton = new JButton("Blur");
 		enhanceButton = new JButton("Enhance");
 		combineButton = new JButton("Combine");
+		rotateButton = new JButton("Rotate");
+		grayscaleButton = new JButton("Grayscale");
+
+		addUndoRedoButtons();
 
 		// Set all disabled since there is not image yet
-		flipButton.setEnabled(false);
-		blurButton.setEnabled(false);
-		enhanceButton.setEnabled(false);
-		combineButton.setEnabled(false);
+		disableButtons();
 
 		// Add buttons to the screen
 		buttonPanel.add(flipButton);
 		buttonPanel.add(blurButton);
 		buttonPanel.add(enhanceButton);
 		buttonPanel.add(combineButton);
+		buttonPanel.add(rotateButton);
+		buttonPanel.add(grayscaleButton);
 
 		cPane.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -429,9 +382,12 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					if (bmp != null) {
 						
 						saveTempImage();
+
 						bmp.flipVertically();
 
 						imageWasModified();
+						redoStack.clear();
+						updateUndoRedoButtons();
 						repaint();
 					} 
 
@@ -448,7 +404,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 						saveTempImage();
 
 						bmp.blur(1);
+
 						imageWasModified();
+						redoStack.clear();
+						updateUndoRedoButtons();
 						repaint();
 
 					} 
@@ -464,9 +423,12 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					if (bmp != null ) {
 						
 						saveTempImage();
-						bmp.enhanceColor("red");
+
+						bmp.enhanceColor("red", 1.5f);
 
 						imageWasModified();
+						redoStack.clear();
+						updateUndoRedoButtons();
 						repaint();
 
 					} 
@@ -479,18 +441,144 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed( ActionEvent e) {
 
-					if (bmp != null) {
-						saveTempImage();
-					} 
+					// saveTempImage(); 
 
 					System.out.println("Combine - not yet implemented");
+
+					// redoStack.clear();
+					// updateUndoRedoButtons();
 					// imageWasModified();
+					// repaint();
+
+				}
+			}
+		);
+
+		rotateButton.addActionListener(
+			new ActionListener () {
+				public void actionPerformed( ActionEvent e) {
+
+					if (bmp != null ) {
+						
+						saveTempImage();
+
+						bmp.rotateCounterClockwise();
+
+						canvas.refreshSize();
+						pack();
+
+						imageWasModified();
+						redoStack.clear();
+						updateUndoRedoButtons();
+						repaint();
+
+					} 
+
+				}
+			}
+		);
+
+		grayscaleButton.addActionListener(
+			new ActionListener () {
+				public void actionPerformed( ActionEvent e) {
+
+					if (bmp != null ) {
+						
+						saveTempImage();
+
+						bmp.grayscale(1.0f);
+
+						imageWasModified();
+						redoStack.clear();
+						updateUndoRedoButtons();
+						repaint();
+
+					} 
 
 				}
 			}
 		);
 
 	 }
+
+	 /**
+	 * Handle all actions involving the undo/redo buttons
+	 **/
+	private void addUndoRedoButtons() {
+
+		Container cPane = this.getContentPane();
+
+		JPanel buttonPanel = new JPanel( );
+
+		undoButton = new JButton("Undo");
+		redoButton = new JButton("Redo");
+
+		undoButton.setEnabled(false);
+		redoButton.setEnabled(false);
+
+		buttonPanel.add(undoButton);
+		buttonPanel.add(redoButton);
+
+		cPane.add(buttonPanel, BorderLayout.NORTH);
+
+
+		undoButton.addActionListener(
+			new ActionListener () {
+				public void actionPerformed( ActionEvent event) {
+					
+					undo();
+
+				}
+			}
+		);
+
+
+		redoButton.addActionListener(
+			new ActionListener () {
+				public void actionPerformed(ActionEvent event) {
+
+					redo();
+
+				}
+			}
+		);		
+
+
+	} // addUndoRedoButtons
+
+	private void undo() {
+
+		redoStack.push(bmp);
+		
+		bmp = undoStack.pop();
+
+		imageWasModified();
+		repaint();
+
+	}
+
+	private void undoAll() {
+
+		while (!undoStack.isEmpty()) {
+			redoStack.push(bmp);
+			bmp = undoStack.pop();
+		}
+
+		imageWasModified();
+		repaint();
+
+	}
+
+	private void redo() {
+
+		undoStack.push(bmp);
+
+		bmp = redoStack.pop();
+
+		imageWasModified();
+		repaint();
+
+	}
 
 	 /** 
 	 * Opens up a JFileChooser for the user to choose a file from their file system.
@@ -499,9 +587,16 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	private File selectFile (String title) {
 
-			/* Set up the file chooser, beginning at the proper directory */
+			/* Set up the file chooser */
 
 		JFileChooser fileChooser = new JFileChooser();
+
+			/* Filter .BMP files */
+
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Bitmap Files", "bmp", "BMP");
+		fileChooser.setFileFilter(filter);
+
+			/* Begin at the most recently accessed directory */
 
 		if (mostRecentInputFile != null)
 			fileChooser.setCurrentDirectory(mostRecentInputFile.getParentFile());
@@ -519,11 +614,25 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	/**
 	* This method should be called whenever a picture manipulation occurs.
 	* The title of the window changes to indicate to the user that the image has changed.
+	* The list of images accessible by pressing "Redo" are also cleared.
 	*/
 	private void imageWasModified() {
 
 		modified = true;
 		updateTitle();
+
+		updateUndoRedoButtons();
+
+	}
+
+	private void updateUndoRedoButtons() {
+
+		undoButton.setEnabled(undoStack.size() != 0);
+		redoButton.setEnabled(redoStack.size() != 0);
+
+		undoMenuItem.setEnabled(undoStack.size() != 0);
+		undoAllMenuItem.setEnabled(undoStack.size() != 0);
+		redoMenuItem.setEnabled(redoStack.size() != 0);
 
 	}
 
@@ -558,8 +667,23 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	/** PRIVATE INNER CLASS **/
 	private class Canvas extends JPanel {
 
+
+			/* Constants */
+		
+		private final int DEFAULT_HEIGHT  = 300;
+		private final int DEFAULT_WIDTH   = 300;
+		private final int DEFAULT_PADDING = 75; 
+
+			/* Variables */
+
+		private int horizontal_padding, vertical_padding;
+
 	 	public Canvas () {
+
 	 		setVisible(true);
+	 		horizontal_padding = DEFAULT_PADDING;
+	 		vertical_padding = DEFAULT_PADDING;
+
 	 	}
 
 	 	/**
@@ -568,7 +692,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 	*/
 	 	@Override public Dimension getPreferredSize() {
 
-	 		return bmp == null 	? new Dimension(DEFAULT_CANVAS_WIDTH + horizontal_padding*2, DEFAULT_CANVAS_HEIGHT + vertical_padding*2)
+	 		return bmp == null 	? new Dimension(DEFAULT_WIDTH + horizontal_padding*2, DEFAULT_HEIGHT + vertical_padding*2)
 	 							: new Dimension(bmp.getWidth() + horizontal_padding*2, bmp.getHeight() + vertical_padding*2);
 	 	
 	 	}
@@ -582,17 +706,31 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	 		super.paintComponent(g);
 
+	 		refreshSize();
+
 	 			/* Draw blank canvas */
-	 		// System.out.println(horizontal_padding + " " + vertical_padding);
+	 		
 	 		if (bmp == null) {
 	 			g.setColor(Color.LIGHT_GRAY);
-		 		g.fillRect(horizontal_padding, vertical_padding, DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT);
+		 		g.fillRect(horizontal_padding, vertical_padding, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 	 		}
 
 	 			/* Draw image */
 
 	 		else
 	 			g.drawImage(bmp.getImage(), horizontal_padding, vertical_padding, null);
+
+	 	}
+
+	 	public void refreshSize() {
+	 		
+	 		int width  = (bmp == null) ? DEFAULT_WIDTH  : bmp.getWidth();
+		    int height = (bmp == null) ? DEFAULT_HEIGHT : bmp.getHeight();
+
+	 		setSize(Math.max(width, getWidth()), Math.max(height, getHeight()));
+
+			horizontal_padding = (getWidth()  - width)  / 2;
+			vertical_padding   = (getHeight() - height) / 2;
 
 	 	}
 	 }

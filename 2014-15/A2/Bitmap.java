@@ -138,6 +138,36 @@ public class Bitmap implements Cloneable {
 	}
 
 	/**
+	* Add a grayscale effect to the image.
+	* @param factor - intensity of the grayscale, value should be in the range [0.0f, 1.0f]
+	*/
+	public void grayscale(float factor) {
+
+		Color[][] newPixels = new Color[height][width];
+
+		for (int y = 0; y < height; y++)
+			for (int x = 0; x < width; x++) {
+
+					/* Calculate grayscale (based on specified factor) */
+				
+				int total = pixels[y][x].getRed() + pixels[y][x].getGreen() + pixels[y][x].getBlue();
+				float avg = total/3.0f;
+
+				float red   = (avg * factor) + (pixels[y][x].getRed()   * (1.0f - factor));
+				float green = (avg * factor) + (pixels[y][x].getGreen() * (1.0f - factor));
+				float blue  = (avg * factor) + (pixels[y][x].getBlue()  * (1.0f - factor));
+				
+					/* Create the grayscaled pixel */
+				
+				newPixels[y][x] = makeValidColor((int) red, (int) green, (int) blue);
+
+			}
+
+		pixels = newPixels;
+
+	}
+
+	/**
 	* Flip the image horizontally.
 	*/
 	public void flipHorizontally() {
@@ -147,6 +177,41 @@ public class Bitmap implements Cloneable {
 		for (int y = 0; y < height; y++)
 			for (int x = 0; x < width; x++)
 				newPixels[y][x] = pixels[y][width - x - 1];
+
+		pixels = newPixels;
+
+	}
+
+	/**
+	* Rotate the image by 90 degrees counter-clockwise.
+	*/
+	public void rotateCounterClockwise() {
+
+			/* Update image properties */
+
+		int oldHeight = height;
+		int oldWidth = width;
+
+		width = oldHeight;
+		height = oldWidth;
+		numPaddingBytes = width % 4;
+
+			/* Update header information */
+
+		// Switch height and width values
+		for (int i = 0; i < 4; i++) {
+			int temp = header[DIMENSIONS_INDEX + i];
+			header[DIMENSIONS_INDEX + i] = header[DIMENSIONS_INDEX + i + 4];
+			header[DIMENSIONS_INDEX + 4 + i] = temp;
+		}
+
+			/* Rotate image */
+
+		Color[][] newPixels = new Color[height][width];
+		
+		for (int y = 0; y < oldHeight; y++)
+			for (int x = 0; x < oldWidth; x++)
+				newPixels[x][y] = pixels[oldHeight - y - 1][x];
 
 		pixels = newPixels;
 
@@ -189,7 +254,7 @@ public class Bitmap implements Cloneable {
 				
 					/* Create the blurred pixel */
 				
-				newPixels[y][x] = new Color(red/count, green/count, blue/count);
+				newPixels[y][x] = makeValidColor(red/count, green/count, blue/count);
 
 			}
 
@@ -197,7 +262,15 @@ public class Bitmap implements Cloneable {
 
 	}
 	
-	public void enhanceColor(String color) {
+	/**
+	* Ehances the specified color.
+	* @param color - "red", "green", or "blue"
+	* @param factor - 0.0f would be 0% (no preferred color remaining)
+	*               - 1.0f would be 100% (no change)
+	*               - 1.5f would be 150% (50% enhancement)
+	*               - >255.0f would be redundant since all values would be 0 or 255 by that point
+	*/
+	public void enhanceColor(String color, float factor) {
 		
 		for (int y = 0; y < height; y++)
 			for (int x = 0; x < width; x++) {
@@ -211,11 +284,11 @@ public class Bitmap implements Cloneable {
 					/* Modify preferred color component */
 
 				if (color.equals("red"))
-					red *= 1.5;
+					red   = (int) (red * factor);
 				else if (color.equals("green"))
-					green *= 1.5;
+					green = (int) (green * factor);
 				else if (color.equals("blue"))
-					blue *= 1.5;
+					blue  = (int) (blue  * factor);
 
 					/* Create new pixel */
 
@@ -282,7 +355,19 @@ public class Bitmap implements Cloneable {
 	}
 
     @Override protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
+
+        Bitmap clonedBitmap = (Bitmap) super.clone();
+
+        Color[][] copyOfPixels = new Color[height][width];
+
+        for (int y = 0; y < height; y++)
+        	for (int x = 0; x < width; x++)
+        		copyOfPixels[y][x] = new Color(pixels[y][x].getRGB());
+
+        clonedBitmap.pixels = copyOfPixels;
+
+        return (Object) clonedBitmap;
+
     }
 
 }
