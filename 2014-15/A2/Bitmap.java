@@ -282,7 +282,19 @@ public class Bitmap implements Cloneable {
 	}
 
     @Override protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
+
+        Bitmap clonedBitmap = (Bitmap) super.clone();
+
+        Color[][] copyOfPixels = new Color[height][width];
+
+        for (int y = 0; y < height; y++)
+        	for (int x = 0; x < width; x++)
+        		copyOfPixels[y][x] = new Color(pixels[y][x].getRGB());
+
+        clonedBitmap.pixels = copyOfPixels;
+
+        return (Object) clonedBitmap;
+
     }
 
 }

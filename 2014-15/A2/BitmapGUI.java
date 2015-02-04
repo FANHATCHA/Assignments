@@ -11,8 +11,7 @@ import java.util.*;
 	-For "Save As" button, the user should be able to type in a new file name
 	(currently the user is only able to overwrite another file (at least on Mac OS))
 	-Options for the effects need to be made available for the user
-	- Filter JChooser to only select bmp files
-	-Fix Undo/Redo feature
+	-Filter JChooser to only select bmp files
 
 	-Effect ideas:
 		-Edge detection (Will)
@@ -105,8 +104,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		blurButton.setEnabled(true);
 		enhanceButton.setEnabled(true);
 		combineButton.setEnabled(true);
-		redoButton.setEnabled(true);
-		undoButton.setEnabled(true);
+
+		updateUndoRedoButtons();
+
 
 	}
 
@@ -116,8 +116,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		blurButton.setEnabled(false);
 		enhanceButton.setEnabled(false);
 		combineButton.setEnabled(false);
-		redoButton.setEnabled(false);
-		undoButton.setEnabled(false);
+		// redoButton.setEnabled(false);
+		// undoButton.setEnabled(false);
+
+		updateUndoRedoButtons();
 
 	}
 
@@ -130,13 +132,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		if (bmp != null) {
 			try {
 
-				System.out.println(undoStack.size() + " " + redoStack.size());
-
 				undoStack.push((Bitmap) bmp.clone());
 
-				System.out.println(undoStack.size() + " " + redoStack.size());
-
-				System.out.println("Stored bmp files: ");
+				// System.out.println("Stored bmp files: ");
 
 			} catch (CloneNotSupportedException e) {
 				System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
@@ -170,26 +168,14 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed( ActionEvent event) {
 
-					System.out.println(undoStack.size() + " " + redoStack.size());
+					redoStack.push(bmp);
 					
-					if (bmp != null) {
+					bmp = undoStack.pop();
 
-						try {
-							redoStack.push((Bitmap) bmp.clone());
-						} catch (CloneNotSupportedException e) {
-							System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
-						}
+					imageWasModified();
+					repaint();
 
-						bmp = undoStack.pop();
-
-						imageWasModified();
-						repaint();
-
-						// canvas.repaint();
-					} 
-
-					System.out.println(undoStack.size() + " " + redoStack.size());
-
+					// canvas.repaint();
 
 				}
 			}
@@ -200,28 +186,14 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed(ActionEvent event) {
 
-					System.out.println(undoStack.size() + " " + redoStack.size());
-
-					try {
-						undoStack.push((Bitmap) bmp.clone());
-					} catch (CloneNotSupportedException e) {
-						System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
-					}
+					undoStack.push(bmp);
 
 					bmp = redoStack.pop();
 
-					if (bmp != null) {
-					
-						//bmp = (Bitmap) redoStack.pop();	
+					imageWasModified();
+					repaint();
 
-						imageWasModified();
-						repaint();
-
-						// canvas.repaint();
-						
-					}
-
-					System.out.println(undoStack.size() + " " + redoStack.size());
+					// canvas.repaint();
 
 				}
 			}
@@ -345,15 +317,15 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				 if (openedFile != null) {
 
 				 	// Method for this?
-				 	redoStack.empty();
-				 	undoStack.empty();
+				 	redoStack.clear();
+				 	undoStack.clear();
 				 	saveTempImage();
 					bmp = new Bitmap(mostRecentInputFile = openedFile);
 					enableButtons();
 					modified = false;
 					canvas.setSize(
-		    		Math.max(bmp.getWidth(), canvas.getWidth()),
-		    		Math.max(bmp.getHeight(), canvas.getHeight())
+		    			Math.max(bmp.getWidth(), canvas.getWidth()),
+		    			Math.max(bmp.getHeight(), canvas.getHeight())
 		    		);
 					horizontal_padding = (canvas.getWidth() - bmp.getWidth()) / 2;
 			    	vertical_padding   = (canvas.getHeight() - bmp.getHeight()) / 2;	
@@ -365,6 +337,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 		case "Close":
 
 		 			// Method for this?
+		 			redoStack.clear();
+				 	undoStack.clear();
 		 			disableButtons();
 		 			bmp = null;
 		 			break;
@@ -381,6 +355,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 }
 
 		 	/* Refresh screen */
+
 		 pack();
 		 repaint();
 
@@ -438,9 +413,12 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					if (bmp != null) {
 						
 						saveTempImage();
+
 						bmp.flipVertically();
 
 						imageWasModified();
+						redoStack.clear();
+						updateUndoRedoButtons();
 						repaint();
 					} 
 
@@ -457,7 +435,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 						saveTempImage();
 
 						bmp.blur(1);
+
 						imageWasModified();
+						redoStack.clear();
+						updateUndoRedoButtons();
 						repaint();
 
 					} 
@@ -473,9 +454,12 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					if (bmp != null ) {
 						
 						saveTempImage();
+
 						bmp.enhanceColor("red");
 
 						imageWasModified();
+						redoStack.clear();
+						updateUndoRedoButtons();
 						repaint();
 
 					} 
@@ -488,10 +472,14 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed( ActionEvent e) {
 
-					saveTempImage(); 
+					// saveTempImage(); 
 
 					System.out.println("Combine - not yet implemented");
+
+					// redoStack.clear();
+					// updateUndoRedoButtons();
 					// imageWasModified();
+					// repaint();
 
 				}
 			}
@@ -526,11 +514,21 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	/**
 	* This method should be called whenever a picture manipulation occurs.
 	* The title of the window changes to indicate to the user that the image has changed.
+	* The list of images accessible by pressing "Redo" are also cleared.
 	*/
 	private void imageWasModified() {
 
 		modified = true;
 		updateTitle();
+
+		updateUndoRedoButtons();
+
+	}
+
+	private void updateUndoRedoButtons() {
+
+		undoButton.setEnabled(undoStack.size() != 0);
+		redoButton.setEnabled(redoStack.size() != 0);
 
 	}
 
