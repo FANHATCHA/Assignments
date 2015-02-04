@@ -137,7 +137,10 @@ public class Bitmap implements Cloneable {
 
 	}
 
-	// factor is in range [0.0,1.0]
+	/**
+	* Add a grayscale effect to the image.
+	* @param factor - intensity of the grayscale, value should be in the range [0.0f, 1.0f]
+	*/
 	public void grayscale(float factor) {
 
 		Color[][] newPixels = new Color[height][width];
@@ -259,7 +262,15 @@ public class Bitmap implements Cloneable {
 
 	}
 	
-	public void enhanceColor(String color) {
+	/**
+	* Ehances the specified color.
+	* @param color - "red", "green", or "blue"
+	* @param factor - 0.0f would be 0% (no preferred color remaining)
+	*               - 1.0f would be 100% (no change)
+	*               - 1.5f would be 150% (50% enhancement)
+	*               - >255.0f would be redundant since all values would be 0 or 255 by that point
+	*/
+	public void enhanceColor(String color, float factor) {
 		
 		for (int y = 0; y < height; y++)
 			for (int x = 0; x < width; x++) {
@@ -273,11 +284,11 @@ public class Bitmap implements Cloneable {
 					/* Modify preferred color component */
 
 				if (color.equals("red"))
-					red *= 1.5;
+					red   = (int) (red * factor);
 				else if (color.equals("green"))
-					green *= 1.5;
+					green = (int) (green * factor);
 				else if (color.equals("blue"))
-					blue *= 1.5;
+					blue  = (int) (blue  * factor);
 
 					/* Create new pixel */
 

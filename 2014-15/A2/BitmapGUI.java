@@ -410,7 +410,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 						
 						saveTempImage();
 
-						bmp.enhanceColor("red");
+						bmp.enhanceColor("red", 1.5f);
 
 						imageWasModified();
 						redoStack.clear();
