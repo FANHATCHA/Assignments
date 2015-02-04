@@ -13,7 +13,13 @@ import java.util.*;
 	-Options for the effects need to be made available for the user
 	- Filter JChooser to only select bmp files
 	-Fix Undo/Redo feature
-	-Add combine feature
+
+	-Effect ideas:
+		-Edge detection (Will)
+		-Pixelize (Will)
+		-Rotate (Micah)
+		-Combine
+		-Swirl??
 
 */
 
@@ -42,8 +48,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	private Canvas canvas;
 
-	private ArrayList <Bitmap> tempBMPFiles = new ArrayList <Bitmap> ();
-	private int currentFilePointer = -1; // There does not exist an image to start with
+	private Stack<Bitmap> 	undoStack = new Stack<Bitmap>(),
+							redoStack = new Stack<Bitmap>();
+	//private ArrayList <Bitmap> tempBMPFiles = new ArrayList <Bitmap> ();
+	//private int currentFilePointer = -1; // There does not exist an image to start with
 
 	public static void main(String[] args) {
 		
@@ -52,9 +60,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	}
 
 	public BitmapGUI () {
-
-			/* Ensure our application will be closed when the user presses the "X" */
-
 
 			/* Add a canvas to the center of the window */
 
@@ -81,7 +86,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	/** Set some default GUI Properties **/
 	private void setGUIproperties() {
-
+		
+		// Ensure our application will be closed when the user presses the "X" */
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Sets screen location in the center of the screen (Works only after calling pack)
@@ -126,9 +132,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		if (bmp != null) {
 			try {
 
-				tempBMPFiles.add( (Bitmap) bmp.clone() );
-				++currentFilePointer;
-				System.out.println("Stored bmp files: " + tempBMPFiles.size() );
+				undoStack.push((Bitmap) bmp.clone());
+				//tempBMPFiles.add( (Bitmap) bmp.clone() );
+				//++currentFilePointer;
+				System.out.println("Stored bmp files: ");// + tempBMPFiles.size() );
 
 			} catch (CloneNotSupportedException e) {
 				System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
@@ -137,16 +144,16 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	} // saveTempImage
 
-	private void setFilePointer(int newIndex) {
+	// private void setFilePointer(int newIndex) {
 
-		if (newIndex < 0)
-			currentFilePointer = 0;
-		else if (newIndex >= tempBMPFiles.size())
-			currentFilePointer = tempBMPFiles.size() - 1;
-		else
-			currentFilePointer = newIndex;
+	// 	if (newIndex < 0)
+	// 		currentFilePointer = 0;
+	// 	else if (newIndex >= tempBMPFiles.size())
+	// 		currentFilePointer = tempBMPFiles.size() - 1;
+	// 	else
+	// 		currentFilePointer = newIndex;
 		
-	}
+	// }
 
 	/**
 	 * Handle all actions involving the undo/redo buttons
@@ -173,16 +180,18 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed( ActionEvent event) {
 					
-					System.out.println("Undo Called " + currentFilePointer + " " + tempBMPFiles.size() );
-					if (bmp != null && currentFilePointer >= 0) {
+					// sSystem.out.println("Undo Called " + currentFilePointer + " " + tempBMPFiles.size() );
+					if (bmp != null) {
 
+						bmp = undoStack.pop();
 						try {
-							bmp = (Bitmap) tempBMPFiles.get(currentFilePointer).clone();
+							redoStack.push((Bitmap) bmp.clone());
+							// bmp = (Bitmap) tempBMPFiles.get(currentFilePointer).clone();
 						} catch (CloneNotSupportedException e) {
 							System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
 						}
 
-						setFilePointer(--currentFilePointer);
+						//setFilePointer(--currentFilePointer);
 
 						imageWasModified();
 						repaint();
@@ -200,12 +209,21 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed( ActionEvent event) {
 
-					System.out.println("Redo Called " + currentFilePointer + " " + tempBMPFiles.size() );
+					//System.out.println("Redo Called " + currentFilePointer + " " + tempBMPFiles.size() );
 
-					if (bmp != null && currentFilePointer < tempBMPFiles.size() ) {
-						
-						setFilePointer(++currentFilePointer);
-						bmp = tempBMPFiles.get(currentFilePointer);
+					bmp = redoStack.pop();
+					try {
+						undoStack.push((Bitmap) bmp.clone());
+						// bmp = (Bitmap) tempBMPFiles.get(currentFilePointer).clone();
+					} catch (CloneNotSupportedException e) {
+						System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
+					}
+
+					if (bmp != null) {
+					
+						//bmp = (Bitmap) redoStack.pop();	
+						//setFilePointer(++currentFilePointer);
+						//bmp = tempBMPFiles.get(currentFilePointer);
 
 						imageWasModified();
 						repaint();
@@ -337,7 +355,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				 if (openedFile != null) {
 
 				 	// Method for this?
-				 	tempBMPFiles.clear();
+				 	redoStack.empty();
+				 	undoStack.empty();
 				 	saveTempImage();
 					bmp = new Bitmap(mostRecentInputFile = openedFile);
 					enableButtons();
