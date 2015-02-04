@@ -1,5 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.filechooser.*;
 import java.io.*;
 import java.awt.event.*;
 import java.util.*;
@@ -11,12 +12,11 @@ import java.util.*;
 	-For "Save As" button, the user should be able to type in a new file name
 	(currently the user is only able to overwrite another file (at least on Mac OS))
 	-Options for the effects need to be made available for the user
-	-Filter JChooser to only select bmp files
 
 	-Effect ideas:
+		-Combine
 		-Edge detection (Will)
 		-Pixelize (Will)
-		-Combine
 		-Swirl??
 
 */
@@ -173,9 +173,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		menu.getAccessibleContext().setAccessibleDescription("File");
 		menuBar.add(menu);
 
-		menuItem = new JMenuItem("Open");
+		menuItem = new JMenuItem("Open...");
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-		menuItem.getAccessibleContext().setAccessibleDescription("Load");
+		menuItem.getAccessibleContext().setAccessibleDescription("Open...");
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
@@ -186,9 +186,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		saveMenuItem.setEnabled(false);
 		menu.add(saveMenuItem);
 
-		saveAsMenuItem = new JMenuItem("Save As");
+		saveAsMenuItem = new JMenuItem("Save As...");
 		saveAsMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
-		saveAsMenuItem.getAccessibleContext().setAccessibleDescription("Save As");
+		saveAsMenuItem.getAccessibleContext().setAccessibleDescription("Save As...");
 		saveAsMenuItem.addActionListener(this);
 		saveAsMenuItem.setEnabled(false);
 		menu.add(saveAsMenuItem);
@@ -243,7 +243,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		 	switch (event.getActionCommand()) {
 
-		 		case "Save As":
+		 		case "Save As...":
 		 			
 		 			File newFile = selectFile("Pick your .BMP");
 
@@ -258,7 +258,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 			modified = false;
 		 			break;
 
-				case "Open":
+				case "Open...":
 				 
 				 File openedFile = selectFile("Pick your .BMP");
 
@@ -561,9 +561,16 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	private File selectFile (String title) {
 
-			/* Set up the file chooser, beginning at the proper directory */
+			/* Set up the file chooser */
 
 		JFileChooser fileChooser = new JFileChooser();
+
+			/* Filter .BMP files */
+
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Bitmap Files", "bmp", "BMP");
+		fileChooser.setFileFilter(filter);
+
+			/* Begin at the most recently accessed directory */
 
 		if (mostRecentInputFile != null)
 			fileChooser.setCurrentDirectory(mostRecentInputFile.getParentFile());
