@@ -50,8 +50,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	private Stack<Bitmap> 	undoStack = new Stack<Bitmap>(),
 							redoStack = new Stack<Bitmap>();
-	//private ArrayList <Bitmap> tempBMPFiles = new ArrayList <Bitmap> ();
-	//private int currentFilePointer = -1; // There does not exist an image to start with
 
 	public static void main(String[] args) {
 		
@@ -132,10 +130,13 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		if (bmp != null) {
 			try {
 
+				System.out.println(undoStack.size() + " " + redoStack.size());
+
 				undoStack.push((Bitmap) bmp.clone());
-				//tempBMPFiles.add( (Bitmap) bmp.clone() );
-				//++currentFilePointer;
-				System.out.println("Stored bmp files: ");// + tempBMPFiles.size() );
+
+				System.out.println(undoStack.size() + " " + redoStack.size());
+
+				System.out.println("Stored bmp files: ");
 
 			} catch (CloneNotSupportedException e) {
 				System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
@@ -143,17 +144,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		}
 
 	} // saveTempImage
-
-	// private void setFilePointer(int newIndex) {
-
-	// 	if (newIndex < 0)
-	// 		currentFilePointer = 0;
-	// 	else if (newIndex >= tempBMPFiles.size())
-	// 		currentFilePointer = tempBMPFiles.size() - 1;
-	// 	else
-	// 		currentFilePointer = newIndex;
-		
-	// }
 
 	/**
 	 * Handle all actions involving the undo/redo buttons
@@ -179,25 +169,26 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		undoButton.addActionListener(
 			new ActionListener () {
 				public void actionPerformed( ActionEvent event) {
+
+					System.out.println(undoStack.size() + " " + redoStack.size());
 					
-					// sSystem.out.println("Undo Called " + currentFilePointer + " " + tempBMPFiles.size() );
 					if (bmp != null) {
 
-						bmp = undoStack.pop();
 						try {
 							redoStack.push((Bitmap) bmp.clone());
-							// bmp = (Bitmap) tempBMPFiles.get(currentFilePointer).clone();
 						} catch (CloneNotSupportedException e) {
 							System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
 						}
 
-						//setFilePointer(--currentFilePointer);
+						bmp = undoStack.pop();
 
 						imageWasModified();
 						repaint();
 
 						// canvas.repaint();
 					} 
+
+					System.out.println(undoStack.size() + " " + redoStack.size());
 
 
 				}
@@ -207,23 +198,21 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		redoButton.addActionListener(
 			new ActionListener () {
-				public void actionPerformed( ActionEvent event) {
+				public void actionPerformed(ActionEvent event) {
 
-					//System.out.println("Redo Called " + currentFilePointer + " " + tempBMPFiles.size() );
+					System.out.println(undoStack.size() + " " + redoStack.size());
 
-					bmp = redoStack.pop();
 					try {
 						undoStack.push((Bitmap) bmp.clone());
-						// bmp = (Bitmap) tempBMPFiles.get(currentFilePointer).clone();
 					} catch (CloneNotSupportedException e) {
 						System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
 					}
 
+					bmp = redoStack.pop();
+
 					if (bmp != null) {
 					
 						//bmp = (Bitmap) redoStack.pop();	
-						//setFilePointer(++currentFilePointer);
-						//bmp = tempBMPFiles.get(currentFilePointer);
 
 						imageWasModified();
 						repaint();
@@ -232,6 +221,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 						
 					}
 
+					System.out.println(undoStack.size() + " " + redoStack.size());
 
 				}
 			}
@@ -498,9 +488,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed( ActionEvent e) {
 
-					if (bmp != null) {
-						saveTempImage();
-					} 
+					saveTempImage(); 
 
 					System.out.println("Combine - not yet implemented");
 					// imageWasModified();
