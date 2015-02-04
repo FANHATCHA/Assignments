@@ -22,15 +22,14 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		/* Constants */
 
-	private final static int FRAME_BORDER_HEIGHT = 22;
 	private static final int DEFAULT_CANVAS_HEIGHT = 550; 
-	private static final int DEFAULT_CANVAS_WIDTH =  700;
-	private static final String TITLE = "BitmapHacker";
-	private static final String TMP_FOLDER = ".tmpImages";
+	private static final int DEFAULT_CANVAS_WIDTH  =  700;
+	private static final String TITLE              = "BitmapHacker";
+	private static final String TMP_FOLDER         = ".tmpImages";
 		/* Variables */
 
 	private static int horizontal_padding = 75;
-	private static int vertical_padding = 75;
+	private static int vertical_padding   = 75;
 
 	private File mostRecentInputFile;
 	private Bitmap bmp;
@@ -116,6 +115,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 */
 	private void saveTempImage( ) {
 
+		// ∃ an image to save
 		if (bmp != null) {
 
 			// Create Folder if it does not exist
@@ -124,16 +124,33 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				new File(TMP_FOLDER).mkdirs(); 
 			} 
 
-			try {
-
-				// Save file as filePointerName
-				bmp.writeBitmap( new File( TMP_FOLDER+"/"+currentFilePointer+".tmp") );
-				++currentFilePointer;
-
-			} catch (IOException e) {
-				System.err.println("Error. Could not save tmp bmp file");
-			}
+			File saveFile = new File( TMP_FOLDER+"/"+currentFilePointer+".tmp");
 			
+			
+			if (saveFile != null) {
+
+				// Create new Thread to save image, this is only so that the user does not experience any lag.
+				Runnable saveImageTask = new Runnable () {
+					public void run() {
+
+						try{				
+							// Save file as filePointerName
+							bmp.writeBitmap( saveFile );
+							++currentFilePointer;
+						} catch (IOException e) {
+							System.err.println("Failed to save temp file: " + currentFilePointer);
+							return;
+						}
+						System.out.println("Finished Saving image: " + currentFilePointer);
+					}
+				};
+
+				new Thread(saveImageTask).start();
+
+			} else {
+				System.err.println("Failed to create temp file: "+ currentFilePointer);
+			}
+
 		}
 
 	}
@@ -166,7 +183,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					if (bmp != null && currentFilePointer > 0) {
 
 						// Back trace where you were in the array of files
-						--currentFilePointer;
+						// --currentFilePointer;
 					} 
 
 
@@ -182,7 +199,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					if (bmp != null && currentFilePointer < tempFiles.size() ) {
 						
 
-						++currentFilePointer;
+						// ++currentFilePointer;
 					}
 
 
