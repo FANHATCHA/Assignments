@@ -21,8 +21,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		/* Constants */
 
-	private static final int DEFAULT_CANVAS_HEIGHT = 550; 
-	private static final int DEFAULT_CANVAS_WIDTH  = 700;
+	private static final int DEFAULT_CANVAS_HEIGHT = 300;
+	private static final int DEFAULT_CANVAS_WIDTH  = 300;
 	private static final String TITLE              = "BitmapHacker";
 	private static final int DEFAULT_PADDING       = 75; 
 
@@ -61,7 +61,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		canvas = new Canvas();
 
 	 	Container cPane = this.getContentPane();
-	 	cPane.add( canvas, BorderLayout.CENTER);
+	 	cPane.add(canvas, BorderLayout.CENTER);
 
 	 		/* Add the menu, buttons, and update the window's title */
 
@@ -139,21 +139,17 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	private void setFilePointer(int newIndex) {
 
-		currentFilePointer = Math.max(0, Math.min(newIndex, tempBMPFiles.size() - 1));
-
-		// if (newIndex < 0) {
-		// 	currentFilePointer = 0;
-		// } else if (newIndex >= tempBMPFiles.size()) {
-		// 	currentFilePointer = tempBMPFiles.size() - 1;
-		// } else {
-		// 	currentFilePointer = newIndex;
-		// }
-
+		if (newIndex < 0)
+			currentFilePointer = 0;
+		else if (newIndex >= tempBMPFiles.size())
+			currentFilePointer = tempBMPFiles.size() - 1;
+		else
+			currentFilePointer = newIndex;
+		
 	}
 
 	/**
 	 * Handle all actions involving the undo/redo buttons
-	 *
 	 **/
 	private void addUndoRedoButtons() {
 
@@ -346,8 +342,12 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					bmp = new Bitmap(mostRecentInputFile = openedFile);
 					enableButtons();
 					modified = false;
-					horizontal_padding = DEFAULT_PADDING;
-					vertical_padding = DEFAULT_PADDING;
+					canvas.setSize(
+		    		Math.max(bmp.getWidth(), canvas.getWidth()),
+		    		Math.max(bmp.getHeight(), canvas.getHeight())
+		    		);
+					horizontal_padding = (canvas.getWidth() - bmp.getWidth()) / 2;
+			    	vertical_padding   = (canvas.getHeight() - bmp.getHeight()) / 2;	
 
 				 }
 
@@ -372,7 +372,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 }
 
 		 	/* Refresh screen */
-
 		 pack();
 		 repaint();
 
@@ -546,15 +545,14 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	/** Make a new thread that monitors when the program quits **/
 	private static void cleanupBeforeProgramQuits() {
 
-		// The code within this will execute when the program exits for good
-    	Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() { 
-    		public void run() {
+	    // The code within this will execute when the program exits for good
+	    Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() { 
+	        public void run() {
 
-	    		// Delete .tmpFolder?
-	    		System.out.println("Perform System cleanup???");
+				System.out.println("Program exited");	            
 
-			}
-		}));
+	        }
+	    }));
 	}
 
 	/** PRIVATE INNER CLASS **/

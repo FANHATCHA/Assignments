@@ -224,7 +224,9 @@ public class Bitmap implements Cloneable {
 			}
 
 	}
+
 	
+
 	/**
 	* Generate a BufferedImage of the bitmap.
 	* @return the generated BufferedImage
