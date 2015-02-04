@@ -2,7 +2,7 @@ import java.awt.*;
 import javax.swing.*;
 import java.io.*;
 import java.awt.event.*;
-
+import java.util.*;
 
 /*
 
@@ -13,6 +13,8 @@ import java.awt.event.*;
 	-Application needs to start in the center of the screen
 	-Options for the effects need to be made available for the user
 	-4 buttons at the bottom need to be enabled/disabled appropriately
+	
+	- Filter JChooser to only select bmp files
 
 */
 
@@ -20,10 +22,11 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		/* Constants */
 
+	private final static int FRAME_BORDER_HEIGHT = 22;
 	private static final int DEFAULT_CANVAS_HEIGHT = 550; 
 	private static final int DEFAULT_CANVAS_WIDTH =  700;
 	private static final String TITLE = "BitmapHacker";
-
+	private static final String TMP_FOLDER = ".tmpImages";
 		/* Variables */
 
 	private static int horizontal_padding = 75;
@@ -36,26 +39,23 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		/* Components */
 
 	private JMenuItem closeMenuItem, saveMenuItem, saveAsMenuItem;
-	private JButton flipButton, blurButton, enhanceButton, combineButton;
+	private JButton flipButton, blurButton, enhanceButton, combineButton, redoButton, undoButton;
 
 	private Canvas canvas;
+
+	private int currentFilePointer = 0;
+	private ArrayList <String> tempFiles = new ArrayList <String> ();
 
 	public static void main(String[] args) {
 		
 		BitmapGUI frame = new BitmapGUI();
-		// frame.setResizable(false);
 
-		// frame.setSize(500, 500);		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		// frame.setLocation(	(dim.width/2) - (frame.getSize().width/2),
-		// 					(dim.height/2) - (frame.getSize().height/2) );
-		
 	}
 
 	public BitmapGUI () {
 
 			/* Ensure our application will be closed when the user presses the "X" */
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 			/* Add a canvas to the center of the window */
 
@@ -68,51 +68,165 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	 	addMenu();
 		addButtons();
-		updateTitle();
+		addUndoRedoButtons();
+
 		trackWindowSize();
 
 			/* Show the user our wonderful GUI */
-
+		
 		pack();
+		setGUIproperties();
+		cleanupBeforeProgramQuits( );
+
+	}
+
+	/** Set some default GUI Properties **/
+	private void setGUIproperties() {
+
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		// Sets screen location in the center of the screen (Works only after calling pack)
+		setLocationRelativeTo(null);
+
+		// Update Title
+		updateTitle();
+
+		// Show Screen
 		setVisible(true);
 
 	}
 
-	private void trackWindowSize() {
+	private void enableButtons() {
+
+		flipButton.setEnabled(true);
+		blurButton.setEnabled(true);
+		enhanceButton.setEnabled(true);
+		combineButton.setEnabled(true);
+		redoButton.setEnabled(true);
+		undoButton.setEnabled(true);
+
+	}
+
+	private static void deleteTempFolder () {
+
+	}
+
+	/**
+	 * Saves the current BitMap file into a temporary image folder
+	 */
+	private void saveTempImage( ) {
+
+		if (bmp != null) {
+
+			// Create Folder if it does not exist
+			if ( !(new File(TMP_FOLDER)).exists() ) {
+				// Create new folder called ".tmpImages"
+				new File(TMP_FOLDER).mkdirs(); 
+			} 
+
+			try {
+
+				// Save file as filePointerName
+				bmp.writeBitmap( new File( TMP_FOLDER+"/"+currentFilePointer+".tmp") );
+				++currentFilePointer;
+
+			} catch (IOException e) {
+				System.err.println("Error. Could not save tmp bmp file");
+			}
+			
+		}
+
+	}
+
+	/**
+	 * Handle all actions involving the undo/redo buttons
+	 *
+	 **/
+	private void addUndoRedoButtons() {
+
+		Container cPane = this.getContentPane();
+
+		JPanel buttonPanel = new JPanel( );
+
+		undoButton = new JButton("Undo");
+		redoButton = new JButton("Redo");
+
+		undoButton.setEnabled(false);
+		redoButton.setEnabled(false);
+
+		buttonPanel.add(undoButton);
+		buttonPanel.add(redoButton);
+
+		cPane.add(buttonPanel, BorderLayout.NORTH);
+
+		undoButton.addActionListener(
+			new ActionListener () {
+				public void actionPerformed( ActionEvent e) {
+
+					if (bmp != null && currentFilePointer > 0) {
+
+						// Back trace where you were in the array of files
+						--currentFilePointer;
+					} 
 
 
-		this.addComponentListener(new ComponentListener() {
+				}
+			}
+		);
 
+		redoButton.addActionListener(
+			new ActionListener () {
+				public void actionPerformed( ActionEvent e) {
+
+
+					if (bmp != null && currentFilePointer < tempFiles.size() ) {
+						
+
+						++currentFilePointer;
+					}
+
+
+				}
+			}
+		);		
+
+
+	}
+
+	/**
+	 * Currently not being used because we are trying to find a better way to center the canvas on the screen
+	 */
+	 private void trackWindowSize() {
+
+		this.addComponentListener(new ComponentAdapter() {
 		    @Override public void componentResized(ComponentEvent e) {
-
+		    	
 		    	if (bmp == null) {
 
-			    	horizontal_padding = ( (e.getComponent()).getWidth() - DEFAULT_CANVAS_WIDTH ) / 2;
-			    	vertical_padding   = ( (e.getComponent()).getHeight() - DEFAULT_CANVAS_HEIGHT) / 2;	
-			    	// System.out.println(horizontal_padding);
-			    	// System.out.println(vertical_padding);
+		    		canvas.setSize(
+		    			Math.max(DEFAULT_CANVAS_WIDTH, canvas.getWidth()),
+		    			Math.max(DEFAULT_CANVAS_HEIGHT, canvas.getHeight())
+		    		);
+
+			    	horizontal_padding = (canvas.getWidth() - DEFAULT_CANVAS_WIDTH ) / 2;
+			    	vertical_padding   = (canvas.getHeight() - DEFAULT_CANVAS_HEIGHT) / 2;	
 
 		    	} else {
-			    	horizontal_padding = ( (e.getComponent()).getWidth() - bmp.getWidth()) / 2;
-			    	vertical_padding   = ( (e.getComponent()).getHeight() - bmp.getHeight()) / 2;
+
+		    		canvas.setSize(
+		    			Math.max(bmp.getWidth(), canvas.getWidth()),
+		    			Math.max(bmp.getHeight(), canvas.getHeight())
+		    		);
+
+			    	horizontal_padding = (canvas.getWidth() - bmp.getWidth()) / 2;
+			    	vertical_padding   = (canvas.getHeight() - bmp.getHeight()) / 2;
+
 		    	}
 
 		        pack();
 		        repaint();
 
 		    }
-
-		    @Override public void componentHidden(ComponentEvent e) {
-		    	
-		    }
-
-			@Override public void componentMoved(ComponentEvent e) {
-
-			}
-
-			@Override public void componentShown(ComponentEvent e)  {
-
-			}
 
 		});
 
@@ -198,21 +312,24 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 			
 		 			break;
 
-		 		case "Open":
-		 			
-		 			File openedFile = selectFile("Pick your .BMP");
+				case "Open":
+				 
+				 File openedFile = selectFile("Pick your .BMP");
 
-		 			if (openedFile != null) {
-		 				
-		 				bmp = new Bitmap(mostRecentInputFile = openedFile);
-		 				modified = false;
+				 if (openedFile != null) {
+				 	
+					bmp = new Bitmap(mostRecentInputFile = openedFile);
+					enableButtons();
+					modified = false;
 
-		 			}
+				 }
 
 		 			break;
 
 		 		case "Close":
 
+		 			// Delete TmpImages folder
+		 			// Disable Buttons
 		 			bmp = null;
 		 			break;
 
@@ -254,7 +371,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 * Adds the 4 buttons to the screen which allow the user to apply
 	 * various visual effects to the image.
 	 */
-	 private void addButtons() {
+	private void addButtons() {
 
 	 	Container cPane = this.getContentPane();
 
@@ -265,6 +382,13 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		enhanceButton = new JButton("Enhance");
 		combineButton = new JButton("Combine");
 
+		// Set all disabled since there is not image yet
+		flipButton.setEnabled(false);
+		blurButton.setEnabled(false);
+		enhanceButton.setEnabled(false);
+		combineButton.setEnabled(false);
+
+		// Add buttons to the screen
 		buttonPanel.add(flipButton);
 		buttonPanel.add(blurButton);
 		buttonPanel.add(enhanceButton);
@@ -276,9 +400,14 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed( ActionEvent e) {
 
-					bmp.flip();
-					imageWasModified();
-					repaint();
+					if (bmp != null) {
+						
+						saveTempImage();
+
+						bmp.flip();
+						imageWasModified();
+						repaint();
+					} 
 
 				}
 			}
@@ -288,9 +417,15 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed( ActionEvent e) {
 
-					bmp.blur(1);
-					imageWasModified();
-					repaint();
+					if (bmp != null) {
+						
+						saveTempImage();
+
+						bmp.blur(1);
+						imageWasModified();
+						repaint();
+
+					} 
 
 				}
 			}
@@ -300,9 +435,15 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			new ActionListener () {
 				public void actionPerformed( ActionEvent e) {
 
-					bmp.enhanceColor("red");
-					imageWasModified();
-					repaint();
+					if (bmp != null ) {
+						
+						saveTempImage();
+
+						bmp.enhanceColor("red");
+						imageWasModified();
+						repaint();
+
+					} 
 
 				}
 			}
@@ -311,6 +452,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		combineButton.addActionListener(
 			new ActionListener () {
 				public void actionPerformed( ActionEvent e) {
+
+					if (bmp != null) {
+						saveTempImage();
+					} 
 
 					System.out.println("Combine - not yet implemented");
 					// imageWasModified();
@@ -325,6 +470,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 * Opens up a JFileChooser for the user to choose a file from their file system.
 	 * @return - a file that the user selected on their computer, or null if they didn't choose anything
 	 */
+
 	private File selectFile (String title) {
 
 			/* Set up the file chooser, beginning at the proper directory */
@@ -368,6 +514,21 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		else
 			setTitle(String.format("%s (%s)", TITLE, mostRecentInputFile.getName()));
 
+	}
+
+	/** Make a new thread that monitors when the program quits **/
+	private static void cleanupBeforeProgramQuits() {
+
+		// The code within this will execute when the program exits for good
+    	Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() { 
+    		public void run() {
+
+	    		// Delete .tmpFolder
+	    		System.out.println("System Exiting. Deleting Temp Folder.");
+				deleteTempFolder();
+
+			}
+		}));
 	}
 
 	/** PRIVATE INNER CLASS **/

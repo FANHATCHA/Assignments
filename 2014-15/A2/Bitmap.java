@@ -56,8 +56,8 @@ public class Bitmap {
 			/* Retrieve dimension information */
 		
 		input.seek(DIMENSIONS_INDEX);
-		width = getInt(input, 4);
-		height = getInt(input, 4);
+		width           = getInt(input, 4);
+		height          = getInt(input, 4);
 		numPaddingBytes = width % 4;
 		
 			/* Read in pixel information */
@@ -71,9 +71,9 @@ public class Bitmap {
 			// Read in the row of pixels
 			for (int x = 0; x < width; x++) {
 
-				int blue = getInt(input, 1);
+				int blue  = getInt(input, 1);
 				int green = getInt(input, 1);
-				int red = getInt(input, 1);
+				int red   = getInt(input, 1);
 
 				pixels[y][x] = makeValidColor(red, green, blue);
 			}
@@ -164,7 +164,7 @@ public class Bitmap {
 			for (int x = 0; x < width; x++) {
 				
 				int count = 0;
-				int red = 0, green = 0, blue = 0;
+				int red   = 0, green = 0, blue = 0;
 
 					/* Calculate blurred pixel from neighbors */
 
