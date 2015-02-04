@@ -2,7 +2,7 @@ import java.awt.*;
 import java.io.*;
 import java.awt.image.*;
 
-public class Bitmap {
+public class Bitmap implements Cloneable {
 
 		/* Constants */
 
@@ -279,4 +279,35 @@ public class Bitmap {
 
 	}
 
+    @Override protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

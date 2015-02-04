@@ -43,7 +43,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	private Canvas canvas;
 
 	private int currentFilePointer = 0;
-	private ArrayList <String> tempFiles = new ArrayList <String> ();
+	// private ArrayList <String> tempBMPFiles = new ArrayList <String> ();
+	private ArrayList <Bitmap> tempBMPFiles = new ArrayList <Bitmap> ();
 
 	public static void main(String[] args) {
 		
@@ -117,6 +118,21 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		// ∃ an image to save
 		if (bmp != null) {
+			
+			try {
+				
+				tempBMPFiles.add( (Bitmap) bmp.clone() );
+				++currentFilePointer;
+				System.out.println("Stored bmp files: " + tempBMPFiles.size());
+
+			} catch (CloneNotSupportedException e) {
+				System.err.println("Houston we've got a problem...");
+			}
+
+			// Thread Approach, nearly working except for the fact that 
+			// there is some sort of overlap between threads
+
+			/* 
 
 			// Create Folder if it does not exist
 			if ( !(new File(TMP_FOLDER)).exists() ) {
@@ -124,36 +140,44 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				new File(TMP_FOLDER).mkdirs(); 
 			} 
 
-			File saveFile = new File( TMP_FOLDER+"/"+currentFilePointer+".tmp");
-			
-			
+			final File saveFile = new File( TMP_FOLDER+"/"+currentFilePointer+".tmp");
+
 			if (saveFile != null) {
 
-				// Create new Thread to save image, this is only so that the user does not experience any lag.
-				Runnable saveImageTask = new Runnable () {
-					public void run() {
+				synchronized (this) {
+					++currentFilePointer;
 
-						try{				
-							// Save file as filePointerName
-							bmp.writeBitmap( saveFile );
-							++currentFilePointer;
-						} catch (IOException e) {
-							System.err.println("Failed to save temp file: " + currentFilePointer);
-							return;
+					// Create new Thread to save image, this is only so that the user does not experience any lag.
+					Runnable saveImageTask = new Runnable () {
+						public void run() {
+
+							try { 
+								// Save file as filePointerName
+								bmp.writeBitmap( saveFile );
+								
+							} catch (IOException e) {
+								System.err.println("Failed to save temp file: " + currentFilePointer);
+								return;
+							}
+							System.out.println("Finished Saving image: " + currentFilePointer);
 						}
-						System.out.println("Finished Saving image: " + currentFilePointer);
-					}
-				};
+					};
 
-				new Thread(saveImageTask).start();
+					try {
+						Thread task = new Thread(saveImageTask);
+						task.start();
+						// task.join();
+					} catch (InterruptedException e) { }
+
+				}
 
 			} else {
 				System.err.println("Failed to create temp file: "+ currentFilePointer);
 			}
+			*/
 
 		}
-
-	}
+	} // saveTempImage
 
 	/**
 	 * Handle all actions involving the undo/redo buttons
@@ -176,14 +200,20 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		cPane.add(buttonPanel, BorderLayout.NORTH);
 
+
 		undoButton.addActionListener(
 			new ActionListener () {
 				public void actionPerformed( ActionEvent e) {
 
 					if (bmp != null && currentFilePointer > 0) {
 
-						// Back trace where you were in the array of files
-						// --currentFilePointer;
+						System.out.println("Undo Called");
+						bmp = tempBMPFiles.get(--currentFilePointer);
+
+						imageWasModified();
+						repaint();
+
+						// canvas.repaint();
 					} 
 
 
@@ -191,15 +221,22 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			}
 		);
 
+
 		redoButton.addActionListener(
 			new ActionListener () {
 				public void actionPerformed( ActionEvent e) {
 
 
-					if (bmp != null && currentFilePointer < tempFiles.size() ) {
+					if (bmp != null && currentFilePointer < tempBMPFiles.size() ) {
 						
+						System.out.println("Redo Called");
+						bmp = tempBMPFiles.get(++currentFilePointer);
 
-						// ++currentFilePointer;
+						imageWasModified();
+						repaint();
+
+						// canvas.repaint();
+						
 					}
 
 
@@ -208,7 +245,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		);		
 
 
-	}
+	} // addUndoRedoButtons
 
 	/**
 	 * Currently not being used because we are trying to find a better way to center the canvas on the screen
@@ -420,8 +457,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					if (bmp != null) {
 						
 						saveTempImage();
-
 						bmp.flip();
+
 						imageWasModified();
 						repaint();
 					} 
@@ -455,8 +492,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					if (bmp != null ) {
 						
 						saveTempImage();
-
 						bmp.enhanceColor("red");
+
 						imageWasModified();
 						repaint();
 
@@ -540,9 +577,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
     	Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() { 
     		public void run() {
 
-	    		// Delete .tmpFolder
-	    		System.out.println("System Exiting. Deleting Temp Folder.");
-				deleteTempFolder();
+	    		// Delete .tmpFolder?
+	    		System.out.println("Perform System cleanup");
+				
 
 			}
 		}));
@@ -590,6 +627,19 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 	}
 	 }
 
-
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
