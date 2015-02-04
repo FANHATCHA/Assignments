@@ -35,7 +35,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		/* Components */
 
-	private JMenuItem closeMenuItem, saveMenuItem, saveAsMenuItem, undoMenuItem, redoMenuItem;
+	private JMenuItem closeMenuItem, saveMenuItem, saveAsMenuItem, undoAllMenuItem, undoMenuItem, redoMenuItem;
 	private JButton flipButton, blurButton, enhanceButton, combineButton, rotateButton, grayscaleButton,
 					undoButton, redoButton;
 
@@ -221,6 +221,15 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		undoMenuItem.setEnabled(false);
 		menu.add(undoMenuItem);
 
+		undoAllMenuItem = new JMenuItem("Undo All");
+		undoAllMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK));
+		undoAllMenuItem.getAccessibleContext().setAccessibleDescription("Undo All");
+		undoAllMenuItem.addActionListener(this);
+		undoAllMenuItem.setEnabled(false);
+		menu.add(undoAllMenuItem);
+
+		menu.addSeparator();
+
 		redoMenuItem = new JMenuItem("Redo");
 		redoMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, ActionEvent.CTRL_MASK));
 		redoMenuItem.getAccessibleContext().setAccessibleDescription("Redo");
@@ -294,6 +303,11 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 		case "Undo":
 
 		 			undo();
+		 			break;
+
+		 		case "Undo All":
+
+		 			undoAll();
 		 			break;
 
 		 		case "Redo":
@@ -543,6 +557,18 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	}
 
+	private void undoAll() {
+
+		while (!undoStack.isEmpty()) {
+			redoStack.push(bmp);
+			bmp = undoStack.pop();
+		}
+
+		imageWasModified();
+		repaint();
+
+	}
+
 	private void redo() {
 
 		undoStack.push(bmp);
@@ -605,6 +631,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		redoButton.setEnabled(redoStack.size() != 0);
 
 		undoMenuItem.setEnabled(undoStack.size() != 0);
+		undoAllMenuItem.setEnabled(undoStack.size() != 0);
 		redoMenuItem.setEnabled(redoStack.size() != 0);
 
 	}
