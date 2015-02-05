@@ -505,7 +505,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 							if (openedFile != null) {
 								try {
 									Bitmap newBmp = new Bitmap( openedFile );
-									bmp = Bitmap.combine(bmp , newBmp );							
+									bmp = Bitmap.combine(bmp , newBmp );
+									pack();							
 								} catch (IOException event) {
 									System.err.println("Ooops! IOError has occured while combining images");
 								}
