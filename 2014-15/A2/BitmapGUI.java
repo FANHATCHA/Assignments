@@ -115,39 +115,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		// Add Panel to the right side of the screen
 		add(optionPanel, BorderLayout.EAST);
 
-
-		sliderOne.addChangeListener(
-			new ChangeListener() {
-				@Override public void stateChanged(ChangeEvent e) {
-
-					System.out.println("1");
-
-				}
-			}
-		);
-
-
-		sliderTwo.addChangeListener(
-			new ChangeListener() {
-				@Override public void stateChanged(ChangeEvent e) {
-
-					System.out.println("2");
-
-				}
-			}
-		);
-
-
-		sliderThree.addChangeListener(
-			new ChangeListener() {
-				@Override public void stateChanged(ChangeEvent e) {
-
-					System.out.println("3");
-
-				}
-			}
-		);
-
 	}
 
 	/** Set some default GUI Properties **/
@@ -512,7 +479,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 							break;
 
 						case BLUR:
-							bmp.blur(1);
+
+							int blurValue = sliderOne.getValue() / 10;
+							System.out.println( blurValue );
+							bmp.blur(blurValue);
 							break;
 						
 						case ENHANCE:
@@ -531,7 +501,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 							break;
 						
 						case GRAYSCALE:
-							bmp.grayscale(1.0f);
+							float grayValue = sliderOne.getValue() / 100f;
+							bmp.grayscale(grayValue);
 							break;
 						
 						case EDGE:
@@ -543,7 +514,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 							break;
 
 					}
-
 
 					imageWasModified();
 					redoStack.clear();
@@ -576,6 +546,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					
 					disableSliders();
 					sliderOne.setEnabled(true);
+					sliderOne.setValue(10); // range of one
 					selectedButton = BUTTON.BLUR;
 
 				} 
@@ -589,6 +560,11 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				if (imageExists() ) {
 					
 					enableSliders();
+
+					sliderOne.setValue(75);
+					sliderTwo.setValue(25);
+					sliderThree.setValue(36);
+
 					selectedButton = BUTTON.ENHANCE;
 
 				} 
@@ -625,7 +601,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				if (imageExists() ) {
 					
 					disableSliders();
-					sliderOne.setEnabled(false);
+					sliderOne.setEnabled(true);
+					sliderOne.setValue(100); 
+
 					selectedButton = BUTTON.GRAYSCALE;
 				} 
 
@@ -640,6 +618,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					
 					disableSliders();
 					sliderOne.setEnabled(true);
+					sliderOne.setValue(50);
 					selectedButton = BUTTON.EDGE;
 				} 
 
@@ -654,6 +633,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					
 					disableSliders();
 					sliderOne.setEnabled(true);
+					sliderOne.setValue(30);
 					selectedButton = BUTTON.MOSAIC;
 				} 
 

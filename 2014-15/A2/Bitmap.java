@@ -144,7 +144,7 @@ public class Bitmap implements Cloneable {
 	/**
 	* Edge Detection.
 	*
-	* @param precision - the precision you want on your edge detection
+	* @param precision - the precision you want on your edge detection. The default is approx 10.0
 	*/
 	public void edgeDetection ( final float precision ) {
 		
