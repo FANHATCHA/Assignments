@@ -99,6 +99,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		combineButton.setEnabled(true);
 		rotateButton.setEnabled(true);
 		grayscaleButton.setEnabled(true);
+		edgeButton.setEnabled(true);
+		mosaicButton.setEnabled(true);
 
 		updateUndoRedoButtons();
 
@@ -113,6 +115,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		combineButton.setEnabled(false);
 		rotateButton.setEnabled(false);
 		grayscaleButton.setEnabled(false);
+		edgeButton.setEnabled(false);
+		mosaicButton.setEnabled(false);
 
 		updateUndoRedoButtons();
 
@@ -133,6 +137,11 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 			} catch (CloneNotSupportedException e) {
 				System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
+			} catch (OutOfMemoryError e) {
+				System.out.println("Memory exceeded, clearing all undo/redos");
+				undoStack.clear();
+				redoStack.clear();
+				updateUndoRedoButtons();
 			}
 		}
 
