@@ -131,12 +131,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				undoStack.push((Bitmap) bmp.clone());
 
-				// System.out.println("Stored bmp files: ");
-
 			} catch (CloneNotSupportedException e) {
 				System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
 			} catch (OutOfMemoryError e) {
-				System.err.println("Memory exceeded, clearing all undo/redos");
+				JOptionPane.showMessageDialog(null, "Memory exceeded, clearing all undo/redos", "Warning", JOptionPane.WARNING_MESSAGE);
 				undoStack.clear();
 				redoStack.clear();
 				updateUndoRedoButtons();
