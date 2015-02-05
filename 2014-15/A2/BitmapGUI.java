@@ -15,8 +15,6 @@ import java.util.*;
 
 	-Effect ideas:
 		-Combine
-		-Edge detection (Will)
-		-Pixelize (Will)
 		-Swirl??
 
 */
@@ -138,7 +136,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			} catch (CloneNotSupportedException e) {
 				System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
 			} catch (OutOfMemoryError e) {
-				System.out.println("Memory exceeded, clearing all undo/redos");
+				System.err.println("Memory exceeded, clearing all undo/redos");
 				undoStack.clear();
 				redoStack.clear();
 				updateUndoRedoButtons();
