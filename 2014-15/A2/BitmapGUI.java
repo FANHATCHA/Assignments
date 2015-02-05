@@ -12,11 +12,12 @@ import javax.swing.event.*;
 
 	-For "Save As" button, the user should be able to type in a new file name
 	(currently the user is only able to overwrite another file (at least on Mac OS))
-	-Options for the effects need to be made available for the user
 
-	-Effect ideas:
-		-Combine
-		-Swirl??
+	- Make sure 'Save As' saves a file with a bmp extension
+
+	- Swirl Effect?
+	- Refactor
+	- Celebrate, we're done!
 
 */
 
@@ -321,12 +322,11 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		 		case "Save As...":
 		 			
-		 			File newFile = selectFile("Pick your .BMP");
+		 			File newFile = saveFile("Choose name for new image");
 
-		 			if (newFile == null)
-		 				break;
-		 			else
-		 				mostRecentInputFile = newFile;
+		 			if (newFile != null) 
+		 				bmp.writeBitmap( newFile );
+		 			break;
 
 		 		case "Save":
 
@@ -749,11 +749,30 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	}
 
+	/**
+	 * Prompts the user to name and specify a file they wish to save
+	 * @return - A File object to which data can be saved
+	 */
+	private static File saveFile (String prompt) {
+
+		// Prompt user to select a file
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle(prompt);
+		int returnVal = fileChooser.showSaveDialog(null);
+
+		// User has finished selecting a file 
+		if(returnVal == JFileChooser.APPROVE_OPTION) 
+			return fileChooser.getSelectedFile();
+
+		// User did not select a file (pressed cancel) 
+		return null;
+		
+	}
+
 	 /** 
 	 * Opens up a JFileChooser for the user to choose a file from their file system.
 	 * @return - a file that the user selected on their computer, or null if they didn't choose anything
 	 */
-
 	private File selectFile (String title) {
 
 			/* Set up the file chooser */

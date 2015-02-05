@@ -270,10 +270,14 @@ public class Bitmap implements Cloneable {
 
 		Bitmap newBitmap = new Bitmap(newWidth, newHeight);
 
-		// Fill background with white
+		// Adding an alpha channel to this black background makes it
+		// comparable against other black pixel using the .equals method
+		final Color backgroundColor = new Color(0,0,0,1);
+
+		// Fill background with Black
 		for (int y = 0; y < newHeight; y++) 
 			for (int x = 0; x < newWidth; x++) 
-				newBitmap.pixels[y][x] = Color.WHITE;
+				newBitmap.pixels[y][x] = backgroundColor;
 		
 		// Create new Header
 		int [] newHeader = p1.header.clone();
@@ -295,7 +299,7 @@ public class Bitmap implements Cloneable {
 				
 				Color px = newBitmap.pixels[y][x];
 				
-				if (px == null) {
+				if (px.equals(backgroundColor)) {
 					newBitmap.pixels[y][x] = p2.pixels[y][x];
 				} else {
 					
