@@ -133,6 +133,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 			} catch (CloneNotSupportedException e) {
 				System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
+
 			} catch (OutOfMemoryError e) {
 				JOptionPane.showMessageDialog(null, "Memory exceeded, clearing all undo/redos", "Warning", JOptionPane.WARNING_MESSAGE);
 				undoStack.clear();
@@ -472,7 +473,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 						
 						saveTempImage();
 
-						bmp.enhanceColor("red", 1.5f);
+						bmp.enhanceColor( 0.75f, 1.5f , 2f );
 
 						imageWasModified();
 						redoStack.clear();

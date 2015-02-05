@@ -143,7 +143,8 @@ public class Bitmap implements Cloneable {
 
 	/**
 	* Edge Detection.
-	* Default: precision = ≈10.0f;
+	*
+	* @param precision - the precision you want on your edge detection
 	*/
 	public void edgeDetection ( final float precision ) {
 		
@@ -159,7 +160,7 @@ public class Bitmap implements Cloneable {
 					Color rightPx = pixels[y][x+1];
 					Color belowPx = pixels[y+1][x];
 
-					// find luminance
+					// Find luminance
 					float lumCur   = luminance(px.getRed(), px.getGreen(), px.getBlue());
 					float lumRight = luminance(rightPx.getRed(), rightPx.getGreen(), rightPx.getBlue());
 					float lumBelow = luminance(belowPx.getRed(), belowPx.getGreen(), belowPx.getBlue());
@@ -187,7 +188,7 @@ public class Bitmap implements Cloneable {
 	 * Creates a Mosaic picture effect.
 	 * If the cellSize is large than the image then the original image is not touched.   
 	 * 
-	 * @param cellSize - the cellsize of each pixel cluster
+	 * @param cellSize - the cell size of each pixel cluster
 	 */
 	public void mosaic( int cellSize ) {
 
@@ -200,6 +201,7 @@ public class Bitmap implements Cloneable {
 					int avgRed = 0, avgGreen = 0, avgBlue = 0;
 					ArrayList <Color> cellPixels = getPixelsInRange( pixels, x, y, x+cellSize, y+cellSize );
 
+					// Average each Color
 					for (Color color : cellPixels) {
 						avgRed   += color.getRed(); 	
 						avgGreen += color.getGreen();
@@ -342,7 +344,7 @@ public class Bitmap implements Cloneable {
 
 					/* Calculate blurred pixel from neighbors */
 
-				for (int yOffset = -range; yOffset <= range; yOffset++)
+				for (int yOffset = -range; yOffset <= range; yOffset++) 
 					for (int xOffset = -range; xOffset <= range; xOffset++) {
 						
 						// We don't want to go out of bounds
@@ -354,9 +356,9 @@ public class Bitmap implements Cloneable {
 							continue;
 						
 						// Add the color values to our running totals
-						red += pixels[y + yOffset][x + xOffset].getRed();
+						red   += pixels[y + yOffset][x + xOffset].getRed();
 						green += pixels[y + yOffset][x + xOffset].getGreen();
-						blue += pixels[y + yOffset][x + xOffset].getBlue();
+						blue  += pixels[y + yOffset][x + xOffset].getBlue();
 						count++;
 
 					}
@@ -372,32 +374,21 @@ public class Bitmap implements Cloneable {
 	}
 	
 	/**
-	* Ehances the specified color.
-	* @param color - "red", "green", or "blue"
-	* @param factor - 0.0f would be 0% (no preferred color remaining)
-	*               - 1.0f would be 100% (no change)
-	*               - 1.5f would be 150% (50% enhancement)
-	*               - >255.0f would be redundant since all values would be 0 or 255 by that point
+	* Enhances the specified color.
+	* @param redFactor - The amount of % you wish to increase the red component by
+	* @param greenFactor - The amount of % you wish to increase the green component by
+	* @param blueFactor - The amount of % you wish to increase the blue component by
 	*/
-	public void enhanceColor(String color, float factor) {
+	public void enhanceColor( float redFactor, float greenFactor, float blueFactor ) {
 		
 		for (int y = 0; y < height; y++)
 			for (int x = 0; x < width; x++) {
 
-					/* Get original values */
-
-				int red = pixels[y][x].getRed();
-				int green = pixels[y][x].getGreen();
-				int blue = pixels[y][x].getBlue();
-				
 					/* Modify preferred color component */
 
-				if (color.equals("red"))
-					red   = (int) (red * factor);
-				else if (color.equals("green"))
-					green = (int) (green * factor);
-				else if (color.equals("blue"))
-					blue  = (int) (blue  * factor);
+				int red   = (int) ( pixels[y][x].getRed()   * redFactor );
+				int green = (int) ( pixels[y][x].getGreen() * greenFactor );
+				int blue  = (int) ( pixels[y][x].getBlue()  * blueFactor );
 
 					/* Create new pixel */
 
