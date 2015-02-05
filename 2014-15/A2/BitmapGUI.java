@@ -18,11 +18,6 @@ import javax.swing.event.*;
 		-Combine
 		-Swirl??
 
-	- Picture Manipulation which require Slider:
-	  - enhance
-	  - Blur
-	  - 
-
 */
 
 public class BitmapGUI extends JFrame implements ActionListener {
@@ -31,6 +26,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	private static final String TITLE = "BitmapHacker";
 	
+	private enum BUTTON {
+		FLIP, BLUR, ENHANCE, COMBINE, ROTATE, GRAYSCALE, EDGE, MOSAIC
+	}
+
 		/* Variables */
 
 	private File mostRecentInputFile;
@@ -40,9 +39,11 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		/* Components */
 
 	private JMenuItem closeMenuItem, saveMenuItem, saveAsMenuItem, undoAllMenuItem, undoMenuItem, redoMenuItem;
-	private JButton flipButton, blurButton, enhanceButton, combineButton, rotateButton, grayscaleButton, edgeButton, mosaicButton,
-					undoButton, redoButton,
+	// private JButton flipButton, blurButton, enhanceButton, combineButton, rotateButton, grayscaleButton, edgeButton, mosaicButton,
+	private JButton undoButton, redoButton,
 					applyButton;
+
+	private JRadioButton flipButton, blurButton, enhanceButton, combineButton, rotateButton, grayscaleButton, edgeButton, mosaicButton;
 
 	private Canvas canvas;
 
@@ -51,6 +52,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	private JSlider sliderOne, sliderTwo, sliderThree;
 	private JPanel optionPanel;
+	private BUTTON selectedButton = BUTTON.FLIP;
 
 	public static void main(String[] args) {
 		
@@ -372,7 +374,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					 	undoStack.clear();
 
 						enableButtons();
-						enableSliders();
 
 					 	saveTempImage();
 						bmp = new Bitmap(mostRecentInputFile = openedFile);
@@ -450,23 +451,36 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	private void addButtons() {
 
 		JPanel buttonPanel = new JPanel();
-		
-		flipButton      = new JButton("Flip");
-		blurButton      = new JButton("Blur");
-		enhanceButton   = new JButton("Enhance");
-		combineButton   = new JButton("Combine");
-		rotateButton    = new JButton("Rotate");
-		grayscaleButton = new JButton("Grayscale");
-		edgeButton      = new JButton("Edge");
-		mosaicButton    = new JButton("Mosaic");
-		
+		ButtonGroup buttonGroup = new ButtonGroup();
+
+		flipButton      = new JRadioButton("Flip");
+		blurButton      = new JRadioButton("Blur");
+		enhanceButton   = new JRadioButton("Enhance");
+		combineButton   = new JRadioButton("Combine");
+		rotateButton    = new JRadioButton("Rotate");
+		grayscaleButton = new JRadioButton("Grayscale");
+		edgeButton      = new JRadioButton("Edge");
+		mosaicButton    = new JRadioButton("Mosaic");
+
+		// By default flipButton will be selected
+		flipButton.setSelected(true);
+
+		buttonGroup.add(flipButton);
+		buttonGroup.add(blurButton);
+		buttonGroup.add(enhanceButton);
+		buttonGroup.add(combineButton);
+		buttonGroup.add(rotateButton);
+		buttonGroup.add(grayscaleButton);
+		buttonGroup.add(edgeButton);
+		buttonGroup.add(mosaicButton);
 
 		addUndoRedoButtons();
 
 		// Set all disabled since there is not image yet
 		disableButtons();
+		disableSliders();
 
-		// Add buttons to the screen
+		// Add buttons to panel
 		buttonPanel.add(flipButton);
 		buttonPanel.add(blurButton);
 		buttonPanel.add(enhanceButton);
@@ -476,122 +490,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		buttonPanel.add(edgeButton);
 		buttonPanel.add(mosaicButton);
 
-
 		add(buttonPanel, BorderLayout.SOUTH);
-
-		// --------------------------------------------------------------------------------
-		// --------------------------------------------------------------------------------
-		/*                              Add Mouse Listeners                              */
-		// --------------------------------------------------------------------------------
-		// --------------------------------------------------------------------------------
-
-
-		flipButton.addMouseMotionListener( new MouseMotionListener ( ) {
-			@Override public void mouseDragged(MouseEvent e) { }
-			@Override public void mouseMoved(MouseEvent e) {
-
-				if (imageExists()) {
-					sliderOne.setEnabled(false);
-					sliderTwo.setEnabled(false);
-					sliderThree.setEnabled(false);
-				}
-
-			}
-		});
-
-		blurButton.addMouseMotionListener( new MouseMotionListener ( ) {
-			@Override public void mouseDragged(MouseEvent e) { }
-			@Override public void mouseMoved(MouseEvent e) {
-
-				if (imageExists()) {
-					sliderOne.setEnabled(true);
-					sliderTwo.setEnabled(false);
-					sliderThree.setEnabled(false);
-				}
-
-			}
-		});
-
-		enhanceButton.addMouseMotionListener( new MouseMotionListener ( ) {
-			@Override public void mouseDragged(MouseEvent e) { }
-			@Override public void mouseMoved(MouseEvent e) {
-
-				if (imageExists()) {
-					sliderOne.setEnabled(true);
-					sliderTwo.setEnabled(true);
-					sliderThree.setEnabled(true);
-				}
-
-			}
-		});
-
-
-		combineButton.addMouseMotionListener( new MouseMotionListener ( ) {
-			@Override public void mouseDragged(MouseEvent e) { }
-			@Override public void mouseMoved(MouseEvent e) {
-
-				if (imageExists()) {
-					sliderOne.setEnabled(false);
-					sliderTwo.setEnabled(false);
-					sliderThree.setEnabled(false);
-				}
-
-			}
-		});
-
-
-		rotateButton.addMouseMotionListener( new MouseMotionListener ( ) {
-			@Override public void mouseDragged(MouseEvent e) { }
-			@Override public void mouseMoved(MouseEvent e) {
-
-				if (imageExists()) {
-					sliderOne.setEnabled(false);
-					sliderTwo.setEnabled(false);
-					sliderThree.setEnabled(false);
-				}
-
-			}
-		});
-
-
-		grayscaleButton.addMouseMotionListener( new MouseMotionListener ( ) {
-			@Override public void mouseDragged(MouseEvent e) { }
-			@Override public void mouseMoved(MouseEvent e) {
-
-				if (imageExists()) {
-					sliderOne.setEnabled(false);
-					sliderTwo.setEnabled(false);
-					sliderThree.setEnabled(false);
-				}
-
-			}
-		});
-
-		edgeButton.addMouseMotionListener( new MouseMotionListener ( ) {
-			@Override public void mouseDragged(MouseEvent e) { }
-			@Override public void mouseMoved(MouseEvent e) {
-
-				if (imageExists()) {
-					sliderOne.setEnabled(true);
-					sliderTwo.setEnabled(false);
-					sliderThree.setEnabled(false);
-				}
-
-			}
-		});
-
-		mosaicButton.addMouseMotionListener( new MouseMotionListener ( ) {
-			@Override public void mouseDragged(MouseEvent e) { }
-			@Override public void mouseMoved(MouseEvent e) {
-
-				if (imageExists()) {
-					sliderOne.setEnabled(true);
-					sliderTwo.setEnabled(false);
-					sliderThree.setEnabled(false);
-				}
-
-			}
-		});
 
 		// --------------------------------------------------------------------------------
 		// --------------------------------------------------------------------------------
@@ -599,14 +498,52 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		// --------------------------------------------------------------------------------
 		// --------------------------------------------------------------------------------
 
-
-		flipButton.addActionListener( new ActionListener () {
+		applyButton.addActionListener( new ActionListener () {
 			public void actionPerformed( ActionEvent e) {
 
 				if (imageExists()) {
 					
 					saveTempImage();
-					bmp.flipVertically();
+
+					switch (selectedButton) {
+
+						case FLIP:
+							bmp.flipVertically();
+							break;
+
+						case BLUR:
+							bmp.blur(1);
+							break;
+						
+						case ENHANCE:
+							bmp.enhanceColor( 0.75f, 1.5f , 2f );
+							break;
+
+						case COMBINE:
+
+							System.out.println("Combine - not yet implemented");
+							break;
+						
+						case ROTATE:
+							bmp.rotateCounterClockwise();
+							canvas.refreshSize();
+							pack();
+							break;
+						
+						case GRAYSCALE:
+							bmp.grayscale(1.0f);
+							break;
+						
+						case EDGE:
+							bmp.edgeDetection( 10 ); 
+							break;
+						
+						case MOSAIC:
+							bmp.mosaic( 13 );
+							break;
+
+					}
+
 
 					imageWasModified();
 					redoStack.clear();
@@ -617,19 +554,29 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			}
 		});
 
+
+
+		flipButton.addActionListener( new ActionListener () {
+			public void actionPerformed( ActionEvent e) {
+
+				if (imageExists()) {
+					
+					disableSliders();
+					selectedButton = BUTTON.FLIP;
+
+				} 
+
+			}
+		});
+
 		blurButton.addActionListener( new ActionListener () {
 			public void actionPerformed( ActionEvent e) {
 
 				if (imageExists()) {
 					
-					saveTempImage();
-
-					bmp.blur(1);
-
-					imageWasModified();
-					redoStack.clear();
-					updateUndoRedoButtons();
-					repaint();
+					disableSliders();
+					sliderOne.setEnabled(true);
+					selectedButton = BUTTON.BLUR;
 
 				} 
 
@@ -641,14 +588,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists() ) {
 					
-					saveTempImage();
-
-					bmp.enhanceColor( 0.75f, 1.5f , 2f );
-
-					imageWasModified();
-					redoStack.clear();
-					updateUndoRedoButtons();
-					repaint();
+					enableSliders();
+					selectedButton = BUTTON.ENHANCE;
 
 				} 
 
@@ -658,14 +599,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		combineButton.addActionListener( new ActionListener () {
 			public void actionPerformed( ActionEvent e) {
 
-				// saveTempImage(); 
 
-				System.out.println("Combine - not yet implemented");
-
-				// redoStack.clear();
-				// updateUndoRedoButtons();
-				// imageWasModified();
-				// repaint();
+				disableSliders();
+				selectedButton = BUTTON.COMBINE;
 
 			}
 		});
@@ -675,17 +611,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists() ) {
 					
-					saveTempImage();
-
-					bmp.rotateCounterClockwise();
-
-					canvas.refreshSize();
-					pack();
-
-					imageWasModified();
-					redoStack.clear();
-					updateUndoRedoButtons();
-					repaint();
+					disableSliders();
+					selectedButton = BUTTON.ROTATE;
 
 				} 
 
@@ -697,15 +624,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists() ) {
 					
-					saveTempImage();
-
-					bmp.grayscale(1.0f);
-
-					imageWasModified();
-					redoStack.clear();
-					updateUndoRedoButtons();
-					repaint();
-
+					disableSliders();
+					sliderOne.setEnabled(false);
+					selectedButton = BUTTON.GRAYSCALE;
 				} 
 
 			}
@@ -717,13 +638,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists()) {
 					
-					saveTempImage();
-					bmp.edgeDetection( 10 ); 
-
-					imageWasModified();
-					redoStack.clear();
-					updateUndoRedoButtons();
-					repaint();
+					disableSliders();
+					sliderOne.setEnabled(true);
+					selectedButton = BUTTON.EDGE;
 				} 
 
 			}
@@ -735,13 +652,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists()) {
 					
-					saveTempImage();
-					bmp.mosaic( 13 );
-
-					imageWasModified();
-					redoStack.clear();
-					updateUndoRedoButtons();
-					repaint();
+					disableSliders();
+					sliderOne.setEnabled(true);
+					selectedButton = BUTTON.MOSAIC;
 				} 
 
 			}
