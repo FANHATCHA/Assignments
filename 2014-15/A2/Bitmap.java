@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.io.*;
 import java.awt.image.*;
+import java.util.*;
 
 public class Bitmap implements Cloneable {
 
@@ -126,9 +127,23 @@ public class Bitmap implements Cloneable {
 		return (r+g+b)/3.0f;
 	}
 
+	/** Returns the pixels in a certain Rectangle of the image  **/
+	private ArrayList<Color> getPixelsInRange( Color [][] arr, int x1, int y1, int x2, int y2 ) {
+
+		ArrayList<Color> newArr = new ArrayList<Color>();
+
+		for (int y = y1; y < y2; y++) 
+			for (int x = x1; x < x2; x++) 
+				if (x < width && y < height) 
+					newArr.add( arr[y][x] );
+
+		return newArr;
+
+	}
+
 	/**
 	* Edge Detection.
-	* Default: precision = 15.0f;
+	* Default: precision = ≈10.0f;
 	*/
 	public void edgeDetection ( final float precision ) {
 		
@@ -139,15 +154,18 @@ public class Bitmap implements Cloneable {
 				
 				if (y < height-1 && x < width-1) {
 					
-					Color px = pixels[y][x];
+					// Get Neighboring pixels
+					Color px      = pixels[y][x];
 					Color rightPx = pixels[y][x+1];
-					Color belowPx  = pixels[y+1][x];
+					Color belowPx = pixels[y+1][x];
 
+					// find luminance
 					float lumCur   = luminance(px.getRed(), px.getGreen(), px.getBlue());
 					float lumRight = luminance(rightPx.getRed(), rightPx.getGreen(), rightPx.getBlue());
 					float lumBelow = luminance(belowPx.getRed(), belowPx.getGreen(), belowPx.getBlue());
 
-					if ( Math.abs(lumRight - lumCur) > precision && Math.abs(lumBelow - lumCur) > precision ) {
+					// Check for edge detection
+					if ( Math.abs(lumRight - lumCur) > precision || Math.abs(lumBelow - lumCur) > precision ) {
 						newPixels[y][x] = Color.BLACK;
 					} else {
 						newPixels[y][x] = Color.WHITE;
@@ -161,10 +179,57 @@ public class Bitmap implements Cloneable {
 			}
 		}
 
-		System.out.println("Loop Runs");
-
 		pixels = newPixels;
 	}
+	
+	/**
+	 *    
+	 * Creates a Mosaic picture effect.
+	 * If the cellSize is large than the image then the original image is not touched.   
+	 * 
+	 * @param cellSize - the cellsize of each pixel cluster
+	 */
+	public void mosaic( int cellSize ) {
+
+		if ( cellSize < Math.max(height, width) && cellSize != 1 ) {
+
+			// This nested loop treats each cell as though it were its own image
+			for (int y = 0; y < height; y += cellSize) {
+				for (int x = 0; x < width; x += cellSize) {
+
+					int avgRed = 0, avgGreen = 0, avgBlue = 0;
+					ArrayList <Color> cellPixels = getPixelsInRange( pixels, x, y, x+cellSize, y+cellSize );
+
+					for (Color color : cellPixels) {
+						avgRed   += color.getRed(); 	
+						avgGreen += color.getGreen();
+						avgBlue  += color.getBlue();
+					} 
+
+					avgRed   /= cellPixels.size();
+					avgGreen /= cellPixels.size();
+					avgBlue  /= cellPixels.size();
+
+					Color avgColor = new Color(avgRed, avgGreen, avgBlue);
+					
+					// Average each cell 
+					for ( int cy = y; cy < y + cellSize; cy++) {
+						for ( int cx = x; cx < x + cellSize ; cx++ ) {
+							
+							// Accounts for non evenly divisible cell sizes
+							if (cx < width && cy < height) 
+								pixels[cy][cx] = avgColor;
+
+						}
+					}
+					
+
+				} // outer x
+			} // outer y
+
+		} 
+
+	} // mosaic
 
 	/**
 	* Flip the image vertically.

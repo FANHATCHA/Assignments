@@ -36,7 +36,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		/* Components */
 
 	private JMenuItem closeMenuItem, saveMenuItem, saveAsMenuItem, undoAllMenuItem, undoMenuItem, redoMenuItem;
-	private JButton flipButton, blurButton, enhanceButton, combineButton, rotateButton, grayscaleButton,
+	private JButton flipButton, blurButton, enhanceButton, combineButton, rotateButton, grayscaleButton, edgeButton, mosaicButton,
 					undoButton, redoButton;
 
 	private Canvas canvas;
@@ -353,12 +353,14 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		JPanel buttonPanel = new JPanel();
 
-		flipButton = new JButton("Flip");
-		blurButton = new JButton("Blur");
-		enhanceButton = new JButton("Enhance");
-		combineButton = new JButton("Combine");
-		rotateButton = new JButton("Rotate");
+		flipButton      = new JButton("Flip");
+		blurButton      = new JButton("Blur");
+		enhanceButton   = new JButton("Enhance");
+		combineButton   = new JButton("Combine");
+		rotateButton    = new JButton("Rotate");
 		grayscaleButton = new JButton("Grayscale");
+		edgeButton      = new JButton("Edge");
+		mosaicButton    = new JButton("Mosaic");
 
 		addUndoRedoButtons();
 
@@ -372,8 +374,50 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		buttonPanel.add(combineButton);
 		buttonPanel.add(rotateButton);
 		buttonPanel.add(grayscaleButton);
+		buttonPanel.add(edgeButton);
+		buttonPanel.add(mosaicButton);
 
 		cPane.add(buttonPanel, BorderLayout.SOUTH);
+
+
+		edgeButton.addActionListener(
+			new ActionListener () {
+				public void actionPerformed( ActionEvent e) {
+
+					if (bmp != null) {
+						
+						saveTempImage();
+						bmp.edgeDetection( 10 ); 
+
+						imageWasModified();
+						redoStack.clear();
+						updateUndoRedoButtons();
+						repaint();
+					} 
+
+				}
+			}
+		);
+		
+
+		mosaicButton.addActionListener(
+			new ActionListener () {
+				public void actionPerformed( ActionEvent e) {
+
+					if (bmp != null) {
+						
+						saveTempImage();
+						bmp.mosaic( 13 );
+
+						imageWasModified();
+						redoStack.clear();
+						updateUndoRedoButtons();
+						repaint();
+					} 
+
+				}
+			}
+		);		
 
 		flipButton.addActionListener(
 			new ActionListener () {
