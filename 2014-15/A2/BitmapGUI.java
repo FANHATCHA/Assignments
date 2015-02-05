@@ -483,8 +483,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 						case BLUR:
 
+							// Blur range between 1-10
 							int blurValue = sliderOne.getValue() / 10;
-							System.out.println( blurValue );
 							bmp.blur(blurValue);
 							break;
 						
@@ -510,16 +510,22 @@ public class BitmapGUI extends JFrame implements ActionListener {
 							break;
 						
 						case GRAYSCALE:
+
+							// Grayscale percentage between 0-100%
 							float grayValue = sliderOne.getValue() / 100f;
 							bmp.grayscale(grayValue);
 							break;
 						
 						case EDGE:
+
+							// Precision between 0-20
 							float edgeValue = sliderOne.getValue() / 5.0f;
 							bmp.edgeDetection( edgeValue ); 
 							break;
 						
 						case MOSAIC:
+
+							// Mosiac cellsize value between 1-50
 							int mosaicValue = Math.max( 1, sliderOne.getValue()/2 );
 							bmp.mosaic( mosaicValue );
 							break;
