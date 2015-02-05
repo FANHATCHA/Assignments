@@ -4,6 +4,7 @@ import javax.swing.filechooser.*;
 import java.io.*;
 import java.awt.event.*;
 import java.util.*;
+import javax.swing.event.*;
 
 /*
 
@@ -35,12 +36,16 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	private JMenuItem closeMenuItem, saveMenuItem, saveAsMenuItem, undoAllMenuItem, undoMenuItem, redoMenuItem;
 	private JButton flipButton, blurButton, enhanceButton, combineButton, rotateButton, grayscaleButton, edgeButton, mosaicButton,
-					undoButton, redoButton;
+					undoButton, redoButton,
+					applyButton;
 
 	private Canvas canvas;
 
 	private Stack<Bitmap> 	undoStack = new Stack<Bitmap>(),
 							redoStack = new Stack<Bitmap>();
+
+	private JPanel optionPanel;
+	private JSlider sliderOne, sliderTwo, sliderThree;
 
 	public static void main(String[] args) {
 		
@@ -61,6 +66,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	 	addMenu();
 		addButtons();
+		addOptionPanel();
 
 		trackWindowSize();
 
@@ -69,6 +75,54 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		pack();
 		setGUIproperties();
 		cleanupBeforeProgramQuits( );
+
+	}
+
+	private void addOptionPanel () {
+
+		// New grid layout with Four rows and One column
+		GridLayout optionPanelLayout = new GridLayout(4, 1);
+
+		optionPanel = new JPanel( optionPanelLayout );
+
+		applyButton = new JButton("Apply Effect");
+
+		// By default slider value is set to 50 in an interval of [0, 100]
+		sliderOne   = new JSlider();
+		sliderTwo   = new JSlider();
+		sliderThree = new JSlider();
+
+		// Place Sliders on the right side of the screen
+		optionPanel.add(sliderOne );
+		optionPanel.add(sliderTwo );
+		optionPanel.add(sliderThree );
+		optionPanel.add(applyButton);
+
+		add(optionPanel, BorderLayout.EAST);
+
+		sliderOne.addChangeListener(
+			new ChangeListener() {
+				@Override public void stateChanged(ChangeEvent e) {
+					System.out.println("1");
+				}
+			}
+		);
+
+		sliderTwo.addChangeListener(
+			new ChangeListener() {
+				@Override public void stateChanged(ChangeEvent e) {
+					System.out.println("2");
+				}
+			}
+		);
+
+		sliderThree.addChangeListener(
+			new ChangeListener() {
+				@Override public void stateChanged(ChangeEvent e) {
+					System.out.println("3");
+				}
+			}
+		);
 
 	}
 
@@ -101,7 +155,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		mosaicButton.setEnabled(true);
 
 		updateUndoRedoButtons();
-
 
 	}
 
@@ -353,12 +406,13 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 * Adds the 4 buttons to the screen which allow the user to apply
 	 * various visual effects to the image.
 	 */
+	
 	private void addButtons() {
 
 	 	Container cPane = this.getContentPane();
 
 		JPanel buttonPanel = new JPanel();
-
+		
 		flipButton      = new JButton("Flip");
 		blurButton      = new JButton("Blur");
 		enhanceButton   = new JButton("Enhance");
@@ -367,6 +421,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		grayscaleButton = new JButton("Grayscale");
 		edgeButton      = new JButton("Edge");
 		mosaicButton    = new JButton("Mosaic");
+		
 
 		addUndoRedoButtons();
 
@@ -382,6 +437,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		buttonPanel.add(grayscaleButton);
 		buttonPanel.add(edgeButton);
 		buttonPanel.add(mosaicButton);
+
 
 		cPane.add(buttonPanel, BorderLayout.SOUTH);
 
