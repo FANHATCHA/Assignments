@@ -23,6 +23,16 @@ public class Bitmap implements Cloneable {
 	public Bitmap(File file) throws IOException {
 		readBitmap(file);
 	}
+
+	// Creates an empty Bitmap file of the correct dimension.
+	public Bitmap(int width, int height) {
+		
+		this.width = width;
+		this.height = height;
+		
+		pixels = new Color[height][width];
+
+	}
 	
 	/**
 	* Get the width of the image.
@@ -246,6 +256,31 @@ public class Bitmap implements Cloneable {
 
 		pixels = newPixels;
 
+	}
+
+	public Bitmap combine( Bitmap bitmapImg ) {
+
+		int newWidth  = Math.max( width, bitmapImg.getWidth() );
+		int newHeight = Math.max( height, bitmapImg.getHeight() );
+
+		Bitmap newBitmap = new Bitmap(newWidth, newHeight);
+
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				newBitmap.pixels[y][x] = Color.GREEN;
+			}
+		}
+
+		// Create new Header
+		int [] newHeader = header.clone();
+
+		// Change dimension in header
+		newHeader[DIMENSIONS_INDEX] = newWidth;
+		newHeader[DIMENSIONS_INDEX+1] = newHeight;
+
+		newBitmap.header = newHeader;
+
+		return newBitmap;
 	}
 
 	/**
