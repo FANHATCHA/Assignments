@@ -18,6 +18,11 @@ import javax.swing.event.*;
 		-Combine
 		-Swirl??
 
+	- Picture Manipulation which require Slider:
+	  - enhance
+	  - Blur
+	  - 
+
 */
 
 public class BitmapGUI extends JFrame implements ActionListener {
@@ -44,8 +49,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	private Stack<Bitmap> 	undoStack = new Stack<Bitmap>(),
 							redoStack = new Stack<Bitmap>();
 
-	private JPanel optionPanel;
 	private JSlider sliderOne, sliderTwo, sliderThree;
+	private JPanel optionPanel;
 
 	public static void main(String[] args) {
 		
@@ -58,15 +63,13 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			/* Add a canvas to the center of the window */
 
 		canvas = new Canvas();
-
-	 	Container cPane = this.getContentPane();
-	 	cPane.add(canvas, BorderLayout.CENTER);
+	 	add(canvas, BorderLayout.CENTER);
 
 	 		/* Add the menu, buttons, and update the window's title */
 
 	 	addMenu();
-		addButtons();
 		addOptionPanel();
+		addButtons();
 
 		trackWindowSize();
 
@@ -78,6 +81,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	}
 
+	public boolean imageExists () {
+		return bmp != null;
+	}
+
 	private void addOptionPanel () {
 
 		// New grid layout with Four rows and One column
@@ -85,41 +92,56 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		optionPanel = new JPanel( optionPanelLayout );
 
+		// Create Apply Button
 		applyButton = new JButton("Apply Effect");
+		applyButton.setFont( new Font("Verdana", Font.BOLD + Font.ITALIC, 14) );
+
 
 		// By default slider value is set to 50 in an interval of [0, 100]
 		sliderOne   = new JSlider();
 		sliderTwo   = new JSlider();
 		sliderThree = new JSlider();
 
-		// Place Sliders on the right side of the screen
-		optionPanel.add(sliderOne );
-		optionPanel.add(sliderTwo );
+		// Add components right side of the screen
+		optionPanel.add(sliderOne);
+		optionPanel.add(sliderTwo);
 		optionPanel.add(sliderThree );
 		optionPanel.add(applyButton);
 
+		disableSliders();
+
+		// Add Panel to the right side of the screen
 		add(optionPanel, BorderLayout.EAST);
+
 
 		sliderOne.addChangeListener(
 			new ChangeListener() {
 				@Override public void stateChanged(ChangeEvent e) {
+
 					System.out.println("1");
+
 				}
 			}
 		);
+
 
 		sliderTwo.addChangeListener(
 			new ChangeListener() {
 				@Override public void stateChanged(ChangeEvent e) {
+
 					System.out.println("2");
+
 				}
 			}
 		);
 
+
 		sliderThree.addChangeListener(
 			new ChangeListener() {
 				@Override public void stateChanged(ChangeEvent e) {
+
 					System.out.println("3");
+
 				}
 			}
 		);
@@ -143,6 +165,18 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	}
 
+	private void enableSliders() {
+		sliderOne.setEnabled(true);
+		sliderTwo.setEnabled(true);
+		sliderThree.setEnabled(true);
+	}
+
+	private void disableSliders() {
+		sliderOne.setEnabled(false);
+		sliderTwo.setEnabled(false);
+		sliderThree.setEnabled(false);
+	}
+
 	private void enableButtons() {
 
 		flipButton.setEnabled(true);
@@ -153,6 +187,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		grayscaleButton.setEnabled(true);
 		edgeButton.setEnabled(true);
 		mosaicButton.setEnabled(true);
+		applyButton.setEnabled(true);
 
 		updateUndoRedoButtons();
 
@@ -168,6 +203,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		grayscaleButton.setEnabled(false);
 		edgeButton.setEnabled(false);
 		mosaicButton.setEnabled(false);
+		applyButton.setEnabled(false);
 
 		updateUndoRedoButtons();
 
@@ -179,7 +215,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	private void saveTempImage( ) {
 
 		// ∃ an image to save
-		if (bmp != null) {
+		if (imageExists()) {
 			try {
 
 				undoStack.push((Bitmap) bmp.clone());
@@ -328,29 +364,33 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				case "Open...":
 				 
-				 File openedFile = selectFile("Pick your .BMP");
+					File openedFile = selectFile("Pick your .BMP");
 
-				 if (openedFile != null) {
+					if (openedFile != null) {
 
-				 	// Method for this?
-				 	redoStack.clear();
-				 	undoStack.clear();
-				 	saveTempImage();
-					bmp = new Bitmap(mostRecentInputFile = openedFile);
-					enableButtons();
-					modified = false;
-					canvas.refreshSize();	
+					 	redoStack.clear();
+					 	undoStack.clear();
 
-				 }
+						enableButtons();
+						enableSliders();
+
+					 	saveTempImage();
+						bmp = new Bitmap(mostRecentInputFile = openedFile);
+						modified = false;
+						canvas.refreshSize();	
+
+					}
 
 		 			break;
 
 		 		case "Close":
 
-		 			// Method for this?
 		 			redoStack.clear();
 				 	undoStack.clear();
+		 			
 		 			disableButtons();
+		 			disableSliders();
+
 		 			bmp = null;
 		 			break;
 
@@ -409,8 +449,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	
 	private void addButtons() {
 
-	 	Container cPane = this.getContentPane();
-
 		JPanel buttonPanel = new JPanel();
 		
 		flipButton      = new JButton("Flip");
@@ -439,170 +477,276 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		buttonPanel.add(mosaicButton);
 
 
-		cPane.add(buttonPanel, BorderLayout.SOUTH);
+		add(buttonPanel, BorderLayout.SOUTH);
+
+		// --------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------
+		/*                              Add Mouse Listeners                              */
+		// --------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------
 
 
-		edgeButton.addActionListener(
-			new ActionListener () {
-				public void actionPerformed( ActionEvent e) {
+		flipButton.addMouseMotionListener( new MouseMotionListener ( ) {
+			@Override public void mouseDragged(MouseEvent e) { }
+			@Override public void mouseMoved(MouseEvent e) {
 
-					if (bmp != null) {
-						
-						saveTempImage();
-						bmp.edgeDetection( 10 ); 
-
-						imageWasModified();
-						redoStack.clear();
-						updateUndoRedoButtons();
-						repaint();
-					} 
-
+				if (imageExists()) {
+					sliderOne.setEnabled(false);
+					sliderTwo.setEnabled(false);
+					sliderThree.setEnabled(false);
 				}
+
 			}
-		);
+		});
+
+		blurButton.addMouseMotionListener( new MouseMotionListener ( ) {
+			@Override public void mouseDragged(MouseEvent e) { }
+			@Override public void mouseMoved(MouseEvent e) {
+
+				if (imageExists()) {
+					sliderOne.setEnabled(true);
+					sliderTwo.setEnabled(false);
+					sliderThree.setEnabled(false);
+				}
+
+			}
+		});
+
+		enhanceButton.addMouseMotionListener( new MouseMotionListener ( ) {
+			@Override public void mouseDragged(MouseEvent e) { }
+			@Override public void mouseMoved(MouseEvent e) {
+
+				if (imageExists()) {
+					sliderOne.setEnabled(true);
+					sliderTwo.setEnabled(true);
+					sliderThree.setEnabled(true);
+				}
+
+			}
+		});
+
+
+		combineButton.addMouseMotionListener( new MouseMotionListener ( ) {
+			@Override public void mouseDragged(MouseEvent e) { }
+			@Override public void mouseMoved(MouseEvent e) {
+
+				if (imageExists()) {
+					sliderOne.setEnabled(false);
+					sliderTwo.setEnabled(false);
+					sliderThree.setEnabled(false);
+				}
+
+			}
+		});
+
+
+		rotateButton.addMouseMotionListener( new MouseMotionListener ( ) {
+			@Override public void mouseDragged(MouseEvent e) { }
+			@Override public void mouseMoved(MouseEvent e) {
+
+				if (imageExists()) {
+					sliderOne.setEnabled(false);
+					sliderTwo.setEnabled(false);
+					sliderThree.setEnabled(false);
+				}
+
+			}
+		});
+
+
+		grayscaleButton.addMouseMotionListener( new MouseMotionListener ( ) {
+			@Override public void mouseDragged(MouseEvent e) { }
+			@Override public void mouseMoved(MouseEvent e) {
+
+				if (imageExists()) {
+					sliderOne.setEnabled(false);
+					sliderTwo.setEnabled(false);
+					sliderThree.setEnabled(false);
+				}
+
+			}
+		});
+
+		edgeButton.addMouseMotionListener( new MouseMotionListener ( ) {
+			@Override public void mouseDragged(MouseEvent e) { }
+			@Override public void mouseMoved(MouseEvent e) {
+
+				if (imageExists()) {
+					sliderOne.setEnabled(true);
+					sliderTwo.setEnabled(false);
+					sliderThree.setEnabled(false);
+				}
+
+			}
+		});
+
+		mosaicButton.addMouseMotionListener( new MouseMotionListener ( ) {
+			@Override public void mouseDragged(MouseEvent e) { }
+			@Override public void mouseMoved(MouseEvent e) {
+
+				if (imageExists()) {
+					sliderOne.setEnabled(true);
+					sliderTwo.setEnabled(false);
+					sliderThree.setEnabled(false);
+				}
+
+			}
+		});
+
+		// --------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------
+		/*                              Add Action Listeners                              */
+		// --------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------
+
+
+		flipButton.addActionListener( new ActionListener () {
+			public void actionPerformed( ActionEvent e) {
+
+				if (imageExists()) {
+					
+					saveTempImage();
+					bmp.flipVertically();
+
+					imageWasModified();
+					redoStack.clear();
+					updateUndoRedoButtons();
+					repaint();
+				} 
+
+			}
+		});
+
+		blurButton.addActionListener( new ActionListener () {
+			public void actionPerformed( ActionEvent e) {
+
+				if (imageExists()) {
+					
+					saveTempImage();
+
+					bmp.blur(1);
+
+					imageWasModified();
+					redoStack.clear();
+					updateUndoRedoButtons();
+					repaint();
+
+				} 
+
+			}
+		});
+
+		enhanceButton.addActionListener( new ActionListener () {
+			public void actionPerformed( ActionEvent e) {
+
+				if (imageExists() ) {
+					
+					saveTempImage();
+
+					bmp.enhanceColor( 0.75f, 1.5f , 2f );
+
+					imageWasModified();
+					redoStack.clear();
+					updateUndoRedoButtons();
+					repaint();
+
+				} 
+
+			}
+		});
+
+		combineButton.addActionListener( new ActionListener () {
+			public void actionPerformed( ActionEvent e) {
+
+				// saveTempImage(); 
+
+				System.out.println("Combine - not yet implemented");
+
+				// redoStack.clear();
+				// updateUndoRedoButtons();
+				// imageWasModified();
+				// repaint();
+
+			}
+		});
+
+		rotateButton.addActionListener( new ActionListener () {
+			public void actionPerformed( ActionEvent e) {
+
+				if (imageExists() ) {
+					
+					saveTempImage();
+
+					bmp.rotateCounterClockwise();
+
+					canvas.refreshSize();
+					pack();
+
+					imageWasModified();
+					redoStack.clear();
+					updateUndoRedoButtons();
+					repaint();
+
+				} 
+
+			}
+		});
+
+		grayscaleButton.addActionListener( new ActionListener () {
+			public void actionPerformed( ActionEvent e) {
+
+				if (imageExists() ) {
+					
+					saveTempImage();
+
+					bmp.grayscale(1.0f);
+
+					imageWasModified();
+					redoStack.clear();
+					updateUndoRedoButtons();
+					repaint();
+
+				} 
+
+			}
+		});
+
+
+		edgeButton.addActionListener( new ActionListener () {
+			public void actionPerformed( ActionEvent e) {
+
+				if (imageExists()) {
+					
+					saveTempImage();
+					bmp.edgeDetection( 10 ); 
+
+					imageWasModified();
+					redoStack.clear();
+					updateUndoRedoButtons();
+					repaint();
+				} 
+
+			}
+		});
 		
 
-		mosaicButton.addActionListener(
-			new ActionListener () {
-				public void actionPerformed( ActionEvent e) {
+		mosaicButton.addActionListener( new ActionListener () {
+			public void actionPerformed( ActionEvent e) {
 
-					if (bmp != null) {
-						
-						saveTempImage();
-						bmp.mosaic( 13 );
+				if (imageExists()) {
+					
+					saveTempImage();
+					bmp.mosaic( 13 );
 
-						imageWasModified();
-						redoStack.clear();
-						updateUndoRedoButtons();
-						repaint();
-					} 
+					imageWasModified();
+					redoStack.clear();
+					updateUndoRedoButtons();
+					repaint();
+				} 
 
-				}
 			}
-		);		
+		});	
 
-		flipButton.addActionListener(
-			new ActionListener () {
-				public void actionPerformed( ActionEvent e) {
-
-					if (bmp != null) {
-						
-						saveTempImage();
-						bmp.flipVertically();
-
-						imageWasModified();
-						redoStack.clear();
-						updateUndoRedoButtons();
-						repaint();
-					} 
-
-				}
-			}
-		);
-
-		blurButton.addActionListener(
-			new ActionListener () {
-				public void actionPerformed( ActionEvent e) {
-
-					if (bmp != null) {
-						
-						saveTempImage();
-
-						bmp.blur(1);
-
-						imageWasModified();
-						redoStack.clear();
-						updateUndoRedoButtons();
-						repaint();
-
-					} 
-
-				}
-			}
-		);
-
-		enhanceButton.addActionListener(
-			new ActionListener () {
-				public void actionPerformed( ActionEvent e) {
-
-					if (bmp != null ) {
-						
-						saveTempImage();
-
-						bmp.enhanceColor( 0.75f, 1.5f , 2f );
-
-						imageWasModified();
-						redoStack.clear();
-						updateUndoRedoButtons();
-						repaint();
-
-					} 
-
-				}
-			}
-		);
-
-		combineButton.addActionListener(
-			new ActionListener () {
-				public void actionPerformed( ActionEvent e) {
-
-					// saveTempImage(); 
-
-					System.out.println("Combine - not yet implemented");
-
-					// redoStack.clear();
-					// updateUndoRedoButtons();
-					// imageWasModified();
-					// repaint();
-
-				}
-			}
-		);
-
-		rotateButton.addActionListener(
-			new ActionListener () {
-				public void actionPerformed( ActionEvent e) {
-
-					if (bmp != null ) {
-						
-						saveTempImage();
-
-						bmp.rotateCounterClockwise();
-
-						canvas.refreshSize();
-						pack();
-
-						imageWasModified();
-						redoStack.clear();
-						updateUndoRedoButtons();
-						repaint();
-
-					} 
-
-				}
-			}
-		);
-
-		grayscaleButton.addActionListener(
-			new ActionListener () {
-				public void actionPerformed( ActionEvent e) {
-
-					if (bmp != null ) {
-						
-						saveTempImage();
-
-						bmp.grayscale(1.0f);
-
-						imageWasModified();
-						redoStack.clear();
-						updateUndoRedoButtons();
-						repaint();
-
-					} 
-
-				}
-			}
-		);
 
 	 }
 
@@ -610,8 +754,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 * Handle all actions involving the undo/redo buttons
 	 **/
 	private void addUndoRedoButtons() {
-
-		Container cPane = this.getContentPane();
 
 		JPanel buttonPanel = new JPanel( );
 
@@ -624,7 +766,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		buttonPanel.add(undoButton);
 		buttonPanel.add(redoButton);
 
-		cPane.add(buttonPanel, BorderLayout.NORTH);
+		add(buttonPanel, BorderLayout.NORTH);
 
 
 		undoButton.addActionListener(
