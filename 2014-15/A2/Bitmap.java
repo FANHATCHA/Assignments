@@ -274,7 +274,7 @@ public class Bitmap implements Cloneable {
 		// comparable against other black pixel using the .equals method
 		final Color backgroundColor = new Color(0,0,0,1);
 
-		// Fill background with Black
+		// Fill background 
 		for (int y = 0; y < newHeight; y++) 
 			for (int x = 0; x < newWidth; x++) 
 				newBitmap.pixels[y][x] = backgroundColor;
@@ -299,8 +299,11 @@ public class Bitmap implements Cloneable {
 				
 				Color px = newBitmap.pixels[y][x];
 				
+				// Writes on top of background
 				if (px.equals(backgroundColor)) {
 					newBitmap.pixels[y][x] = p2.pixels[y][x];
+
+				// Average pixel colors
 				} else {
 					
 					int r = 0, g = 0, b = 0;
