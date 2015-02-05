@@ -258,27 +258,60 @@ public class Bitmap implements Cloneable {
 
 	}
 
-	public Bitmap combine( Bitmap bitmapImg ) {
+	/**
+	 * @para p1 - first image you wish to combine 
+	 * @para p2 - the second image you wish to combine 
+	 * @return - A combined image of the rgb values
+	 **/
+	public static Bitmap combine( Bitmap p1, Bitmap p2 ) {
 
-		int newWidth  = Math.max( width, bitmapImg.getWidth() );
-		int newHeight = Math.max( height, bitmapImg.getHeight() );
+		int newWidth  = Math.max( p1.getWidth(), p2.getWidth() );
+		int newHeight = Math.max( p1.getHeight(), p2.getHeight() );
 
 		Bitmap newBitmap = new Bitmap(newWidth, newHeight);
 
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				newBitmap.pixels[y][x] = Color.GREEN;
-			}
-		}
-
+		// Fill background with white
+		for (int y = 0; y < newHeight; y++) 
+			for (int x = 0; x < newWidth; x++) 
+				newBitmap.pixels[y][x] = Color.WHITE;
+		
 		// Create new Header
-		int [] newHeader = header.clone();
+		int [] newHeader = p1.header.clone();
 
 		// Change dimension in header
 		newHeader[DIMENSIONS_INDEX] = newWidth;
 		newHeader[DIMENSIONS_INDEX+1] = newHeight;
 
 		newBitmap.header = newHeader;
+
+		// Add first image
+		for (int y = 0; y < p1.getHeight(); y++) 
+			for (int x = 0; x < p1.getWidth(); x++) 
+				newBitmap.pixels[y][x] = p1.pixels[y][x];
+
+		// Combine other image
+		for (int y = 0; y < p2.getHeight(); y++) {
+			for (int x = 0; x < p2.getWidth(); x++) {
+				
+				Color px = newBitmap.pixels[y][x];
+				
+				if (px == null) {
+					newBitmap.pixels[y][x] = p2.pixels[y][x];
+				} else {
+					
+					int r = 0, g = 0, b = 0;
+					Color px2 = p2.pixels[y][x];
+					
+					r = (px2.getRed() + px.getRed()) / 2;
+					g = (px2.getGreen() + px.getGreen()) / 2;
+					b = (px2.getBlue() + px.getBlue()) / 2;
+					
+					newBitmap.pixels[y][x] = makeValidColor(r, g, b);
+
+				}
+
+			}
+		}
 
 		return newBitmap;
 	}

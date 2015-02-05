@@ -499,8 +499,18 @@ public class BitmapGUI extends JFrame implements ActionListener {
 							break;
 
 						case COMBINE:
+	
+							File openedFile = selectFile("Pick your .BMP");
 
-							System.out.println("Combine - not yet implemented");
+							if (openedFile != null) {
+								try {
+									Bitmap newBmp = new Bitmap( openedFile );
+									bmp = Bitmap.combine(bmp , newBmp );							
+								} catch (IOException event) {
+									System.err.println("Ooops! IOError has occured while combining images");
+								}
+							}
+
 							break;
 						
 						case ROTATE:
