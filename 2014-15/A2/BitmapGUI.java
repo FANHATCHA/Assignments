@@ -99,10 +99,13 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		applyButton.setFont( new Font("Verdana", Font.BOLD + Font.ITALIC, 14) );
 
 
-		// By default slider value is set to 50 in an interval of [0, 100]
-		sliderOne   = new JSlider();
-		sliderTwo   = new JSlider();
-		sliderThree = new JSlider();
+		// By default slider value is set to 50 in an interval of [1, 100]
+		sliderOne   = new JSlider(1, 100);
+		sliderTwo   = new JSlider(1, 100);
+		sliderThree = new JSlider(1, 100);
+		sliderOne.setValue(50);
+		sliderTwo.setValue(50);
+		sliderThree.setValue(50);
 
 		// Add components right side of the screen
 		optionPanel.add(sliderOne);
@@ -486,7 +489,13 @@ public class BitmapGUI extends JFrame implements ActionListener {
 							break;
 						
 						case ENHANCE:
-							bmp.enhanceColor( 0.75f, 1.5f , 2f );
+
+							// RGB values can range from 0-200%
+							float redVal = (sliderOne.getValue()*2) / 100f;
+							float greenVal = (sliderTwo.getValue()*2) / 100f;
+							float blueVal = (sliderThree.getValue()*2) / 100f;
+
+							bmp.enhanceColor( redVal, greenVal , blueVal );
 							break;
 
 						case COMBINE:
@@ -506,11 +515,13 @@ public class BitmapGUI extends JFrame implements ActionListener {
 							break;
 						
 						case EDGE:
-							bmp.edgeDetection( 10 ); 
+							float edgeValue = sliderOne.getValue() / 5.0f;
+							bmp.edgeDetection( edgeValue ); 
 							break;
 						
 						case MOSAIC:
-							bmp.mosaic( 13 );
+							int mosaicValue = Math.max( 1, sliderOne.getValue()/2 );
+							bmp.mosaic( mosaicValue );
 							break;
 
 					}
@@ -620,6 +631,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					sliderOne.setEnabled(true);
 					sliderOne.setValue(50);
 					selectedButton = BUTTON.EDGE;
+
 				} 
 
 			}
