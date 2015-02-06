@@ -375,20 +375,32 @@ public class Bitmap implements Cloneable {
 
 		int cx = width/2;
 		int cy = height/2;
+		final double swirlRadius = min(cx, cy);
+		final double MAX_ROT = PI/16; // Max rotation 
 
 		Color[][] newPixels = new Color[height][width];
-		double theta = PI/4; 
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 
-				int newX = (int)(  (x-cx)*cos( theta ) + (y-cy)*sin(theta) + cx );
-				int newY = (int)( -(x-cx)*sin( theta ) + (y-cy)*cos(theta) + cy);
+				double r =  sqrt( (cx-x)*(cx-x) + (cy-y)*(cy-y) );
 
-				newX = max( 0, min(width-1, newX) );
-				newY = max( 0, min(height-1, newY) );
+				if ( r < min(cy, cx) ) {
+					
+					double theta = MAX_ROT * (swirlRadius/r); 
 
-				newPixels[y][x] = pixels[newY][newX];
+					int newX = (int)(  (x-cx)*cos( theta ) + (y-cy)*sin(theta) + cx );
+					int newY = (int)( -(x-cx)*sin( theta ) + (y-cy)*cos(theta) + cy);
+
+					newX = max( 0, min(width-1, newX) );
+					newY = max( 0, min(height-1, newY) );
+					
+					newPixels[y][x] = pixels[newY][newX];
+				} else {
+					newPixels[y][x] = pixels[y][x];
+				}
+
+
 				
 			}
 		}
@@ -396,25 +408,21 @@ public class Bitmap implements Cloneable {
 		pixels = newPixels;
 
 
-		/* Micah
+		/* Circle crop
+		int r =  (int) sqrt( (cx-x)*(cx-x) + (cy-y)*(cy-y) );
 
-		// int centerX = x + 30;
-		//int centerY = y + height/2;
+		if ( r < min(cy, cx) ) {
+			
+			int newX = (int)(  (x-cx)*cos( theta ) + (y-cy)*sin(theta) + cx );
+			int newY = (int)( -(x-cx)*sin( theta ) + (y-cy)*cos(theta) + cy);
 
-		// x = 0, y = height - 1
-		// x = width/2, y = height/2
-
-		double r = Math.sqrt( (cx-x)*(cx-x) + (cy-y)*(cy-y) );
-		double angle = ((width + height) - r)/1000.0;//a*Math.exp(-(x*x + y*y)/(b*b));
-		//double angle = //a*Math.exp(-(x*x + y*y)/(b*b));
-		double u = Math.cos(angle)*x + Math.sin(angle)*y + cx;
-		double v = -Math.sin(angle)*x + Math.cos(angle)*y + cy;
-
-			// Create the inverted pixel 
-		v = Math.max(0, Math.min(height - 1, v));
-		u = Math.max(0, Math.min(width - 1, u));
-
-		newPixels[y][x] = pixels[(int)v][(int)u];
+			newX = max( 0, min(width-1, newX) );
+			newY = max( 0, min(height-1, newY) );
+			
+			newPixels[y][x] = pixels[newY][newX];
+		} else {
+			newPixels[y][x] = pixels[y][x];
+		}
 		*/
 
 	}
