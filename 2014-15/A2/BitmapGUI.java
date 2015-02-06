@@ -131,7 +131,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		optionPanel.add(sliderThree );
 		optionPanel.add(applyButton);
 
-		setEnabledSliders(false);
+		setVisibleSliders(false);
 
 		// Add Panel to the right side of the screen
 		add(optionPanel, BorderLayout.EAST);
@@ -139,14 +139,14 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	}
 
 	/**
-	* Enable/disable the sliders as requested.
-	* @param enabled - true if the sliders should be enabled
+	* Show/hide the sliders as requested.
+	* @param visible - true if the sliders should be made visible
 	*/
-	private void setEnabledSliders(boolean enabled) {
+	private void setVisibleSliders(boolean visible) {
 
-		sliderOne.setEnabled(enabled);
-		sliderTwo.setEnabled(enabled);
-		sliderThree.setEnabled(enabled);
+		sliderOne.setVisible(visible);
+		sliderTwo.setVisible(visible);
+		sliderThree.setVisible(visible);
 
 	}
 
@@ -345,7 +345,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				 	undoStack.clear();
 		 			
 		 			setEnabledButtons(false);
-		 			setEnabledSliders(false);
+		 			setVisibleSliders(false);
 
 		 			bmp = null;
 		 			break;
@@ -433,7 +433,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		// Set all disabled since there is not image yet
 		setEnabledButtons(false);
-		setEnabledSliders(false);
+		setVisibleSliders(false);
 
 		// Add buttons to panel
 		buttonPanel.add(flipButton);
@@ -463,22 +463,22 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					switch (selectedButton) {
 
 						case FLIP:
+
 							bmp.flipVertically();
 							break;
 
 						case BLUR:
 
-							// Blur range between 1-10
-							int blurValue = sliderOne.getValue() / 10;
-							bmp.blur(blurValue);
+							// Blur can range from 1 to 10
+							bmp.blur(sliderOne.getValue());
 							break;
 						
 						case ENHANCE:
 
 							// RGB values can range from 0-200%
-							float redVal   = (sliderOne.getValue()*2)   / 100f;
-							float greenVal = (sliderTwo.getValue()*2)   / 100f;
-							float blueVal  = (sliderThree.getValue()*2) / 100f;
+							float redVal   = (sliderOne.getValue())   / 100f;
+							float greenVal = (sliderTwo.getValue())   / 100f;
+							float blueVal  = (sliderThree.getValue()) / 100f;
 
 							bmp.enhanceColor(redVal, greenVal , blueVal);
 							break;
@@ -489,8 +489,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 							if (openedFile != null) {
 								try {
-									Bitmap newBmp = new Bitmap( openedFile );
-									bmp = Bitmap.combine(bmp , newBmp );
+									Bitmap newBmp = new Bitmap(openedFile);
+									bmp = Bitmap.combine(bmp, newBmp);
 									pack();							
 								} catch (IOException event) {
 									System.err.println("Ooops! IOError has occured while combining images");
@@ -516,8 +516,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 						case EDGE:
 
 							// Precision between 0-20
-							float edgeValue = sliderOne.getValue() / 5.0f;
-							bmp.edgeDetection( edgeValue ); 
+							bmp.edgeDetection(sliderOne.getValue()); 
 							break;
 						
 						case MOSAIC:
@@ -545,7 +544,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists()) {
 					
-					setEnabledSliders(false);
+					setVisibleSliders(false);
 					selectedButton = BUTTON.FLIP;
 
 				} 
@@ -558,9 +557,27 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists()) {
 					
-					setEnabledSliders(false);
-					sliderOne.setEnabled(true);
+					// Set enabled
+					setVisibleSliders(false);
+					sliderOne.setVisible(true);
+					
+					// Set values
+					sliderOne.setMinimum(1);
 					sliderOne.setValue(5);
+					sliderOne.setMaximum(10);
+
+					// Add ticks
+					sliderOne.setSnapToTicks(true);
+					sliderOne.setMinorTickSpacing(1);
+					sliderOne.setPaintTicks(true);
+
+					// Add labels
+					sliderOne.setPaintLabels(true);
+					Hashtable<Integer, JLabel> dict = new Hashtable<Integer, JLabel>();
+				    dict.put(new Integer(1), new JLabel("Less"));
+				    dict.put(new Integer(10), new JLabel("More"));
+				    sliderOne.setLabelTable(dict);
+
 					selectedButton = BUTTON.BLUR;
 
 				} 
@@ -572,12 +589,45 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 
 				if (imageExists() ) {
-					
-					setEnabledSliders(true);
 
-					sliderOne.setValue(50);
-					sliderTwo.setValue(50);
-					sliderThree.setValue(50);
+					// Set enabled
+					setVisibleSliders(true);
+					
+					// Set values
+					sliderOne.setMinimum(0);
+					sliderOne.setValue(100);
+					sliderOne.setMaximum(200);
+					sliderTwo.setMinimum(0);
+					sliderTwo.setValue(100);
+					sliderTwo.setMaximum(200);
+					sliderThree.setMinimum(0);
+					sliderThree.setValue(100);
+					sliderThree.setMaximum(200);
+
+					// Add ticks
+					sliderOne.setSnapToTicks(true);
+					sliderOne.setMinorTickSpacing(10);
+					sliderOne.setMajorTickSpacing(50);
+					sliderOne.setPaintTicks(true);
+					sliderTwo.setSnapToTicks(true);
+					sliderTwo.setMinorTickSpacing(10);
+					sliderTwo.setMajorTickSpacing(50);
+					sliderTwo.setPaintTicks(true);
+					sliderThree.setSnapToTicks(true);
+					sliderThree.setMinorTickSpacing(10);
+					sliderThree.setMajorTickSpacing(50);
+					sliderThree.setPaintTicks(true);
+
+					// Add labels
+					sliderOne.setPaintLabels(true);
+					sliderTwo.setPaintLabels(true);
+					sliderThree.setPaintLabels(true);
+					Hashtable<Integer, JLabel> dict = new Hashtable<Integer, JLabel>();
+					for (int i = 0; i <= 5; i++)
+						dict.put(new Integer(i * 50), new JLabel(String.valueOf(i * 50) + "%"));
+				    sliderOne.setLabelTable(dict);
+				    sliderTwo.setLabelTable(dict);
+				    sliderThree.setLabelTable(dict);
 
 					selectedButton = BUTTON.ENHANCE;
 
@@ -589,7 +639,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		combineButton.addActionListener( new ActionListener () {
 			public void actionPerformed( ActionEvent e) {
 
-				setEnabledSliders(false);
+				setVisibleSliders(false);
 				selectedButton = BUTTON.COMBINE;
 
 			}
@@ -600,7 +650,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists() ) {
 					
-					setEnabledSliders(false);
+					setVisibleSliders(false);
 					selectedButton = BUTTON.ROTATE;
 
 				} 
@@ -612,10 +662,27 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 
 				if (imageExists() ) {
+
+					// Set enabled
+					setVisibleSliders(false);
+					sliderOne.setVisible(true);
 					
-					setEnabledSliders(false);
-					sliderOne.setEnabled(true);
-					sliderOne.setValue(100); 
+					// Set values
+					sliderOne.setMinimum(0);
+					sliderOne.setValue(100);
+					sliderOne.setMaximum(100);
+
+					// Add ticks
+					sliderOne.setSnapToTicks(true);
+					sliderOne.setMinorTickSpacing(10);
+					sliderOne.setPaintTicks(true);
+
+					// Add labels
+					sliderOne.setPaintLabels(true);
+					Hashtable<Integer, JLabel> dict = new Hashtable<Integer, JLabel>();
+				    dict.put(new Integer(1), new JLabel("Color"));
+				    dict.put(new Integer(100), new JLabel("Grayscale"));
+				    sliderOne.setLabelTable(dict);
 
 					selectedButton = BUTTON.GRAYSCALE;
 				} 
@@ -628,10 +695,28 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 
 				if (imageExists()) {
+
+					// Set enabled
+					setVisibleSliders(false);
+					sliderOne.setVisible(true);
 					
-					setEnabledSliders(false);
-					sliderOne.setEnabled(true);
-					sliderOne.setValue(50);
+					// Set values
+					sliderOne.setMinimum(0);
+					sliderOne.setValue(10);
+					sliderOne.setMaximum(20);
+
+					// Add ticks
+					sliderOne.setSnapToTicks(true);
+					sliderOne.setMinorTickSpacing(2);
+					sliderOne.setPaintTicks(true);
+
+					// Add labels
+					sliderOne.setPaintLabels(true);
+					Hashtable<Integer, JLabel> dict = new Hashtable<Integer, JLabel>();
+				    dict.put(new Integer(0), new JLabel("Less"));
+				    dict.put(new Integer(20), new JLabel("More"));
+				    sliderOne.setLabelTable(dict);
+
 					selectedButton = BUTTON.EDGE;
 
 				} 
@@ -645,9 +730,27 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists()) {
 					
-					setEnabledSliders(false);
-					sliderOne.setEnabled(true);
-					sliderOne.setValue(50);
+					// Set enabled
+					setVisibleSliders(false);
+					sliderOne.setVisible(true);
+					
+					// Set values
+					sliderOne.setMinimum(10);
+					sliderOne.setValue(55);
+					sliderOne.setMaximum(110);
+
+					// Add ticks
+					sliderOne.setSnapToTicks(true);
+					sliderOne.setMinorTickSpacing(10);
+					sliderOne.setPaintTicks(true);
+
+					// Add labels
+					sliderOne.setPaintLabels(true);
+					Hashtable<Integer, JLabel> dict = new Hashtable<Integer, JLabel>();
+				    dict.put(new Integer(10), new JLabel("Less"));
+				    dict.put(new Integer(110), new JLabel("More"));
+				    sliderOne.setLabelTable(dict);
+
 					selectedButton = BUTTON.MOSAIC;
 				} 
 

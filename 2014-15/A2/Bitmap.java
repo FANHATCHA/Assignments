@@ -152,11 +152,10 @@ public class Bitmap implements Cloneable {
 	}
 
 	/**
-	* Edge Detection.
-	*
-	* @param precision - the precision you want on your edge detection. The default is approx 10.0
+	* Apply an edge detection effect on the image.
+	* @param precision - the precision you want on your edge detection (default is 10)
 	*/
-	public void edgeDetection ( final float precision ) {
+	public void edgeDetection (final int precision) {
 		
 		Color[][] newPixels = new Color[height][width];
 
@@ -194,13 +193,10 @@ public class Bitmap implements Cloneable {
 	}
 	
 	/**
-	 *    
-	 * Creates a Mosaic picture effect.
-	 * If the cellSize is large than the image then the original image is not touched.   
-	 * 
+	 * Applies a pixelizing effect to the image.
 	 * @param cellSize - the cell size of each pixel cluster
 	 */
-	public void mosaic( int cellSize ) {
+	public void mosaic(int cellSize) {
 
 		if ( cellSize < Math.max(height, width) && cellSize != 1 ) {
 
@@ -408,10 +404,6 @@ public class Bitmap implements Cloneable {
 	* @param range - a positive integer (strength of the blur)
 	*/
 	public void blur(int range) {
-
-		// Range of 0 or less will cause a division by 0 error
-		if (range <= 0)
-			range = 1;
 
 		Color[][] newPixels = new Color[height][width];
 
