@@ -25,7 +25,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	private static final String TITLE = "BitmapHacker";
 	
 	private enum BUTTON {
-		FLIP, BLUR, ENHANCE, COMBINE, ROTATE, GRAYSCALE, EDGE, MOSAIC
+		FLIP, BLUR, ENHANCE, COMBINE, ROTATE, GRAYSCALE, EDGE, MOSAIC, INVERT
 	}
 
 		/* Variables */
@@ -50,7 +50,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	private JPanel optionPanel;
 
 	private BUTTON selectedButton = BUTTON.FLIP;
-	private JRadioButton flipButton, blurButton, enhanceButton, combineButton, rotateButton, grayscaleButton, edgeButton, mosaicButton;
+	private JRadioButton flipButton, blurButton, enhanceButton, combineButton, rotateButton, grayscaleButton, edgeButton, mosaicButton, invertButton;
 
 
 	public static void main(String[] args) {
@@ -278,6 +278,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		grayscaleButton.setEnabled(enabled);
 		edgeButton.setEnabled(enabled);
 		mosaicButton.setEnabled(enabled);
+		invertButton.setEnabled(enabled);
 
 		updateUndoRedoButtons();
 
@@ -529,6 +530,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		grayscaleButton = new JRadioButton("Grayscale");
 		edgeButton      = new JRadioButton("Edge");
 		mosaicButton    = new JRadioButton("Mosaic");
+		invertButton    = new JRadioButton("Invert");
 
 		buttonGroup.add(flipButton);
 		buttonGroup.add(blurButton);
@@ -538,6 +540,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		buttonGroup.add(grayscaleButton);
 		buttonGroup.add(edgeButton);
 		buttonGroup.add(mosaicButton);
+		buttonGroup.add(invertButton);
 
 		addUndoRedoButtons();
 
@@ -554,6 +557,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		buttonPanel.add(grayscaleButton);
 		buttonPanel.add(edgeButton);
 		buttonPanel.add(mosaicButton);
+		buttonPanel.add(invertButton);
 
 		add(buttonPanel, BorderLayout.SOUTH);
 
@@ -621,6 +625,11 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 							// Mosiac cellsize value between 2-52
 							bmp.mosaic(sliderOne.slider.getValue());
+							break;
+
+						case INVERT:
+
+							bmp.invert();
 							break;
 
 					}
@@ -891,7 +900,20 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				repaint();
 
 			}
-		});	
+		});
+
+		invertButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				switchToSliders();
+
+				setVisibleEffectOptions(false);
+				selectedButton = BUTTON.INVERT;
+
+				repaint();
+
+			}
+		});
 
 
 	 }
@@ -1138,9 +1160,12 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 			/* Draw blank canvas */
 	 		
 	 		if (bmp == null) {
+
+	 			// Draw canvas
 	 			g.setColor(Color.LIGHT_GRAY);
 		 		g.fillRect(horizontal_padding, vertical_padding, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
+		 		// Draw message telling the user to open a .BMP
 		 		g.setColor(Color.BLACK);
 		 		g.setFont(new Font("Verdana", Font.BOLD, 14));
 		 		String str1 = "Please open a bitmap image.";
@@ -1149,7 +1174,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 		FontMetrics fm2 = g.getFontMetrics();
    				Rectangle2D rect1 = fm1.getStringBounds(str1, g);
    				Rectangle2D rect2 = fm2.getStringBounds(str2, g);
-
     			g.drawString(str1, (int) ((getWidth() - rect1.getWidth())/2),
                       (int) ((getHeight() - rect1.getHeight())/2));
     			g.drawString(str2, (int) ((getWidth() - rect2.getWidth())/2),

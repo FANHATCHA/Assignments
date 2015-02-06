@@ -350,6 +350,32 @@ public class Bitmap implements Cloneable {
 	}
 
 	/**
+	* Add a invert effect to the image.
+	*/
+	public void invert() {
+
+		Color[][] newPixels = new Color[height][width];
+
+		for (int y = 0; y < height; y++)
+			for (int x = 0; x < width; x++) {
+
+					/* Calculate inverted values */
+				
+				int red = 255 - pixels[y][x].getRed();
+				int green = 255 - pixels[y][x].getGreen();
+				int blue = 255 - pixels[y][x].getBlue();
+
+					/* Create the inverted pixel */
+				
+				newPixels[y][x] = makeValidColor(red, green, blue);
+
+			}
+
+		pixels = newPixels;
+
+	}
+
+	/**
 	* Flip the image horizontally.
 	*/
 	public void flipHorizontally() {
