@@ -1,3 +1,4 @@
+import static java.lang.Math.*;
 import java.awt.*;
 import java.io.*;
 import java.awt.image.*;
@@ -371,48 +372,50 @@ public class Bitmap implements Cloneable {
 	* Add a swirl effect to the image.
 	*/
 	public void swirl() {
-		double a = 5.0;
-		double b = 100.0;
-
-		/*
-			a = amount of rotation
-			b = size of effect
-
-			angle = a*exp(-(x*x+y*y)/(b*b));
-			u = cos(angle)*x + sin(angle)*y;
-			v = -sin(angle)*x + cos(angle)*y;
-		*/
 
 		int cx = width/2;
 		int cy = height/2;
 
 		Color[][] newPixels = new Color[height][width];
+		double theta = PI/4; 
 
-		for (int y = 0; y < height; y++)
+		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 
-				// int centerX = x + 30;
-				//int centerY = y + height/2;
+				int newX = (int)(  (x-cx)*cos( theta ) + (y-cy)*sin(theta) + cx );
+				int newY = (int)( -(x-cx)*sin( theta ) + (y-cy)*cos(theta) + cy);
 
-				// x = 0, y = height - 1
-				// x = width/2, y = height/2
+				newX = max( 0, min(width-1, newX) );
+				newY = max( 0, min(height-1, newY) );
 
-				double r = Math.sqrt( (cx-x)*(cx-x) + (cy-y)*(cy-y) );
-
-
-				double angle = ((width + height) - r)/1000.0;//a*Math.exp(-(x*x + y*y)/(b*b));
-				//double angle = //a*Math.exp(-(x*x + y*y)/(b*b));
-				double u = Math.cos(angle)*x + Math.sin(angle)*y + cx;
-				double v = -Math.sin(angle)*x + Math.cos(angle)*y + cy;
-
-					/* Create the inverted pixel */
-				v = Math.max(0, Math.min(height - 1, v + width/2));
-				u = Math.max(0, Math.min(width - 1, u + width/2));
-				newPixels[y][x] = pixels[(int)v][(int)u];
-
+				newPixels[y][x] = pixels[newY][newX];
+				
 			}
+		}
 
 		pixels = newPixels;
+
+
+		/* Micah
+
+		// int centerX = x + 30;
+		//int centerY = y + height/2;
+
+		// x = 0, y = height - 1
+		// x = width/2, y = height/2
+
+		double r = Math.sqrt( (cx-x)*(cx-x) + (cy-y)*(cy-y) );
+		double angle = ((width + height) - r)/1000.0;//a*Math.exp(-(x*x + y*y)/(b*b));
+		//double angle = //a*Math.exp(-(x*x + y*y)/(b*b));
+		double u = Math.cos(angle)*x + Math.sin(angle)*y + cx;
+		double v = -Math.sin(angle)*x + Math.cos(angle)*y + cy;
+
+			// Create the inverted pixel 
+		v = Math.max(0, Math.min(height - 1, v));
+		u = Math.max(0, Math.min(width - 1, u));
+
+		newPixels[y][x] = pixels[(int)v][(int)u];
+		*/
 
 	}
 
