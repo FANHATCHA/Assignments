@@ -78,8 +78,31 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	}
 
-	public boolean imageExists () {
+	/**
+	* Check to see if an image exists on the canvas.
+	* @return true if there is an image on the canvas
+	*/
+	private boolean imageExists () {
 		return bmp != null;
+	}
+
+	/**
+	* Set some default GUI Properties
+	*/
+	private void setGUIproperties() {
+		
+		// Ensure our application will be closed when the user presses the "X" */
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		// Sets screen location in the center of the screen (only works after calling pack)
+		setLocationRelativeTo(null);
+
+		// Update Title
+		updateTitle();
+
+		// Show Screen
+		setVisible(true);
+
 	}
 
 	private void addOptionPanel () {
@@ -108,69 +131,40 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		optionPanel.add(sliderThree );
 		optionPanel.add(applyButton);
 
-		disableSliders();
+		setEnabledSliders(false);
 
 		// Add Panel to the right side of the screen
 		add(optionPanel, BorderLayout.EAST);
 
 	}
 
-	/** Set some default GUI Properties **/
-	private void setGUIproperties() {
-		
-		// Ensure our application will be closed when the user presses the "X" */
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	/**
+	* Enable/disable the sliders as requested.
+	* @param enabled - true if the sliders should be enabled
+	*/
+	private void setEnabledSliders(boolean enabled) {
 
-		// Sets screen location in the center of the screen (Works only after calling pack)
-		setLocationRelativeTo(null);
-
-		// Update Title
-		updateTitle();
-
-		// Show Screen
-		setVisible(true);
+		sliderOne.setEnabled(enabled);
+		sliderTwo.setEnabled(enabled);
+		sliderThree.setEnabled(enabled);
 
 	}
 
-	private void enableSliders() {
-		sliderOne.setEnabled(true);
-		sliderTwo.setEnabled(true);
-		sliderThree.setEnabled(true);
-	}
+	/**
+	* Enable/disable the radio buttons as requested.
+	* @param enabled - true if the radio buttons should be enabled
+	*/
+	private void setEnabledButtons(boolean enabled) {
 
-	private void disableSliders() {
-		sliderOne.setEnabled(false);
-		sliderTwo.setEnabled(false);
-		sliderThree.setEnabled(false);
-	}
-
-	private void enableButtons() {
-
-		flipButton.setEnabled(true);
-		blurButton.setEnabled(true);
-		enhanceButton.setEnabled(true);
-		combineButton.setEnabled(true);
-		rotateButton.setEnabled(true);
-		grayscaleButton.setEnabled(true);
-		edgeButton.setEnabled(true);
-		mosaicButton.setEnabled(true);
-		applyButton.setEnabled(true);
-
-		updateUndoRedoButtons();
-
-	}
-
-	private void disableButtons() {
-
-		flipButton.setEnabled(false);
-		blurButton.setEnabled(false);
-		enhanceButton.setEnabled(false);
-		combineButton.setEnabled(false);
-		rotateButton.setEnabled(false);
-		grayscaleButton.setEnabled(false);
-		edgeButton.setEnabled(false);
-		mosaicButton.setEnabled(false);
-		applyButton.setEnabled(false);
+		flipButton.setEnabled(enabled);
+		blurButton.setEnabled(enabled);
+		enhanceButton.setEnabled(enabled);
+		combineButton.setEnabled(enabled);
+		rotateButton.setEnabled(enabled);
+		grayscaleButton.setEnabled(enabled);
+		edgeButton.setEnabled(enabled);
+		mosaicButton.setEnabled(enabled);
+		applyButton.setEnabled(enabled);
 
 		updateUndoRedoButtons();
 
@@ -188,10 +182,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				undoStack.push((Bitmap) bmp.clone());
 
 			} catch (CloneNotSupportedException e) {
-				System.err.println("Houston we've got a problem. Temp bmp file could not be cloned.");
+				System.err.println("Houston we've got a problem. The Bitmap could not be cloned!");
 
 			} catch (OutOfMemoryError e) {
-				JOptionPane.showMessageDialog(null, "Memory exceeded, clearing all undo/redos", "Warning", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Memory exceeded! Clearing all undo/redos.", "Warning", JOptionPane.WARNING_MESSAGE);
 				undoStack.clear();
 				redoStack.clear();
 				updateUndoRedoButtons();
@@ -209,7 +203,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		    @Override public void componentResized(ComponentEvent e) {
 
 		    	canvas.refreshSize();
-
 		        pack();
 		        repaint();
 
@@ -336,7 +329,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 					 	redoStack.clear();
 					 	undoStack.clear();
 
-						enableButtons();
+						setEnabledButtons(true);
 
 						bmp = new Bitmap(mostRecentInputFile = openedFile);
 						modified = false;
@@ -351,8 +344,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 			redoStack.clear();
 				 	undoStack.clear();
 		 			
-		 			disableButtons();
-		 			disableSliders();
+		 			setEnabledButtons(false);
+		 			setEnabledSliders(false);
 
 		 			bmp = null;
 		 			break;
@@ -406,7 +399,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 }
 
 	 /**
-	 * Adds the 4 buttons to the screen which allow the user to apply
+	 * Adds many buttons to the screen, allowing the user to apply
 	 * various visual effects to the image.
 	 */
 	
@@ -424,7 +417,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		edgeButton      = new JRadioButton("Edge");
 		mosaicButton    = new JRadioButton("Mosaic");
 
-		// By default flipButton will be selected
+		// By default the first button (flipButton) will be selected
 		flipButton.setSelected(true);
 
 		buttonGroup.add(flipButton);
@@ -439,8 +432,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		addUndoRedoButtons();
 
 		// Set all disabled since there is not image yet
-		disableButtons();
-		disableSliders();
+		setEnabledButtons(false);
+		setEnabledSliders(false);
 
 		// Add buttons to panel
 		buttonPanel.add(flipButton);
@@ -454,11 +447,11 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		add(buttonPanel, BorderLayout.SOUTH);
 
-		// --------------------------------------------------------------------------------
-		// --------------------------------------------------------------------------------
-		/*                              Add Action Listeners                              */
-		// --------------------------------------------------------------------------------
-		// --------------------------------------------------------------------------------
+		// -------------------------------------------------------------------------------- //
+		// -------------------------------------------------------------------------------- //
+		/*                              Add Action Listeners                                */
+		// -------------------------------------------------------------------------------- //
+		// -------------------------------------------------------------------------------- //
 
 		applyButton.addActionListener( new ActionListener () {
 			public void actionPerformed( ActionEvent e) {
@@ -552,7 +545,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists()) {
 					
-					disableSliders();
+					setEnabledSliders(false);
 					selectedButton = BUTTON.FLIP;
 
 				} 
@@ -565,7 +558,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists()) {
 					
-					disableSliders();
+					setEnabledSliders(false);
 					sliderOne.setEnabled(true);
 					sliderOne.setValue(5);
 					selectedButton = BUTTON.BLUR;
@@ -580,7 +573,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists() ) {
 					
-					enableSliders();
+					setEnabledSliders(true);
 
 					sliderOne.setValue(50);
 					sliderTwo.setValue(50);
@@ -596,8 +589,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		combineButton.addActionListener( new ActionListener () {
 			public void actionPerformed( ActionEvent e) {
 
-
-				disableSliders();
+				setEnabledSliders(false);
 				selectedButton = BUTTON.COMBINE;
 
 			}
@@ -608,7 +600,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists() ) {
 					
-					disableSliders();
+					setEnabledSliders(false);
 					selectedButton = BUTTON.ROTATE;
 
 				} 
@@ -621,7 +613,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists() ) {
 					
-					disableSliders();
+					setEnabledSliders(false);
 					sliderOne.setEnabled(true);
 					sliderOne.setValue(100); 
 
@@ -637,7 +629,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists()) {
 					
-					disableSliders();
+					setEnabledSliders(false);
 					sliderOne.setEnabled(true);
 					sliderOne.setValue(50);
 					selectedButton = BUTTON.EDGE;
@@ -653,7 +645,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				if (imageExists()) {
 					
-					disableSliders();
+					setEnabledSliders(false);
 					sliderOne.setEnabled(true);
 					sliderOne.setValue(50);
 					selectedButton = BUTTON.MOSAIC;
@@ -666,7 +658,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 }
 
 	 /**
-	 * Handle all actions involving the undo/redo buttons
+	 * Create the undo/redo buttons and all corresponding actions.
 	 **/
 	private void addUndoRedoButtons() {
 
@@ -683,11 +675,10 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		add(buttonPanel, BorderLayout.NORTH);
 
-
 		undoButton.addActionListener(
 			new ActionListener() {
+
 				public void actionPerformed(ActionEvent event) {
-					
 					undo();
 
 				}
@@ -697,8 +688,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		redoButton.addActionListener(
 			new ActionListener() {
-				public void actionPerformed(ActionEvent event) {
 
+				public void actionPerformed(ActionEvent event) {
 					redo();
 
 				}
@@ -708,6 +699,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	} // addUndoRedoButtons
 
+	/**
+	* Undo the last image manipulation.
+	*/
 	private void undo() {
 
 		redoStack.push(bmp);
@@ -719,6 +713,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	}
 
+	/**
+	* Undo all image manipulations.
+	*/
 	private void undoAll() {
 
 		while (!undoStack.isEmpty()) {
@@ -731,6 +728,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	}
 
+	/**
+	* Redo the last image manipulation that was un-done.
+	*/
 	private void redo() {
 
 		undoStack.push(bmp);
@@ -741,6 +741,50 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		repaint();
 
 	}
+
+	/**
+	* This method should be called whenever a picture manipulation occurs.
+	* The title of the window changes to indicate to the user that the image has changed.
+	*/
+	private void imageWasModified() {
+
+		modified = true;
+		updateTitle();
+
+		updateUndoRedoButtons();
+
+	}
+
+	/**
+	* Enables/disables the undo/redo buttons and menu items appropriately.
+	*/
+	private void updateUndoRedoButtons() {
+
+		undoButton.setEnabled(undoStack.size() != 0);
+		redoButton.setEnabled(redoStack.size() != 0);
+
+		undoMenuItem.setEnabled(undoStack.size() != 0);
+		undoAllMenuItem.setEnabled(undoStack.size() != 0);
+		redoMenuItem.setEnabled(redoStack.size() != 0);
+
+	}
+
+	/**
+	* Updates the title of the window depending on whether or not an image
+	* is open, and whether the image has been modified.
+	*/
+	private void updateTitle() {
+
+		if (bmp == null)
+			setTitle(TITLE);
+		else if (modified)
+			setTitle(String.format("%s (%s*)", TITLE, mostRecentInputFile.getName()));
+		else
+			setTitle(String.format("%s (%s)", TITLE, mostRecentInputFile.getName()));
+
+	}
+
+/** FILE SELECTION **/
 
 	/**
 	 * Prompts the user to name and specify a file they wish to save
@@ -775,7 +819,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		if (name.indexOf(".") != -1)
 			name = name.substring(0, name.indexOf("."));
 
-		return new File(name + ".bmp");
+		return new File(fileChooser.getSelectedFile().getParentFile() + "/" + name + ".bmp");
 		
 	}
 
@@ -808,47 +852,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		
 	} 
 
-	/**
-	* This method should be called whenever a picture manipulation occurs.
-	* The title of the window changes to indicate to the user that the image has changed.
-	* The list of images accessible by pressing "Redo" are also cleared.
-	*/
-	private void imageWasModified() {
+/** PRIVATE INNER CLASS **/
 
-		modified = true;
-		updateTitle();
-
-		updateUndoRedoButtons();
-
-	}
-
-	private void updateUndoRedoButtons() {
-
-		undoButton.setEnabled(undoStack.size() != 0);
-		redoButton.setEnabled(redoStack.size() != 0);
-
-		undoMenuItem.setEnabled(undoStack.size() != 0);
-		undoAllMenuItem.setEnabled(undoStack.size() != 0);
-		redoMenuItem.setEnabled(redoStack.size() != 0);
-
-	}
-
-	/**
-	* This method updates the title of the window depending on whether or not an image
-	* is open, and whether the image has been modified.
-	*/
-	private void updateTitle() {
-
-		if (bmp == null)
-			setTitle(TITLE);
-		else if (modified)
-			setTitle(String.format("%s (%s*)", TITLE, mostRecentInputFile.getName()));
-		else
-			setTitle(String.format("%s (%s)", TITLE, mostRecentInputFile.getName()));
-
-	}
-
-	/** PRIVATE INNER CLASS **/
 	private class Canvas extends JPanel {
 
 			/* Constants */
