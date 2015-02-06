@@ -13,8 +13,8 @@ import java.awt.geom.*;
 	TO-DO:
 
 	- Swirl Effect?
-	- Refactor
-	- Celebrate, we're done!
+	- Refactor (majorly)
+	- Celebrate, we're (never) done!
 
 */
 
@@ -50,7 +50,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	private JPanel optionPanel;
 
 	private BUTTON selectedButton = BUTTON.FLIP;
-	private JRadioButton flipButton, blurButton, enhanceButton, combineButton, rotateButton, grayscaleButton, edgeButton, mosaicButton, invertButton;
+	private JRadioButton flipButton, blurButton, enhanceButton, combineButton, rotateButton,
+						 grayscaleButton, edgeButton, mosaicButton, invertButton;
 
 
 	public static void main(String[] args) {
@@ -519,7 +520,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	
 	private void addButtons() {
 
-		JPanel buttonPanel = new JPanel();
+		JPanel buttonPanel = new JPanel(new GridLayout(2, 5));
 		ButtonGroup buttonGroup = new ButtonGroup();
 
 		flipButton      = new JRadioButton("Flip");
@@ -578,7 +579,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 						case BLUR:
 
-							// Blur can range from 1 to 10
+							// Blur can range from 1 to 11
 							bmp.blur(sliderOne.slider.getValue());
 							break;
 						
@@ -602,7 +603,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 									bmp = Bitmap.combine(bmp, newBmp);
 									pack();							
 								} catch (IOException event) {
-									System.err.println("Ooops! IOError has occured while combining images");
+									System.err.println("Ooops! IOException has occured while combining images.");
 								}
 							}
 
@@ -618,7 +619,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 						case EDGE:
 
 							// Precision between 0-20
-							bmp.edgeDetection(sliderOne.slider.getValue()); 
+							bmp.edgeDetection(20 - sliderOne.slider.getValue()); 
 							break;
 						
 						case MOSAIC:
@@ -629,7 +630,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 						case INVERT:
 
-							bmp.invert();
+							bmp.swirl();
+							// bmp.invert();
 							break;
 
 					}
@@ -675,8 +677,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				
 				// Set values
 				sliderOne.slider.setMinimum(1);
-				sliderOne.slider.setValue(5);
-				sliderOne.slider.setMaximum(10);
+				sliderOne.slider.setMaximum(11);
+				sliderOne.slider.setValue(6);
 
 				// Add ticks
 				sliderOne.slider.setSnapToTicks(true);
@@ -688,7 +690,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				sliderOne.slider.setPaintLabels(true);
 				Hashtable<Integer, JLabel> dict = new Hashtable<Integer, JLabel>();
 			    dict.put(new Integer(1), new JLabel("Less"));
-			    dict.put(new Integer(10), new JLabel("More"));
+			    dict.put(new Integer(11), new JLabel("More"));
 			    sliderOne.slider.setLabelTable(dict);
 
 				selectedButton = BUTTON.BLUR;
@@ -714,14 +716,14 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				
 				// Set values
 				sliderOne.slider.setMinimum(0);
-				sliderOne.slider.setValue(100);
 				sliderOne.slider.setMaximum(200);
+				sliderOne.slider.setValue(100);
 				sliderTwo.slider.setMinimum(0);
-				sliderTwo.slider.setValue(100);
 				sliderTwo.slider.setMaximum(200);
+				sliderTwo.slider.setValue(100);
 				sliderThree.slider.setMinimum(0);
-				sliderThree.slider.setValue(100);
 				sliderThree.slider.setMaximum(200);
+				sliderThree.slider.setValue(100);
 
 				// Add ticks
 				sliderOne.slider.setSnapToTicks(true);
@@ -800,8 +802,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				
 				// Set values
 				sliderOne.slider.setMinimum(0);
-				sliderOne.slider.setValue(100);
 				sliderOne.slider.setMaximum(100);
+				sliderOne.slider.setValue(100);
 
 				// Add ticks
 				sliderOne.slider.setSnapToTicks(true);
@@ -839,8 +841,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				
 				// Set values
 				sliderOne.slider.setMinimum(0);
-				sliderOne.slider.setValue(10);
 				sliderOne.slider.setMaximum(20);
+				sliderOne.slider.setValue(10);
 
 				// Add ticks
 				sliderOne.slider.setSnapToTicks(true);
@@ -878,8 +880,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				
 				// Set values
 				sliderOne.slider.setMinimum(2);
-				sliderOne.slider.setValue(5);
 				sliderOne.slider.setMaximum(52);
+				sliderOne.slider.setValue(5);
 
 				// Add ticks
 				sliderOne.slider.setSnapToTicks(false);
@@ -914,7 +916,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 			}
 		});
-
 
 	 }
 
