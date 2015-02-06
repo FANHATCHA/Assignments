@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
+import java.awt.geom.*;
 
 /*
 
@@ -1139,6 +1140,20 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 		if (bmp == null) {
 	 			g.setColor(Color.LIGHT_GRAY);
 		 		g.fillRect(horizontal_padding, vertical_padding, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+		 		g.setColor(Color.BLACK);
+		 		g.setFont(new Font("Verdana", Font.BOLD, 14));
+		 		String str1 = "Please open a bitmap image.";
+		 		String str2 = "(Ctrl + O)";
+		 		FontMetrics fm1 = g.getFontMetrics();
+		 		FontMetrics fm2 = g.getFontMetrics();
+   				Rectangle2D rect1 = fm1.getStringBounds(str1, g);
+   				Rectangle2D rect2 = fm2.getStringBounds(str2, g);
+
+    			g.drawString(str1, (int) ((getWidth() - rect1.getWidth())/2),
+                      (int) ((getHeight() - rect1.getHeight())/2));
+    			g.drawString(str2, (int) ((getWidth() - rect2.getWidth())/2),
+                      (int) ((getHeight() + rect2.getHeight())/2));
 	 		}
 
 	 			/* Draw image */
