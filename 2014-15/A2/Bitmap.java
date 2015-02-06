@@ -409,6 +409,10 @@ public class Bitmap implements Cloneable {
 	*/
 	public void blur(int range) {
 
+		// Range of 0 or less will cause a division by 0 error
+		if (range <= 0)
+			range = 1;
+
 		Color[][] newPixels = new Color[height][width];
 
 		for (int y = 0; y < height; y++)

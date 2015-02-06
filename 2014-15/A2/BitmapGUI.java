@@ -10,11 +10,6 @@ import javax.swing.event.*;
 
 	TO-DO:
 
-	-For "Save As" button, the user should be able to type in a new file name
-	(currently the user is only able to overwrite another file (at least on Mac OS))
-
-	- Make sure 'Save As' saves a file with a bmp extension
-
 	- Swirl Effect?
 	- Refactor
 	- Celebrate, we're done!
@@ -40,7 +35,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		/* Components */
 
 	private JMenuItem closeMenuItem, saveMenuItem, saveAsMenuItem, undoAllMenuItem, undoMenuItem, redoMenuItem;
-	// private JButton flipButton, blurButton, enhanceButton, combineButton, rotateButton, grayscaleButton, edgeButton, mosaicButton,
+	
 	private JButton undoButton, redoButton,
 					applyButton;
 
@@ -80,7 +75,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		
 		pack();
 		setGUIproperties();
-		cleanupBeforeProgramQuits( );
 
 	}
 
@@ -324,9 +318,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 			
 		 			File newFile = saveFile("Choose name for new image");
 
-		 			if (newFile != null) 
-		 				bmp.writeBitmap( newFile );
-		 			break;
+		 			if (newFile != null)
+		 				mostRecentInputFile = newFile;
 
 		 		case "Save":
 
@@ -345,7 +338,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 						enableButtons();
 
-					 	saveTempImage();
 						bmp = new Bitmap(mostRecentInputFile = openedFile);
 						modified = false;
 						canvas.refreshSize();	
@@ -491,11 +483,11 @@ public class BitmapGUI extends JFrame implements ActionListener {
 						case ENHANCE:
 
 							// RGB values can range from 0-200%
-							float redVal = (sliderOne.getValue()*2) / 100f;
-							float greenVal = (sliderTwo.getValue()*2) / 100f;
-							float blueVal = (sliderThree.getValue()*2) / 100f;
+							float redVal   = (sliderOne.getValue()*2)   / 100f;
+							float greenVal = (sliderTwo.getValue()*2)   / 100f;
+							float blueVal  = (sliderThree.getValue()*2) / 100f;
 
-							bmp.enhanceColor( redVal, greenVal , blueVal );
+							bmp.enhanceColor(redVal, greenVal , blueVal);
 							break;
 
 						case COMBINE:
@@ -515,6 +507,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 							break;
 						
 						case ROTATE:
+
 							bmp.rotateCounterClockwise();
 							canvas.refreshSize();
 							pack();
@@ -554,8 +547,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 
 
-		flipButton.addActionListener( new ActionListener () {
-			public void actionPerformed( ActionEvent e) {
+		flipButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 
 				if (imageExists()) {
 					
@@ -567,14 +560,14 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			}
 		});
 
-		blurButton.addActionListener( new ActionListener () {
-			public void actionPerformed( ActionEvent e) {
+		blurButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 
 				if (imageExists()) {
 					
 					disableSliders();
 					sliderOne.setEnabled(true);
-					sliderOne.setValue(10); // range of one
+					sliderOne.setValue(5);
 					selectedButton = BUTTON.BLUR;
 
 				} 
@@ -582,16 +575,16 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			}
 		});
 
-		enhanceButton.addActionListener( new ActionListener () {
-			public void actionPerformed( ActionEvent e) {
+		enhanceButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 
 				if (imageExists() ) {
 					
 					enableSliders();
 
-					sliderOne.setValue(75);
-					sliderTwo.setValue(25);
-					sliderThree.setValue(36);
+					sliderOne.setValue(50);
+					sliderTwo.setValue(50);
+					sliderThree.setValue(50);
 
 					selectedButton = BUTTON.ENHANCE;
 
@@ -610,8 +603,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			}
 		});
 
-		rotateButton.addActionListener( new ActionListener () {
-			public void actionPerformed( ActionEvent e) {
+		rotateButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 
 				if (imageExists() ) {
 					
@@ -623,8 +616,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			}
 		});
 
-		grayscaleButton.addActionListener( new ActionListener () {
-			public void actionPerformed( ActionEvent e) {
+		grayscaleButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 
 				if (imageExists() ) {
 					
@@ -639,8 +632,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		});
 
 
-		edgeButton.addActionListener( new ActionListener () {
-			public void actionPerformed( ActionEvent e) {
+		edgeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 
 				if (imageExists()) {
 					
@@ -655,14 +648,14 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		});
 		
 
-		mosaicButton.addActionListener( new ActionListener () {
-			public void actionPerformed( ActionEvent e) {
+		mosaicButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 
 				if (imageExists()) {
 					
 					disableSliders();
 					sliderOne.setEnabled(true);
-					sliderOne.setValue(30);
+					sliderOne.setValue(50);
 					selectedButton = BUTTON.MOSAIC;
 				} 
 
@@ -692,8 +685,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 
 		undoButton.addActionListener(
-			new ActionListener () {
-				public void actionPerformed( ActionEvent event) {
+			new ActionListener() {
+				public void actionPerformed(ActionEvent event) {
 					
 					undo();
 
@@ -703,7 +696,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 
 		redoButton.addActionListener(
-			new ActionListener () {
+			new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 
 					redo();
@@ -753,19 +746,36 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 * Prompts the user to name and specify a file they wish to save
 	 * @return - A File object to which data can be saved
 	 */
-	private static File saveFile (String prompt) {
+	private File saveFile(String title) {
 
-		// Prompt user to select a file
+			/* Set up the file chooser */
+
 		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setDialogTitle(prompt);
-		int returnVal = fileChooser.showSaveDialog(null);
+		fileChooser.setDialogTitle(title);
 
-		// User has finished selecting a file 
-		if(returnVal == JFileChooser.APPROVE_OPTION) 
-			return fileChooser.getSelectedFile();
+			/* Begin at the most recently accessed directory */
 
-		// User did not select a file (pressed cancel) 
-		return null;
+		if (mostRecentInputFile != null)
+			fileChooser.setCurrentDirectory(mostRecentInputFile.getParentFile());
+
+			/* Prompt user to select a file */
+
+		fileChooser.showSaveDialog(null);
+
+			/* User pressed cancel, so there was no file */
+
+		if (fileChooser.getSelectedFile() == null)
+			return null;
+
+			/* Add .BMP extension if the user didn't put it there */
+
+		String name = fileChooser.getSelectedFile().getName();
+
+		// Remove anything after the period
+		if (name.indexOf(".") != -1)
+			name = name.substring(0, name.indexOf("."));
+
+		return new File(name + ".bmp");
 		
 	}
 
@@ -778,6 +788,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			/* Set up the file chooser */
 
 		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle(title);
 
 			/* Filter .BMP files */
 
@@ -788,8 +799,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		if (mostRecentInputFile != null)
 			fileChooser.setCurrentDirectory(mostRecentInputFile.getParentFile());
-
-		fileChooser.setDialogTitle(title);
 
 			/* Prompt user to select a file, returning it */
 
@@ -839,22 +848,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	}
 
-	/** Make a new thread that monitors when the program quits **/
-	private static void cleanupBeforeProgramQuits() {
-
-	    // The code within this will execute when the program exits for good
-	    Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() { 
-	        public void run() {
-
-				System.out.println("Program exited");	            
-
-	        }
-	    }));
-	}
-
 	/** PRIVATE INNER CLASS **/
 	private class Canvas extends JPanel {
-
 
 			/* Constants */
 		
