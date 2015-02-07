@@ -199,7 +199,7 @@ public class Bitmap implements Cloneable {
 	 */
 	public void mosaic(int cellSize) {
 
-		if ( cellSize < Math.max(height, width) && cellSize != 1 ) {
+		if ( cellSize < max(height, width) && cellSize != 1 ) {
 
 			// This nested loop treats each cell as though it were its own image
 			for (int y = 0; y < height; y += cellSize) {
@@ -262,8 +262,8 @@ public class Bitmap implements Cloneable {
 	 **/
 	public static Bitmap combine(Bitmap p1, Bitmap p2) {
 
-		int newWidth  = Math.max( p1.getWidth(), p2.getWidth() );
-		int newHeight = Math.max( p1.getHeight(), p2.getHeight() );
+		int newWidth  = max( p1.getWidth(), p2.getWidth() );
+		int newHeight = max( p1.getHeight(), p2.getHeight() );
 
 		Bitmap newBitmap = new Bitmap(newWidth, newHeight);
 
@@ -370,13 +370,15 @@ public class Bitmap implements Cloneable {
 
 	/**
 	* Add a swirl effect to the image.
+	* @param xOrigin - value from 0.0 to 1.0
+	* @param yOrigin - value from 0.0 to 1.0
+	* @param range
 	*/
-	public void swirl() {
+	public void swirl(float xOrigin, float yOrigin, int range) {
 
-		int cx = width/2;
-		int cy = height/2;
-		final double swirlRadius = min(cx, cy);
-		final double MAX_ROT = PI/16; // Max rotation 
+		final int cx = (int) (width*xOrigin);
+		final int cy = (int) (height*yOrigin);
+		final double swirlRadius = min(cx, cy)*range;
 
 		Color[][] newPixels = new Color[height][width];
 
@@ -384,24 +386,17 @@ public class Bitmap implements Cloneable {
 			for (int x = 0; x < width; x++) {
 
 				double r =  sqrt( (cx-x)*(cx-x) + (cy-y)*(cy-y) );
-
-				if ( r < min(cy, cx) ) {
 					
-					double theta = MAX_ROT * (swirlRadius/r); 
+				double theta = swirlRadius/(r*r); 
 
-					int newX = (int)(  (x-cx)*cos( theta ) + (y-cy)*sin(theta) + cx );
-					int newY = (int)( -(x-cx)*sin( theta ) + (y-cy)*cos(theta) + cy);
+				int newX = (int)(  (x-cx)*cos( theta ) + (y-cy)*sin(theta) + cx );
+				int newY = (int)( -(x-cx)*sin( theta ) + (y-cy)*cos(theta) + cy);
 
-					newX = max( 0, min(width-1, newX) );
-					newY = max( 0, min(height-1, newY) );
-					
-					newPixels[y][x] = pixels[newY][newX];
-				} else {
-					newPixels[y][x] = pixels[y][x];
-				}
-
-
+				newX = max( 0, min(width-1, newX) );
+				newY = max( 0, min(height-1, newY) );
 				
+				newPixels[y][x] = pixels[newY][newX];
+
 			}
 		}
 
@@ -595,9 +590,9 @@ public class Bitmap implements Cloneable {
 	*/
 	private static Color makeValidColor(int red, int green, int blue) {
 
-		red = Math.max(MIN_RGB_VALUE, Math.min(red, MAX_RGB_VALUE));
-		green = Math.max(MIN_RGB_VALUE, Math.min(green, MAX_RGB_VALUE));
-		blue = Math.max(MIN_RGB_VALUE, Math.min(blue, MAX_RGB_VALUE));
+		red   = max(MIN_RGB_VALUE, min(red,   MAX_RGB_VALUE));
+		green = max(MIN_RGB_VALUE, min(green, MAX_RGB_VALUE));
+		blue  = max(MIN_RGB_VALUE, min(blue,  MAX_RGB_VALUE));
 
 		return new Color(red, green, blue);
 

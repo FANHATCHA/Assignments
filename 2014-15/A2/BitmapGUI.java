@@ -12,7 +12,6 @@ import java.awt.geom.*;
 
 	TO-DO:
 
-	- Swirl Effect?
 	- Refactor (majorly)
 	- Celebrate, we're (never) done!
 
@@ -25,7 +24,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	private static final String TITLE = "BitmapHacker";
 	
 	private enum BUTTON {
-		FLIP, BLUR, ENHANCE, COMBINE, ROTATE, GRAYSCALE, EDGE, MOSAIC, INVERT
+		FLIP, BLUR, ENHANCE, COMBINE, ROTATE, GRAYSCALE, EDGE, MOSAIC, INVERT, SWIRL
 	}
 
 		/* Variables */
@@ -51,7 +50,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	private BUTTON selectedButton = BUTTON.FLIP;
 	private JRadioButton flipButton, blurButton, enhanceButton, combineButton, rotateButton,
-						 grayscaleButton, edgeButton, mosaicButton, invertButton;
+						 grayscaleButton, edgeButton, mosaicButton, invertButton, swirlButton;
 
 
 	public static void main(String[] args) {
@@ -280,6 +279,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		edgeButton.setEnabled(enabled);
 		mosaicButton.setEnabled(enabled);
 		invertButton.setEnabled(enabled);
+		swirlButton.setEnabled(enabled);
 
 		updateUndoRedoButtons();
 
@@ -532,6 +532,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		edgeButton      = new JRadioButton("Edge");
 		mosaicButton    = new JRadioButton("Mosaic");
 		invertButton    = new JRadioButton("Invert");
+		swirlButton     = new JRadioButton("Swirl");
 
 		buttonGroup.add(flipButton);
 		buttonGroup.add(blurButton);
@@ -542,6 +543,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		buttonGroup.add(edgeButton);
 		buttonGroup.add(mosaicButton);
 		buttonGroup.add(invertButton);
+		buttonGroup.add(swirlButton);
 
 		addUndoRedoButtons();
 
@@ -559,6 +561,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		buttonPanel.add(edgeButton);
 		buttonPanel.add(mosaicButton);
 		buttonPanel.add(invertButton);
+		buttonPanel.add(swirlButton);
 
 		add(buttonPanel, BorderLayout.SOUTH);
 
@@ -630,8 +633,16 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 						case INVERT:
 
-							bmp.swirl();
-							// bmp.invert();
+							bmp.invert();
+							break;
+
+						case SWIRL:
+
+							// Values can range from 0-100%
+							float x = (sliderOne.slider.getValue()) / 100f;
+							float y = (sliderTwo.slider.getValue()) / 100f;
+
+							bmp.swirl(x, y, sliderThree.slider.getValue());
 							break;
 
 					}
@@ -912,6 +923,71 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				setVisibleEffectOptions(false);
 				selectedButton = BUTTON.INVERT;
 
+				repaint();
+
+			}
+		});
+
+		swirlButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				switchToSliders();
+
+				// Set enabled
+				setVisibleEffectOptions(true);
+
+				// Set titles
+				sliderOne.label.setText("X:");
+				sliderTwo.label.setText("Y:");
+				sliderThree.label.setText("Range:");
+				
+				// Set values
+				sliderOne.slider.setMinimum(0);
+				sliderOne.slider.setMaximum(100);
+				sliderOne.slider.setValue(50);
+				sliderTwo.slider.setMinimum(0);
+				sliderTwo.slider.setMaximum(100);
+				sliderTwo.slider.setValue(50);
+				sliderThree.slider.setMinimum(0);
+				sliderThree.slider.setMaximum(100);
+				sliderThree.slider.setValue(50);
+
+				// Add ticks
+				sliderOne.slider.setSnapToTicks(false);
+				sliderOne.slider.setMinorTickSpacing(10);
+				sliderOne.slider.setMajorTickSpacing(0);
+				sliderOne.slider.setPaintTicks(true);
+				sliderTwo.slider.setSnapToTicks(false);
+				sliderTwo.slider.setMinorTickSpacing(10);
+				sliderTwo.slider.setMajorTickSpacing(0);
+				sliderTwo.slider.setPaintTicks(true);
+				sliderThree.slider.setSnapToTicks(false);
+				sliderThree.slider.setMinorTickSpacing(50);
+				sliderThree.slider.setMajorTickSpacing(0);
+				sliderThree.slider.setPaintTicks(true);
+
+				// Add labels
+				sliderOne.slider.setPaintLabels(true);
+				Hashtable<Integer, JLabel> dict1 = new Hashtable<Integer, JLabel>();
+				dict1.put(0, new JLabel("Left"));
+				dict1.put(100, new JLabel("Right"));
+			    sliderOne.slider.setLabelTable(dict1);
+
+			    sliderTwo.slider.setPaintLabels(true);
+				Hashtable<Integer, JLabel> dict2 = new Hashtable<Integer, JLabel>();
+				dict2.put(0, new JLabel("Bottom"));
+				dict2.put(100, new JLabel("Top"));
+			    sliderTwo.slider.setLabelTable(dict2);
+
+			    sliderThree.slider.setPaintLabels(true);
+				Hashtable<Integer, JLabel> dict3 = new Hashtable<Integer, JLabel>();
+				dict3.put(0, new JLabel("Less"));
+				dict3.put(100, new JLabel("More"));
+			    sliderThree.slider.setLabelTable(dict3);
+
+				selectedButton = BUTTON.SWIRL;
+
+				pack();
 				repaint();
 
 			}
