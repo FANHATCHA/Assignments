@@ -719,8 +719,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				// Set titles
 				sliderOne.label.setText("Red:");
-				sliderTwo.label.setText("Blue:");
-				sliderThree.label.setText("Green:");
+				sliderTwo.label.setText("Green:");
+				sliderThree.label.setText("Blue:");
 				
 				// Set values
 				sliderOne.slider.setMinimum(0);
