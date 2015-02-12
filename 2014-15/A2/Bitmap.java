@@ -368,9 +368,9 @@ public class Bitmap implements Cloneable {
 
 					/* Calculate inverted values */
 				
-				int red = 255 - pixels[y][x].getRed();
+				int red   = 255 - pixels[y][x].getRed();
 				int green = 255 - pixels[y][x].getGreen();
-				int blue = 255 - pixels[y][x].getBlue();
+				int blue  = 255 - pixels[y][x].getBlue();
 
 					/* Create the inverted pixel */
 				
@@ -400,7 +400,7 @@ public class Bitmap implements Cloneable {
 					
 				double theta = range/(r*r); 
 
-				int newX = (int)(  (x-cx)*cos( theta ) + (y-cy)*sin(theta) + cx );
+				int newX = (int)(  (x-cx)*cos( theta ) + (y-cy)*sin(theta) + cx);
 				int newY = (int)( -(x-cx)*sin( theta ) + (y-cy)*cos(theta) + cy);
 
 				newX = max( 0, min(width-1, newX) );
