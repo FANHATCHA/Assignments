@@ -1,3 +1,10 @@
+/**
+* BitmapGUI
+*
+* Data Structures II : Assignment 2
+* @author Micah Stairs and William Fiset
+*/
+
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.filechooser.*;
@@ -8,15 +15,6 @@ import javax.swing.event.*;
 import javax.swing.border.*;
 import java.awt.geom.*;
 
-/*
-
-	TO-DO:
-
-	- Refactor (majorly)
-	- Celebrate, we're (never) done!
-
-*/
-
 public class BitmapGUI extends JFrame implements ActionListener {
 
 		/* Constants */
@@ -24,7 +22,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	private static final String TITLE = "BitmapHacker";
 	
 	private enum BUTTON {
-		FLIP, BLUR, ENHANCE, COMBINE, ROTATE, GRAYSCALE, EDGE, MOSAIC, INVERT, SWIRL
+		NONE, FLIP, BLUR, ENHANCE, COMBINE, ROTATE, GRAYSCALE, EDGE, MOSAIC, INVERT, SWIRL
 	}
 
 		/* Variables */
@@ -34,7 +32,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	private Bitmap bmp;
 
 	private Stack<Bitmap> undoStack = new Stack<Bitmap>(), redoStack = new Stack<Bitmap>();
-
 
 		/* Components */
 
@@ -48,7 +45,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	private EffectOption sliderOne, sliderTwo, sliderThree;
 	private JPanel optionPanel;
 
-	private BUTTON selectedButton = BUTTON.FLIP;
+	private ButtonGroup buttonGroup;
+	private BUTTON selectedButton = BUTTON.NONE;
 	private JRadioButton flipButton, blurButton, enhanceButton, combineButton, rotateButton,
 						 grayscaleButton, edgeButton, mosaicButton, invertButton, swirlButton;
 
@@ -79,14 +77,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		pack();
 		setGUIproperties();
 
-	}
-
-	/**
-	* Check to see if an image exists on the canvas.
-	* @return true if there is an image on the canvas
-	*/
-	private boolean imageExists () {
-		return bmp != null;
 	}
 
 	/**
@@ -146,10 +136,11 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				}
 
-				imageWasModified();
+				
 				redoStack.clear();
 				updateUndoRedoButtons();
-				repaint();
+				imageWasModified();
+
 			} 
 
 		});
@@ -180,10 +171,11 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				}
 
-				imageWasModified();
+				
 				redoStack.clear();
 				updateUndoRedoButtons();
-				repaint();
+				imageWasModified();
+
 			} 
 
 		});
@@ -207,10 +199,11 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 				}
 
-				imageWasModified();
+				
 				redoStack.clear();
 				updateUndoRedoButtons();
-				repaint();
+				imageWasModified();
+
 			} 
 
 		});
@@ -232,6 +225,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	}
 
 
+	/**
+	* Hide sliders, and activate buttons
+	*/
 	private void switchToButtons() {
 
 		applyButton.setEnabled(false);
@@ -242,6 +238,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	}
 
+	/**
+	* Hide buttons, and activate sliders
+	*/
 	private void switchToSliders() {
 
 		applyButton.setEnabled(true);
@@ -290,21 +289,18 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 */
 	private void saveTempImage( ) {
 
-		// ∃ an image to save
-		if (imageExists()) {
-			try {
+		try {
 
-				undoStack.push((Bitmap) bmp.clone());
+			undoStack.push((Bitmap) bmp.clone());
 
-			} catch (CloneNotSupportedException e) {
-				System.err.println("Houston we've got a problem. The Bitmap could not be cloned!");
+		} catch (CloneNotSupportedException e) {
+			System.err.println("Houston we've got a problem. The Bitmap could not be cloned!");
 
-			} catch (OutOfMemoryError e) {
-				JOptionPane.showMessageDialog(null, "Memory exceeded! Clearing all undo/redos.", "Warning", JOptionPane.WARNING_MESSAGE);
-				undoStack.clear();
-				redoStack.clear();
-				updateUndoRedoButtons();
-			}
+		} catch (OutOfMemoryError e) {
+			JOptionPane.showMessageDialog(null, "Memory exceeded! Clearing all undo/redos.", "Warning", JOptionPane.WARNING_MESSAGE);
+			undoStack.clear();
+			redoStack.clear();
+			updateUndoRedoButtons();
 		}
 
 	} // saveTempImage
@@ -461,6 +457,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 			
 		 			setEnabledButtons(false);
 		 			setVisibleEffectOptions(false);
+		 			applyButton.setEnabled(false);
+		 			selectedButton = BUTTON.NONE;
+		 			buttonGroup.clearSelection();
 
 		 			bmp = null;
 		 			break;
@@ -521,7 +520,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	private void addButtons() {
 
 		JPanel buttonPanel = new JPanel(new GridLayout(2, 5));
-		ButtonGroup buttonGroup = new ButtonGroup();
+		buttonGroup = new ButtonGroup();
 
 		flipButton      = new JRadioButton("Flip");
 		blurButton      = new JRadioButton("Blur");
@@ -529,7 +528,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		combineButton   = new JRadioButton("Combine");
 		rotateButton    = new JRadioButton("Rotate");
 		grayscaleButton = new JRadioButton("Grayscale");
-		edgeButton      = new JRadioButton("Edge");
+		edgeButton      = new JRadioButton("Edge Detection");
 		mosaicButton    = new JRadioButton("Mosaic");
 		invertButton    = new JRadioButton("Invert");
 		swirlButton     = new JRadioButton("Swirl");
@@ -574,86 +573,84 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		applyButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (imageExists()) {
+				saveTempImage();
+
+				switch (selectedButton) {
+
+					case BLUR:
+
+						// Blur can range from 1 to 11
+						bmp.blur(sliderOne.slider.getValue());
+						break;
 					
-					saveTempImage();
+					case ENHANCE:
 
-					switch (selectedButton) {
+						// RGB values can range from 0-200%
+						float redVal   = (sliderOne.slider.getValue())   / 100f;
+						float greenVal = (sliderTwo.slider.getValue())   / 100f;
+						float blueVal  = (sliderThree.slider.getValue()) / 100f;
 
-						case BLUR:
+						bmp.enhanceColor(redVal, greenVal , blueVal);
+						break;
 
-							// Blur can range from 1 to 11
-							bmp.blur(sliderOne.slider.getValue());
-							break;
-						
-						case ENHANCE:
+					case COMBINE:
 
-							// RGB values can range from 0-200%
-							float redVal   = (sliderOne.slider.getValue())   / 100f;
-							float greenVal = (sliderTwo.slider.getValue())   / 100f;
-							float blueVal  = (sliderThree.slider.getValue()) / 100f;
+						File openedFile = selectFile("Pick your .BMP");
 
-							bmp.enhanceColor(redVal, greenVal , blueVal);
-							break;
-
-						case COMBINE:
-	
-							File openedFile = selectFile("Pick your .BMP");
-
-							if (openedFile != null) {
-								try {
-									Bitmap newBmp = new Bitmap(openedFile);
-									bmp = Bitmap.combine(bmp, newBmp);
-									pack();							
-								} catch (IOException event) {
-									System.err.println("Ooops! IOException has occured while combining images.");
-								}
+						if (openedFile != null) {
+							try {
+								Bitmap newBmp = new Bitmap(openedFile);
+								bmp = Bitmap.combine(bmp, newBmp);
+								pack();							
+							} catch (IOException event) {
+								System.err.println("Ooops! IOException has occured while combining images.");
 							}
+						}
 
-							break;
-						
-						case GRAYSCALE:
+						break;
+					
+					case GRAYSCALE:
 
-							// Grayscale percentage between 0-100%
-							float grayValue = sliderOne.slider.getValue() / 100f;
-							bmp.grayscale(grayValue);
-							break;
-						
-						case EDGE:
+						// Grayscale percentage between 0-100%
+						float grayValue = sliderOne.slider.getValue() / 100f;
+						bmp.grayscale(grayValue);
+						break;
+					
+					case EDGE:
 
-							// Precision between 0-20
-							bmp.edgeDetection(20 - sliderOne.slider.getValue()); 
-							break;
-						
-						case MOSAIC:
+						// Precision between 0-20
+						bmp.edgeDetection(20 - sliderOne.slider.getValue()); 
+						break;
+					
+					case MOSAIC:
 
-							// Mosiac cellsize value between 2-52
-							bmp.mosaic(sliderOne.slider.getValue());
-							break;
+						// Mosiac cellsize value between 2-52
+						bmp.mosaic(sliderOne.slider.getValue());
+						break;
 
-						case INVERT:
+					case INVERT:
 
-							bmp.invert();
-							break;
+						bmp.invert();
+						break;
 
-						case SWIRL:
+					case SWIRL:
 
-							// Values can range from 0-100%
-							float x = (sliderOne.slider.getValue()) / 100f;
-							float y = (sliderTwo.slider.getValue()) / 100f;
+						// Values can range from 0-100%
+						float x = (sliderOne.slider.getValue()) / 100f;
+						float y = (sliderTwo.slider.getValue()) / 100f;
 
-							bmp.swirl(x, y, sliderThree.slider.getValue());
-							break;
+						bmp.swirl(x, y, sliderThree.slider.getValue());
+						break;
 
-					}
+				} // switch
 
-					imageWasModified();
-					redoStack.clear();
-					updateUndoRedoButtons();
-					repaint();
-				} 
+				
+				redoStack.clear();
+				updateUndoRedoButtons();
+				imageWasModified();
 
-			}
+			} 
+
 		});
 
 		flipButton.addActionListener(new ActionListener() {
@@ -949,8 +946,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				sliderTwo.slider.setMaximum(100);
 				sliderTwo.slider.setValue(50);
 				sliderThree.slider.setMinimum(0);
-				sliderThree.slider.setMaximum(100);
-				sliderThree.slider.setValue(50);
+				sliderThree.slider.setMaximum(10000);
+				sliderThree.slider.setValue(5000);
 
 				// Add ticks
 				sliderOne.slider.setSnapToTicks(false);
@@ -962,7 +959,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 				sliderTwo.slider.setMajorTickSpacing(0);
 				sliderTwo.slider.setPaintTicks(true);
 				sliderThree.slider.setSnapToTicks(false);
-				sliderThree.slider.setMinorTickSpacing(50);
+				sliderThree.slider.setMinorTickSpacing(1000);
 				sliderThree.slider.setMajorTickSpacing(0);
 				sliderThree.slider.setPaintTicks(true);
 
@@ -982,7 +979,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			    sliderThree.slider.setPaintLabels(true);
 				Hashtable<Integer, JLabel> dict3 = new Hashtable<Integer, JLabel>();
 				dict3.put(0, new JLabel("Less"));
-				dict3.put(100, new JLabel("More"));
+				dict3.put(10000, new JLabel("More"));
 			    sliderThree.slider.setLabelTable(dict3);
 
 				selectedButton = BUTTON.SWIRL;
@@ -1013,27 +1010,19 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 		add(buttonPanel, BorderLayout.NORTH);
 
-		undoButton.addActionListener(
-			new ActionListener() {
-
+		undoButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 					undo();
-
 				}
 			}
 		);
 
-
-		redoButton.addActionListener(
-			new ActionListener() {
-
+		redoButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 					redo();
-
 				}
 			}
 		);		
-
 
 	} // addUndoRedoButtons
 
@@ -1047,7 +1036,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		bmp = undoStack.pop();
 
 		imageWasModified();
-		repaint();
 
 	}
 
@@ -1062,7 +1050,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		}
 
 		imageWasModified();
-		repaint();
 
 	}
 
@@ -1076,7 +1063,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		bmp = redoStack.pop();
 
 		imageWasModified();
-		repaint();
 
 	}
 
@@ -1090,6 +1076,8 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		updateTitle();
 
 		updateUndoRedoButtons();
+
+		repaint();
 
 	}
 
@@ -1215,6 +1203,7 @@ public class BitmapGUI extends JFrame implements ActionListener {
 	 	/**
 	 	* Returns the dimensions that the canvas should be, taking into consideration
 	 	* the image size and padding.
+	 	* @return preferred dimension
 	 	*/
 	 	@Override public Dimension getPreferredSize() {
 
@@ -1247,14 +1236,16 @@ public class BitmapGUI extends JFrame implements ActionListener {
 		 		g.setFont(new Font("Verdana", Font.BOLD, 14));
 		 		String str1 = "Please open a bitmap image.";
 		 		String str2 = "(Ctrl + O)";
+
 		 		FontMetrics fm1 = g.getFontMetrics();
 		 		FontMetrics fm2 = g.getFontMetrics();
+
    				Rectangle2D rect1 = fm1.getStringBounds(str1, g);
    				Rectangle2D rect2 = fm2.getStringBounds(str2, g);
-    			g.drawString(str1, (int) ((getWidth() - rect1.getWidth())/2),
-                      (int) ((getHeight() - rect1.getHeight())/2));
-    			g.drawString(str2, (int) ((getWidth() - rect2.getWidth())/2),
-                      (int) ((getHeight() + rect2.getHeight())/2));
+  
+    			g.drawString(str1, (int) ((getWidth() - rect1.getWidth())/2), (int) ((getHeight() - rect1.getHeight())/2));
+    			g.drawString(str2, (int) ((getWidth() - rect2.getWidth())/2), (int) ((getHeight() + rect2.getHeight())/2));
+	 		
 	 		}
 
 	 			/* Draw image */
@@ -1264,6 +1255,9 @@ public class BitmapGUI extends JFrame implements ActionListener {
 
 	 	}
 
+	 	/**
+	 	* Refreshes the canvas size, properly padding it
+	 	*/
 	 	public void refreshSize() {
 	 		
 	 		int width  = (bmp == null) ? DEFAULT_WIDTH  : bmp.getWidth();
@@ -1275,6 +1269,6 @@ public class BitmapGUI extends JFrame implements ActionListener {
 			vertical_padding   = (getHeight() - height) / 2;
 
 	 	}
-	 }
+	 } // Canvas Class
 
 }

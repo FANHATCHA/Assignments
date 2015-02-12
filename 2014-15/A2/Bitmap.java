@@ -1,3 +1,10 @@
+/**
+* Bitmap
+*
+* Data Structures II : Assignment 2
+* @author Micah Stairs and William Fiset
+*/
+
 import static java.lang.Math.*;
 import java.awt.*;
 import java.io.*;
@@ -133,24 +140,6 @@ public class Bitmap implements Cloneable {
 		output.close();
 
 	}
-	
-	private float luminance(int r, int g, int b) {
-		return (r+g+b)/3.0f;
-	}
-
-	/** Returns the pixels in a certain Rectangle of the image  **/
-	private ArrayList<Color> getPixelsInRange( Color [][] arr, int x1, int y1, int x2, int y2 ) {
-
-		ArrayList<Color> newArr = new ArrayList<Color>();
-
-		for (int y = y1; y < y2; y++) 
-			for (int x = x1; x < x2; x++) 
-				if (x < width && y < height) 
-					newArr.add( arr[y][x] );
-
-		return newArr;
-
-	}
 
 	/**
 	* Apply an edge detection effect on the image.
@@ -191,6 +180,29 @@ public class Bitmap implements Cloneable {
 		}
 
 		pixels = newPixels;
+	}
+
+	/**
+	* Return the average of the RGB values
+	*/
+	private float luminance(int r, int g, int b) {
+		return (r+g+b)/3.0f;
+	}
+
+	/**
+	* Returns the pixels in a certain Rectangle of the image
+	**/
+	private ArrayList<Color> getPixelsInRange( Color [][] arr, int x1, int y1, int x2, int y2 ) {
+
+		ArrayList<Color> newArr = new ArrayList<Color>();
+
+		for (int y = y1; y < y2; y++) 
+			for (int x = x1; x < x2; x++) 
+				if (x < width && y < height) 
+					newArr.add( arr[y][x] );
+
+		return newArr;
+
 	}
 	
 	/**
@@ -374,11 +386,10 @@ public class Bitmap implements Cloneable {
 	* @param yOrigin - value from 0.0 to 1.0
 	* @param range
 	*/
-	public void swirl(float xOrigin, float yOrigin, int range) {
+	public void swirl(float xOrigin, float yOrigin, double range) {
 
 		final int cx = (int) (width*xOrigin);
 		final int cy = (int) (height*yOrigin);
-		final double swirlRadius = min(cx, cy)*range;
 
 		Color[][] newPixels = new Color[height][width];
 
@@ -387,7 +398,7 @@ public class Bitmap implements Cloneable {
 
 				double r =  sqrt( (cx-x)*(cx-x) + (cy-y)*(cy-y) );
 					
-				double theta = swirlRadius/(r*r); 
+				double theta = range/(r*r); 
 
 				int newX = (int)(  (x-cx)*cos( theta ) + (y-cy)*sin(theta) + cx );
 				int newY = (int)( -(x-cx)*sin( theta ) + (y-cy)*cos(theta) + cy);
@@ -401,24 +412,6 @@ public class Bitmap implements Cloneable {
 		}
 
 		pixels = newPixels;
-
-
-		/* Circle crop
-		int r =  (int) sqrt( (cx-x)*(cx-x) + (cy-y)*(cy-y) );
-
-		if ( r < min(cy, cx) ) {
-			
-			int newX = (int)(  (x-cx)*cos( theta ) + (y-cy)*sin(theta) + cx );
-			int newY = (int)( -(x-cx)*sin( theta ) + (y-cy)*cos(theta) + cy);
-
-			newX = max( 0, min(width-1, newX) );
-			newY = max( 0, min(height-1, newY) );
-			
-			newPixels[y][x] = pixels[newY][newX];
-		} else {
-			newPixels[y][x] = pixels[y][x];
-		}
-		*/
 
 	}
 
@@ -542,8 +535,6 @@ public class Bitmap implements Cloneable {
 
 	}
 
-	
-
 	/**
 	* Generate a BufferedImage of the bitmap.
 	* @return the generated BufferedImage
@@ -598,6 +589,9 @@ public class Bitmap implements Cloneable {
 
 	}
 
+	/**
+	* Duplicates the Bitmap, ensuring that a deep copy is made, not just copying references
+	*/
     @Override protected Object clone() throws CloneNotSupportedException {
 
         Bitmap clonedBitmap = (Bitmap) super.clone();

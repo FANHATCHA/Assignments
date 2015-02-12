@@ -1,3 +1,11 @@
+/**
+* Effect Option - GUI element allowing you to contain both a slider (and its associated label),
+* as well as a button. You can easily toggle between these two modes.
+*
+* Data Structures II : Assignment 2
+* @author Micah Stairs and William Fiset
+*/
+
 import javax.swing.*;
 import java.awt.*;
 
