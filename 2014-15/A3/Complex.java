@@ -11,49 +11,54 @@ z starts at 0
 c is a constant
 
 **/
+
 public class Complex {
 
 	private double real, imag;
 
 	// Standard constructor
-	public Complex( double inReal, double inImag ) {
-		this.real = inReal;
-		this.imag = inImag
+	public Complex(double real, double imag) {
+		this.real = real;
+		this.imag = imag;
 	}
 
 	// Copying constructor
-	public Complex(Complex inComplex) {
-		this.real = inComplex.getReal();
-		this.imag = inComplex.getImag();
+	public Complex(Complex complex) {
+		this.real = complex.getReal();
+		this.imag = complex.getImag();
 	}
 
-
-	public void multiply(Complex toMult ) {
-		this.real = real.getReal()*toMult.getReal() - real.getImag()*toMult.getImag();
-		this.imag = real.getImag()*toMult.getReal() + real.getReal()*toMult.getImag();
+	public void multiply(Complex complex) {
+		Complex previousValue = new Complex(this);
+		this.real = (previousValue.getReal()*complex.getReal()) - (previousValue.getImag()*complex.getImag());
+		this.imag = (previousValue.getImag()*complex.getReal()) + (previousValue.getReal()*complex.getImag());
 	}
 
-	public void add( Complex toAdd ) {
-		this.real += toSub.getReal();
-		this.imag += toSub.getImag();
+	public void add(Complex complex) {
+		this.real += complex.getReal();
+		this.imag += complex.getImag();
 	}
 
-	public void subtract(Complex toSub) {
-		this.real -= toSub.getReal();
-		this.imag -= toSub.getImag();
+	public void subtract(Complex complex) {
+		this.real -= complex.getReal();
+		this.imag -= complex.getImag();
 	}
 
 	public double getImag() {
-		return this.inImag;
+		return imag;
 	}
 
 	public double getReal() {
-		return this.inReal;
+		return real;
 	}
 
 	// Returns the modulus of this complex number (distance from origin)
 	public double modulus() {
 		return Math.sqrt(Math.pow(getReal(), 2) + Math.pow(getImag(), 2));
+	}
+
+	@Override public String toString() {
+		return "[" + getReal() + " + " + getImag() + "i]";
 	}
 
 }
