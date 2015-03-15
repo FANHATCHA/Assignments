@@ -15,12 +15,16 @@ import java.awt.image.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class MandelbrotGUI extends JFrame implements ActionListener {
+public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener {
 
 		/* Constants */
 
 	private static int  IMAGE_SIZE 		= 600,
 						MAX_ITERATIONS 	= 150;
+
+	private static double  	DEFAULT_ZOOM		= 100,
+							DEFAULT_TOP_LEFT_X	= -3.0,
+							DEFAULT_TOP_LEFT_Y	= +3.0;
 
 		/* Instance variables */
 
@@ -40,12 +44,12 @@ public class MandelbrotGUI extends JFrame implements ActionListener {
 
 	public MandelbrotGUI() {
 
-		/* Add a canvas to the center of the window */
+			/* Add a canvas to the center of the window */
 
 		canvas = new Canvas();
 	 	add(canvas, BorderLayout.CENTER);
 
-	 		/* Add the menu and buttons */
+	 		/* Add the menu */
 
 	 	addMenu();
 
@@ -53,6 +57,10 @@ public class MandelbrotGUI extends JFrame implements ActionListener {
 		
 		pack();
 		setGUIproperties();
+
+			/* Add listeners */
+
+		addKeyListener(this);
 
 			/* Update fractal initally */
 
@@ -145,13 +153,16 @@ public class MandelbrotGUI extends JFrame implements ActionListener {
 
 	 			System.out.println("Returning to default view...");
 	 			returnToDefaultMenuItem.setEnabled(false);
-
+	 			ZOOM_FACTOR = DEFAULT_ZOOM;
+	 			TOP_LEFT_X = DEFAULT_TOP_LEFT_X;
+	 			TOP_LEFT_Y = DEFAULT_TOP_LEFT_Y;
 	 			break;
 
 	 		case "Zoom In":
 
 	 			System.out.println("Zooming in...");
 	 			returnToDefaultMenuItem.setEnabled(true);
+	 			ZOOM_FACTOR *= 2;
 	 			
 	 			break;
 
@@ -159,12 +170,46 @@ public class MandelbrotGUI extends JFrame implements ActionListener {
 
 	 			System.out.println("Zooming out...");
 	 			returnToDefaultMenuItem.setEnabled(true);
+	 			ZOOM_FACTOR /= 2;
 	 			
 	 			break;
 	 	}
 
+	 	updateFractal();
+
 	 }
 
+	public void keyPressed(KeyEvent e) {
+
+		switch (e.getKeyCode()) {
+
+			case KeyEvent.VK_LEFT:
+				TOP_LEFT_X -= 1.0/(ZOOM_FACTOR/100);
+				returnToDefaultMenuItem.setEnabled(true);
+				break;
+
+			case KeyEvent.VK_RIGHT:
+				TOP_LEFT_X += 1.0/(ZOOM_FACTOR/100);
+				returnToDefaultMenuItem.setEnabled(true);
+				break;
+
+			case KeyEvent.VK_UP:
+				TOP_LEFT_Y += 1.0/(ZOOM_FACTOR/100);
+				returnToDefaultMenuItem.setEnabled(true);
+				break;
+
+			case KeyEvent.VK_DOWN:
+				TOP_LEFT_Y -= 1.0/(ZOOM_FACTOR/100);
+				returnToDefaultMenuItem.setEnabled(true);
+				break;
+		}
+
+		updateFractal();
+
+	} 
+
+	public void keyReleased(KeyEvent e) { } 
+	public void keyTyped(KeyEvent e) { } 
 
     private int doIterations(Complex c) {
 
@@ -174,7 +219,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener {
 		otherwise it is in the mandelbrot. 
 
     	z_0 = 0
-    	z_1 = 0^2 + c = c
+    	z_1 = (z_0)^2 + c = c
     	...
 		z_n = (z_n-1)^2 + c
 
@@ -196,10 +241,11 @@ public class MandelbrotGUI extends JFrame implements ActionListener {
     	*/
 
     	Complex z = new Complex(0, 0);
-
+    	
     	for (int i = 0; i < MAX_ITERATIONS; i++) {
     		z.multiply(z);
     		z.add(c);
+    		//System.out.println(z);
     		if (z.modulus() > 2) {
     			// System.out.println(i);
     			return i;
@@ -214,7 +260,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener {
 
     	for (int y = 0; y < IMAGE_SIZE; y++)
 			for (int x = 0; x < IMAGE_SIZE; x++) {
-				fractalImage.setRGB(x, y, getColor(doIterations(getComplexPoint(x, IMAGE_SIZE - y - 1))));
+				fractalImage.setRGB(x, y, getColor(doIterations(getComplexPoint(x, y))));
 			}
 
 		canvas.repaint();

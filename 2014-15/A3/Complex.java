@@ -32,16 +32,14 @@ public class Complex {
 		Complex previousValue = new Complex(this);
 		this.real = (previousValue.getReal()*complex.getReal()) - (previousValue.getImag()*complex.getImag());
 		this.imag = (previousValue.getImag()*complex.getReal()) + (previousValue.getReal()*complex.getImag());
+		//System.out.println(previousValue + " * " + complex + " = " + this);
 	}
 
 	public void add(Complex complex) {
+		//System.out.print(this + " + " + complex + " = ");
 		this.real += complex.getReal();
 		this.imag += complex.getImag();
-	}
-
-	public void subtract(Complex complex) {
-		this.real -= complex.getReal();
-		this.imag -= complex.getImag();
+		//System.out.println(this);
 	}
 
 	public double getImag() {
@@ -54,11 +52,11 @@ public class Complex {
 
 	// Returns the modulus of this complex number (distance from origin)
 	public double modulus() {
-		return Math.sqrt(Math.pow(getReal(), 2) + Math.pow(getImag(), 2));
+		return Math.sqrt(getReal()*getReal() + getImag()*getImag());
 	}
 
 	@Override public String toString() {
-		return "[" + getReal() + " + " + getImag() + "i]";
+		return "(" + getReal() + " + " + getImag() + "i)";
 	}
 
 }
