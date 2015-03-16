@@ -22,7 +22,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	private static int  IMAGE_SIZE 		= 600,
 						MAX_ITERATIONS 	= 150;
 
-	private static double  	DEFAULT_ZOOM		= 100,
+	private static double  	DEFAULT_ZOOM		= 100.0,
 							DEFAULT_TOP_LEFT_X	= -3.0,
 							DEFAULT_TOP_LEFT_Y	= +3.0;
 
@@ -162,14 +162,14 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	 		case "Zoom In":
 
 	 			returnToDefaultMenuItem.setEnabled(true);
-	 			ZOOM_FACTOR *= 2;
+	 			ZOOM_FACTOR *= 2.0;
 	 			
 	 			break;
 
 	 		case "Zoom Out":
 
 	 			returnToDefaultMenuItem.setEnabled(true);
-	 			ZOOM_FACTOR /= 2;
+	 			ZOOM_FACTOR /= 2.0;
 	 			
 	 			break;
 	 	}
@@ -263,7 +263,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
     		z.multiply(z);
     		z.add(c);
     		//System.out.println(z);
-    		if (z.modulus() > 2) {
+    		if (z.modulus() > 2.0) {
     			// System.out.println(i);
     			return i;
     		}
@@ -277,7 +277,9 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
     	for (int y = 0; y < IMAGE_SIZE; y++)
 			for (int x = 0; x < IMAGE_SIZE; x++) {
-				fractalImage.setRGB(x, y, getColor(doIterations(getComplexPoint(x, y))));
+				int colorValue = doIterations(getComplexPoint(x, y));
+				int color = makeColor(colorValue);
+				fractalImage.setRGB(x, y, color);
 			}
 
 		canvas.repaint();
@@ -290,12 +292,11 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
     }
 
-    private int getColor(int iterations) {
+    private int makeColor(int iterations) {
 
     	// iterations = (int) (Math.random()*150);
 
     	double percentageOfIterations = ((double) iterations) / ((double) MAX_ITERATIONS);
-
     	Color color = new Color(
     		(int) (255.0*percentageOfIterations),
     		(int) (255.0*percentageOfIterations),
