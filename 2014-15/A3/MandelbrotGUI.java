@@ -19,7 +19,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 		/* Constants */
 
-	public static int  IMAGE_SIZE 		= 600,
+	public static int  	IMAGE_SIZE 		= 600,
 						MAX_ITERATIONS 	= 150;
 
 	private static double  	DEFAULT_ZOOM		= 100.0,
@@ -212,14 +212,23 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	public void mousePressed(MouseEvent e) {
 
-		// // Left click to zoom in
-		// if (e.getButton == MouseEvent.BUTTON1) {
-		// 	returnToDefaultMenuItem.setEnabled(true);
-	 // 		ZOOM_FACTOR *= 2;
-		// } else if (e.getButton == MouseEvent.BUTTON2) {
-		// 	returnToDefaultMenuItem.setEnabled(true);
-	 // 		ZOOM_FACTOR /= 2;
-		// }
+		// Left click to zoom in
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			returnToDefaultMenuItem.setEnabled(true);
+			// System.out.println(TOP_LEFT_X + " " + TOP_LEFT_Y);
+			
+			// TOP_LEFT_X += e.getX()/ZOOM_FACTOR;
+			// TOP_LEFT_Y += e.getY()/ZOOM_FACTOR;
+			// // System.out.println(TOP_LEFT_X + " " + TOP_LEFT_Y);
+	 		ZOOM_FACTOR *= 2;
+		} else if (e.getButton() == MouseEvent.BUTTON3) {
+			returnToDefaultMenuItem.setEnabled(true);
+			// TOP_LEFT_X += e.getX()/ZOOM_FACTOR;
+			// TOP_LEFT_Y += e.getY()/ZOOM_FACTOR;
+	 		ZOOM_FACTOR /= 2;
+		}
+
+		updateFractal();
 
 	} 
 
@@ -260,7 +269,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		Complex z = new Complex(0, 0);
 	    	
     	for (int i = 0; i < MAX_ITERATIONS; i++) {
-    		z.multiply(z);
+    		z.multiply(new Complex(z));
     		z.add(c);
 
     		// Not within Mandelbrot set
@@ -293,14 +302,50 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
     private int makeColor(int iterations) {
 
-    	// iterations = (int) (Math.random()*150);
-
     	double percentageOfIterations = ((double) iterations) / ((double) MAX_ITERATIONS);
-    	Color color = new Color(
-    		(int) (255.0*percentageOfIterations),
-    		(int) (255.0*percentageOfIterations),
-    		0
-    	);
+    	Color color;
+
+    	// Black
+    	if (iterations == MAX_ITERATIONS)
+    		color = new Color(0, 0, 0);
+    	
+    	// Purple
+    	else if (iterations > 50)
+    		color = new Color(
+	    		(int) (128.0*(1.0 - percentageOfIterations)),
+	    		0,
+	    		(int) (128.0*(1.0 - percentageOfIterations))
+	    	);
+
+    	// Purple to Red
+    	else if (iterations > 25)
+    		color = new Color(
+	    		(int) (128.0*(percentageOfIterations)*3.0),
+	    		0,
+	    		(int) (128.0*(percentageOfIterations)*3.0)
+	    	);
+    	//
+    	// else if (iterations > 25)
+    	// 	color = new Color(
+	    // 		(int) (128.0*percentageOfIterations*3.0),
+	    // 		0,
+	    // 		(int) (64.0*percentageOfIterations*3.0)
+	    // 	);
+    	// // Red
+    	// else if (iterations > 15)
+    	// 	color = new Color(
+	    // 		(int) (128.0*percentageOfIterations*6.0),
+	    // 		0,
+	    // 		0
+	    // 	);
+    	// Red to green
+    	else
+    		color = new Color(
+	    		(int) (255.0*percentageOfIterations*3.0),
+	    		(int) (128.0*(1.0 -  (percentageOfIterations*6.0 ) )),
+	    		0
+	    	);
+
 
 		return color.getRGB();
     }
