@@ -19,7 +19,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 		/* Constants */
 
-	private static int  IMAGE_SIZE 		= 600,
+	public static int  IMAGE_SIZE 		= 600,
 						MAX_ITERATIONS 	= 150;
 
 	private static double  	DEFAULT_ZOOM		= 100.0,
@@ -257,19 +257,18 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
     	*/
 
-    	Complex z = new Complex(0, 0);
-    	
+		Complex z = new Complex(0, 0);
+	    	
     	for (int i = 0; i < MAX_ITERATIONS; i++) {
     		z.multiply(z);
     		z.add(c);
-    		//System.out.println(z);
-    		if (z.modulus() > 2.0) {
-    			// System.out.println(i);
-    			return i;
-    		}
+
+    		// Not within Mandelbrot set
+    		if (z.modulus() > 2.0) return i;
     	}
 
-    	return MAX_ITERATIONS;
+    	// Within Mandelbrot set
+	    return MAX_ITERATIONS;
 
     }
 
