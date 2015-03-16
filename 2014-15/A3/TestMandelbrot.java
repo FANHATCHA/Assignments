@@ -5,8 +5,8 @@ public class TestMandelbrot {
     	Complex [] points = {
     		new Complex(0,0),
     		new Complex(-1, 0),
-    		new Complex(0,0),
-    		new Complex(0,0),
+    		new Complex(1.0/8.0,0),
+    		new Complex(1.0/4.0,0),
 
     		new Complex(1,0),
     		new Complex(1,0),
@@ -32,7 +32,6 @@ public class TestMandelbrot {
     	cases += points.length;
 
     	for (int i =0; i < points.length; i++) {
-    		System.out.println(isWithinFractal(points[i]));
     		if (isWithinFractal(points[i]) == withinFractal[i] ) {
     			passes++;
     		}
