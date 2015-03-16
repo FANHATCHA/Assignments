@@ -15,7 +15,7 @@ import java.awt.image.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener {
+public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener, MouseListener {
 
 		/* Constants */
 
@@ -61,6 +61,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 			/* Add listeners */
 
 		addKeyListener(this);
+		addMouseListener(this);
 
 			/* Update fractal initally */
 
@@ -160,7 +161,6 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	 		case "Zoom In":
 
-	 			System.out.println("Zooming in...");
 	 			returnToDefaultMenuItem.setEnabled(true);
 	 			ZOOM_FACTOR *= 2;
 	 			
@@ -168,7 +168,6 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	 		case "Zoom Out":
 
-	 			System.out.println("Zooming out...");
 	 			returnToDefaultMenuItem.setEnabled(true);
 	 			ZOOM_FACTOR /= 2;
 	 			
@@ -210,6 +209,24 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	public void keyReleased(KeyEvent e) { } 
 	public void keyTyped(KeyEvent e) { } 
+
+	public void mousePressed(MouseEvent e) {
+
+		// // Left click to zoom in
+		// if (e.getButton == MouseEvent.BUTTON1) {
+		// 	returnToDefaultMenuItem.setEnabled(true);
+	 // 		ZOOM_FACTOR *= 2;
+		// } else if (e.getButton == MouseEvent.BUTTON2) {
+		// 	returnToDefaultMenuItem.setEnabled(true);
+	 // 		ZOOM_FACTOR /= 2;
+		// }
+
+	} 
+
+	public void mouseReleased(MouseEvent e) { }
+	public void mouseExited(MouseEvent e) { } 
+	public void mouseEntered(MouseEvent e) { } 
+	public void mouseClicked(MouseEvent e) { } 
 
     private int doIterations(Complex c) {
 
