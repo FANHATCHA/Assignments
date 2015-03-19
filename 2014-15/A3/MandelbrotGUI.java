@@ -69,7 +69,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		addKeyListener(this);
 		addMouseListener(this);
 
-			/* Update fractal initally */
+			/* Update fractal initially */
 
 		updateFractal();
 
@@ -304,7 +304,8 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
     		z.add(c);
 
     		// Not within Mandelbrot set
-    		if (z.modulus() > 2.0) return i;
+    		if (z.modulus() > 2.0)
+    			return i;
     	}
 
     	// Within Mandelbrot set
@@ -312,78 +313,93 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
     }
 
-    static int[] arr;
+    static int[] totalIterations;
+    static int[] summedTotalIterations;
+    static int[][] numIterations = new int[IMAGE_SIZE][IMAGE_SIZE];
 
     private void updateFractal() {
-    	arr = new int[MAX_ITERATIONS+1];
+
+    	// Compute the number of iterations for each pixel in the image
+		totalIterations = new int[MAX_ITERATIONS+1];
     	for (int y = 0; y < IMAGE_SIZE; y++)
 			for (int x = 0; x < IMAGE_SIZE; x++) {
-				int colorValue = doIterations(getComplexPoint(x, y));
-				int color = makeColor(colorValue);
+				
+				int iterations = doIterations(getComplexPoint(x, y));
+				totalIterations[iterations]++;
+
+				// Store these values so that they don't need to be computed a second time
+				numIterations[y][x] = iterations;
+			}
+
+		// Using dynamic programming, store some totals we will use later to calculate how much each color should be weighted
+		summedTotalIterations = new int[MAX_ITERATIONS+1];
+		for (int i = 1; i < MAX_ITERATIONS; i++)
+			summedTotalIterations[i] += summedTotalIterations[i - 1] + totalIterations[i - 1];
+
+		// Set the color of each pixel based on the data that was gathered
+    	for (int y = 0; y < IMAGE_SIZE; y++)
+			for (int x = 0; x < IMAGE_SIZE; x++) {
+				int color = makeColor(numIterations[y][x]);
 				fractalImage.setRGB(x, y, color);
 			}
-		System.out.println(Arrays.toString(arr));
+
 		canvas.repaint();
 
     }
 
+    /* Given an (x,y) co-ordinate of the image, return the corresponding co-ordinate in the current scope of the complex plane */
     private Complex getComplexPoint(double x, double y) {
 
     	return new Complex(x/ZOOM_FACTOR + TOP_LEFT_X, y/ZOOM_FACTOR - TOP_LEFT_Y);
 
     }
 
-
+    /* Given the number of iterations, calculate the appropriate color of the pixel */
     private int makeColor(int iterations) {
 
-    	double percentageOfIterations = ((double) iterations) / ((double) MAX_ITERATIONS);
-    	Color color;
+    	// Use data gathered from all pixels in the current scope of the image to determine what color this pixel should be 
+    	double percentage = (double) summedTotalIterations[iterations] / (double) (IMAGE_SIZE*IMAGE_SIZE);
 
-    	arr[iterations]++;
+    	Color color;
 
     	// Black
     	if (iterations == MAX_ITERATIONS)
     		color = new Color(0, 0, 0);
     	
-    	// Purple
-    	else if (iterations > 50)
-    		color = new Color(
-	    		(int) (128.0*(1.0 - percentageOfIterations)),
-	    		0,
-	    		(int) (128.0*(1.0 - percentageOfIterations))
-	    	);
-
-    	// Purple to Red
-    	else if (iterations > 25)
-    		color = new Color(
-	    		(int) (128.0*(percentageOfIterations)*3.0),
-	    		0,
-	    		(int) (128.0*(percentageOfIterations)*3.0)
-	    	);
-    	//
-    	// else if (iterations > 25)
-    	// 	color = new Color(
-	    // 		(int) (128.0*percentageOfIterations*3.0),
-	    // 		0,
-	    // 		(int) (64.0*percentageOfIterations*3.0)
-	    // 	);
-    	// // Red
-    	// else if (iterations > 15)
-    	// 	color = new Color(
-	    // 		(int) (128.0*percentageOfIterations*6.0),
-	    // 		0,
-	    // 		0
-	    // 	);
-    	// Red to green
+    	// Pick an appropriate color for the pixel
     	else
-    		color = new Color(
-	    		(int) (255.0*percentageOfIterations*3.0),
-	    		(int) (128.0*(1.0 -  (percentageOfIterations*6.0 ) )),
-	    		0
+			color = fadeBetweenColors(0, 0, 0, percentage, 255, 192, 0);    		
+			// color = fadeBetweenColors(255, 192, 0, percentage, 0, 30, 178);    		
+
+    	return color.getRGB();
+    }
+
+    /* Given two colors and a percentage, return a blended version of the pixel */
+    private Color fadeBetweenColors(int r1, int g1, int b1, double percentage, int r2, int g2, int b2) {
+
+    		/* Setup */
+
+    	boolean rLowToHigh = r1 < r2;
+    	boolean gLowToHigh = g1 < g2;
+    	boolean bLowToHigh = b1 < b2;
+
+    	int lowR = Math.min(r1, r2);
+    	int highR = Math.max(r1, r2);
+
+    	int lowG = Math.min(g1, g2);
+    	int highG = Math.max(g1, g2);
+
+    	int lowB = Math.min(b1, b2);
+    	int highB = Math.max(b1, b2);
+
+    		/* Build and return color */
+
+    	return new Color(
+	    		lowR + (int) ( ((double) (highR-lowR)) * (rLowToHigh ? percentage : 1.0 - percentage) ),
+	    		lowG + (int) ( ((double) (highG-lowG)) * (gLowToHigh ? percentage : 1.0 - percentage) ),
+	    		lowB + (int) ( ((double) (highB-lowB)) * (bLowToHigh ? percentage : 1.0 - percentage) )
 	    	);
 
-
-		return color.getRGB();
     }
 
 	/** PRIVATE INNER CLASS **/

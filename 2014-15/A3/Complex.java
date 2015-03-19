@@ -2,14 +2,6 @@
 
 @author William Fiset, Micah Stairs
 
-Mandelbrot Set is a region of the Complex plane.
-a + bi --> Complex number
-
-z = z^2 + c
-
-z starts at 0
-c is a constant
-
 **/
 
 public class Complex {
