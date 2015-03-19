@@ -1,12 +1,8 @@
 /**
 
+COMP 2631: Data Structures and Algorithms II (Winter 2015)
 @author William Fiset, Micah Stairs
-
-Each time you render the mandelbrot set, you will iterate though
-all the pixels on the drawing surface (x,y) and convert those
-to positions on the complex plane.
-	
-c = a + bi
+Fractal Assignment
 
 */
 
@@ -27,9 +23,6 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 							DEFAULT_TOP_LEFT_X	= -3.0,
 							DEFAULT_TOP_LEFT_Y	= +3.0;
 
-	private static int CANVAS_X = 75,
-					   CANVAS_Y = 100;
-
 		/* Instance variables */
 
 	private Canvas canvas;
@@ -43,9 +36,16 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	
 	private JMenuBar menuBar = new JMenuBar();
 
-    public static void main(String[] args) {
+	private JButton leftButton, rightButton, topButton, bottomButton;
 
-		MandelbrotGUI gui = new MandelbrotGUI();
+
+	// Fractal Color data fields
+    private static int[] totalIterations;
+    private static int[] summedTotalIterations;
+    private static int[][] numIterations = new int[IMAGE_SIZE][IMAGE_SIZE];
+
+    public static void main(String[] args) {
+		new MandelbrotGUI();
 	}
 
 	public MandelbrotGUI() {
@@ -58,6 +58,11 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	 		/* Add the menu */
 
 	 	addMenu();
+
+			/* Adds buttons to screen */
+
+		addButtons();
+		addButtonActionListeners();
 
 			/* Show the user our wonderful GUI */
 		
@@ -92,6 +97,50 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 		// Show Screen
 		setVisible(true);
+
+	}
+
+	/**
+	* Adds Buttons aroudn the screen
+	*/
+	private void addButtons() {
+
+		leftButton = new JButton("Left");
+		rightButton = new JButton("Right");
+		topButton = new JButton("Move Up");
+		bottomButton = new JButton("Move Down");
+
+		this.add(leftButton, BorderLayout.WEST);
+		this.add(rightButton, BorderLayout.EAST);
+		this.add(topButton, BorderLayout.NORTH);
+		this.add(bottomButton, BorderLayout.SOUTH);
+	}
+
+	private void addButtonActionListeners() {
+
+		leftButton.addActionListener(
+			new ActionListener() { public void actionPerformed(ActionEvent action) {
+				paneLeft();
+			}}
+		);
+
+		rightButton.addActionListener(
+			new ActionListener() { public void actionPerformed(ActionEvent action) {
+				paneRight();
+			}}
+		);
+
+		topButton.addActionListener(
+			new ActionListener() { public void actionPerformed(ActionEvent action) {
+				paneUp();
+			}}
+		);
+
+		bottomButton.addActionListener(
+			new ActionListener() { public void actionPerformed(ActionEvent action) {
+				paneDown();
+			}}
+		);
 
 	}
 
@@ -146,7 +195,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	* with the main menu, or presses keyboard shortcuts to trigger those events.
 	* @param event - the triggered event
 	*/
-	public void actionPerformed(ActionEvent event) {
+	@Override public void actionPerformed(ActionEvent event) {
 
 	 	switch (event.getActionCommand()) {
 
@@ -183,39 +232,36 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	 }
 
-	public void keyPressed(KeyEvent e) {
-
+	@Override public void keyPressed(KeyEvent e) {
+	
 		switch (e.getKeyCode()) {
 
 			case KeyEvent.VK_LEFT:
-				TOP_LEFT_X -= 1.0/(ZOOM_FACTOR/100);
-				returnToDefaultMenuItem.setEnabled(true);
+
+				paneLeft();
 				break;
 
 			case KeyEvent.VK_RIGHT:
-				TOP_LEFT_X += 1.0/(ZOOM_FACTOR/100);
-				returnToDefaultMenuItem.setEnabled(true);
+				paneRight();
 				break;
 
 			case KeyEvent.VK_UP:
-				TOP_LEFT_Y += 1.0/(ZOOM_FACTOR/100);
-				returnToDefaultMenuItem.setEnabled(true);
+				paneUp();
 				break;
 
 			case KeyEvent.VK_DOWN:
-				TOP_LEFT_Y -= 1.0/(ZOOM_FACTOR/100);
-				returnToDefaultMenuItem.setEnabled(true);
+				paneDown();
 				break;
-		}
 
-		updateFractal();
+				
+		}
 
 	} 
 
-	public void keyReleased(KeyEvent e) { } 
-	public void keyTyped(KeyEvent e) { } 
+	@Override public void keyReleased(KeyEvent e) { } 
+	@Override public void keyTyped(KeyEvent e) { } 
 
-	public void mousePressed(MouseEvent mouse) {
+	@Override public void mousePressed(MouseEvent mouse) {
 
 
 		/*
@@ -253,20 +299,17 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		 		TOP_LEFT_X -= (IMAGE_SIZE/2)/ZOOM_FACTOR;
 		 		TOP_LEFT_Y += (IMAGE_SIZE/2)/ZOOM_FACTOR;
 
-
 			}
-
-			// System.out.println( TOP_LEFT_X + " " + TOP_LEFT_Y );
 
 			updateFractal();
 				
 		} // if
 	} // mousePressed
 
-	public void mouseReleased(MouseEvent e) { }
-	public void mouseExited(MouseEvent e) { } 
-	public void mouseEntered(MouseEvent e) { } 
-	public void mouseClicked(MouseEvent e) { } 
+	@Override public void mouseReleased(MouseEvent e) { }
+	@Override public void mouseExited(MouseEvent e) { } 
+	@Override public void mouseEntered(MouseEvent e) { } 
+	@Override public void mouseClicked(MouseEvent e) { } 
 
     private int doIterations(Complex c) {
 
@@ -313,9 +356,29 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
     }
 
-    static int[] totalIterations;
-    static int[] summedTotalIterations;
-    static int[][] numIterations = new int[IMAGE_SIZE][IMAGE_SIZE];
+    private void paneLeft() {
+		TOP_LEFT_X -= 1.0/(ZOOM_FACTOR/100);
+		returnToDefaultMenuItem.setEnabled(true);
+		updateFractal();
+    }
+
+    private void paneRight() {
+		TOP_LEFT_X += 1.0/(ZOOM_FACTOR/100);
+		returnToDefaultMenuItem.setEnabled(true);
+    	updateFractal();
+    }
+
+    private void paneDown() {
+		TOP_LEFT_Y += 1.0/(ZOOM_FACTOR/100);
+		returnToDefaultMenuItem.setEnabled(true);
+		updateFractal();
+    }
+
+    private void paneUp() {
+		TOP_LEFT_Y -= 1.0/(ZOOM_FACTOR/100);
+		returnToDefaultMenuItem.setEnabled(true);
+		updateFractal();
+    }
 
     private void updateFractal() {
 
