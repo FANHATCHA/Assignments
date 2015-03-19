@@ -91,9 +91,9 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		try {
 
 			// Method One
-			// File iconFile = new File(iconName);
-			// BufferedImage buffImg = ImageIO.read(iconFile);
-			// this.setIconImage(buffImg);
+			File iconFile = new File(iconName);
+			BufferedImage buffImg = ImageIO.read(iconFile);
+			this.setIconImage(buffImg);
 
 			// Method Two
 			setIconImage(new ImageIcon(iconName).getImage());
