@@ -90,16 +90,10 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 		try {
 
-			// Method One
-			File iconFile = new File(iconName);
-			BufferedImage buffImg = ImageIO.read(iconFile);
-			this.setIconImage(buffImg);
-
-			// Method Two
 			setIconImage(new ImageIcon(iconName).getImage());
 
 		} catch(Exception e) {
-			System.err.println("Could Not set Icon Image.");
+			System.err.println("Could Not set Icon Image. Make sure fractalIcon.png is within the directory.");
 			e.printStackTrace();
 		}
 
@@ -395,7 +389,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	}
 
 
-	/*
+	/**
 		- If this sequence goes to infinity, then it is NOT in the mandelbrot set.
 		- Otherwise it is in the mandelbrot set. 
 	
