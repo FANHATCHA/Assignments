@@ -216,10 +216,12 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		menuBar.add(menu);
 
 		menuItem = new JMenuItem("Zoom In");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke('i'));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Zoom Out");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke('o'));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
