@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.plaf.basic.*;
 import java.util.*;
 
@@ -26,19 +27,17 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 		/* Instance variables */
 
-	private Canvas canvas;
-	private JMenuItem returnToDefaultMenuItem;
-	private BufferedImage fractalImage = new BufferedImage(IMAGE_SIZE, IMAGE_SIZE, BufferedImage.TYPE_INT_RGB);
-
-
+	// Current view variables
 	private double 	ZOOM_FACTOR = 100,
 					TOP_LEFT_X  = -3.0,
 					TOP_LEFT_Y  = 3.0;
 	
+	// UI components
 	private JMenuBar menuBar = new JMenuBar();
-
 	private JButton leftButton, rightButton, topButton, bottomButton;
-
+	private JSlider adjustZoomSlider;
+	private Canvas canvas;
+	private BufferedImage fractalImage = new BufferedImage(IMAGE_SIZE, IMAGE_SIZE, BufferedImage.TYPE_INT_RGB);
 
 	// Fractal Color data fields
     private static int[] totalIterations;
@@ -63,7 +62,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 			/* Adds buttons to screen */
 
 		addButtons();
-		addButtonActionListeners();
+		addButtonListeners();
 
 			/* Show the user our wonderful GUI */
 		
@@ -104,40 +103,39 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	/* Adds buttons to the user interface, allowing the user to navigate around the fractal */
 	private void addButtons() {
 
-			
-
 			/* Create a slider to adjust the zoom level */
 		
-		JSlider adjustZoom = new JSlider();
+		adjustZoomSlider = new JSlider();
 		
 		// Set properties
-		adjustZoom.setMinimum(1);
-		adjustZoom.setMaximum(11);
-		adjustZoom.setValue(6);
-		adjustZoom.setSnapToTicks(true);
-		adjustZoom.setMinorTickSpacing(1);
-		adjustZoom.setPaintTicks(true);
+		adjustZoomSlider.setMinimum(1);
+		adjustZoomSlider.setMaximum(23);
+		adjustZoomSlider.setValue(7);
+		adjustZoomSlider.setSnapToTicks(true);
+		adjustZoomSlider.setMinorTickSpacing(1);
+		adjustZoomSlider.setPaintTicks(true);
 
 		// Add labels
-	    adjustZoom.setLabelTable(new Hashtable<Integer, JLabel>() {
+	    adjustZoomSlider.setLabelTable(new Hashtable<Integer, JLabel>() {
 	    	{
-			    put(new Integer(1), new JLabel("3.125%"));
-			    put(new Integer(2), new JLabel("6.25%"));
-			    put(new Integer(3), new JLabel("12.5%"));
-			    put(new Integer(4), new JLabel("25%"));
-			    put(new Integer(5), new JLabel("50%"));
-			    put(new Integer(6), new JLabel("100%"));
-			    put(new Integer(7), new JLabel("200%"));
-			    put(new Integer(8), new JLabel("400%"));
-			    put(new Integer(9), new JLabel("800%"));
-			    put(new Integer(9), new JLabel("800%"));
-			    put(new Integer(10), new JLabel("1600%"));
-			    put(new Integer(11), new JLabel("3200%"));
+			    put(new Integer(1), new JLabel("<3.125%"));
+			    put(new Integer(3), new JLabel("6.25%"));
+			    put(new Integer(5), new JLabel("25%"));
+			    put(new Integer(7), new JLabel("100%"));
+			    //put(new Integer(9), new JLabel("4x"));
+			    put(new Integer(11), new JLabel("16x"));
+			    //put(new Integer(13), new JLabel("64x"));
+			    put(new Integer(15), new JLabel("256x"));
+			    //put(new Integer(17), new JLabel("1024x"));
+			    put(new Integer(19), new JLabel("4096x"));
+			    //put(new Integer(21), new JLabel("16384x"));
+			    put(new Integer(23), new JLabel(">32768x"));
 			}
 		} );
-		adjustZoom.setPaintLabels(true);
+		adjustZoomSlider.setPaintLabels(true);
+		adjustZoomSlider.setFocusable(false);
 
-	    this.add(adjustZoom, BorderLayout.SOUTH);
+	    this.add(adjustZoomSlider, BorderLayout.SOUTH);
 
 			/* Create buttons to let the user shift the view in one of four directions */
 
@@ -151,13 +149,13 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		Container southContainer = new Container();
         southContainer.setLayout(new BorderLayout());
         southContainer.add(bottomButton, BorderLayout.CENTER);
-        southContainer.add(adjustZoom, BorderLayout.SOUTH);
+        southContainer.add(adjustZoomSlider, BorderLayout.SOUTH);
         this.add(southContainer, BorderLayout.SOUTH);
 
 	} // addButtons
 
-	/* Add the action listeners for the buttons */
-	private void addButtonActionListeners() {
+	/* Add the listeners for the buttons */
+	private void addButtonListeners() {
 
 		leftButton.addActionListener(
 			new ActionListener() { public void actionPerformed(ActionEvent action) {
@@ -182,6 +180,15 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 				shiftDown();
 			}}
 		);
+
+		adjustZoomSlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+
+				// ...5 = 50%, 6 = 100%, 7 = 200%...
+				double newZoomFactor = 100.0 * Math.pow(2, adjustZoomSlider.getValue() - 7);
+				adjustZoom(newZoomFactor);
+			}
+		});
 
 	} // addButtonActionListeners
 
@@ -208,21 +215,20 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		menu.getAccessibleContext().setAccessibleDescription("View");
 		menuBar.add(menu);
 
-		returnToDefaultMenuItem = new JMenuItem("Zoom In");
-		returnToDefaultMenuItem.addActionListener(this);
-		menu.add(returnToDefaultMenuItem);
+		menuItem = new JMenuItem("Zoom In");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
 
-		returnToDefaultMenuItem = new JMenuItem("Zoom Out");
-		returnToDefaultMenuItem.addActionListener(this);
-		menu.add(returnToDefaultMenuItem);
+		menuItem = new JMenuItem("Zoom Out");
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
 
 		menu.addSeparator();
 
-		returnToDefaultMenuItem = new JMenuItem("Return to Default");
-		returnToDefaultMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
-		returnToDefaultMenuItem.addActionListener(this);
-		returnToDefaultMenuItem.setEnabled(false);
-		menu.add(returnToDefaultMenuItem);
+		menuItem = new JMenuItem("Return to Default");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		menu.add(menuItem);
 
 		this.setJMenuBar(menuBar);
 
@@ -244,30 +250,29 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	 		case "Return to Default":
 
-	 			System.out.println("Returning to default view...");
-	 			returnToDefaultMenuItem.setEnabled(false);
 	 			ZOOM_FACTOR = DEFAULT_ZOOM;
 	 			TOP_LEFT_X = DEFAULT_TOP_LEFT_X;
 	 			TOP_LEFT_Y = DEFAULT_TOP_LEFT_Y;
+	 			updateFractal();
+	 			updateZoomSliderValue();
 
 	 			break;
 
 	 		case "Zoom In":
 
-	 			returnToDefaultMenuItem.setEnabled(true);
-	 			ZOOM_FACTOR *= 2.0;
-	 			
+	 			adjustZoom(ZOOM_FACTOR*2);
+	 			updateZoomSliderValue();
+
 	 			break;
 
 	 		case "Zoom Out":
 
-	 			returnToDefaultMenuItem.setEnabled(true);
-	 			ZOOM_FACTOR /= 2.0;
-	 			
-	 			break;
-	 	} // switch
+	 			adjustZoom(ZOOM_FACTOR/2);
+	 			updateZoomSliderValue();
 
-	 	updateFractal();
+	 			break;
+
+	 	} // switch
 
 	 } // actionPerformed
 
@@ -309,31 +314,15 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 			// Left click to zoom in
 			if (mouse.getButton() == MouseEvent.BUTTON1) {
-				
-				TOP_LEFT_X += mx/ZOOM_FACTOR;
-				TOP_LEFT_Y -= my/ZOOM_FACTOR;
-
-		 		ZOOM_FACTOR *= 2;
-
-		 		TOP_LEFT_X -= (IMAGE_SIZE/2)/ZOOM_FACTOR;
-		 		TOP_LEFT_Y += (IMAGE_SIZE/2)/ZOOM_FACTOR;
-
-				returnToDefaultMenuItem.setEnabled(true);
+				adjustZoom(mx, my, ZOOM_FACTOR*2);
+				updateZoomSliderValue();
+			}
 
 			// Right click to zoom out
-			} else if (mouse.getButton() == MouseEvent.BUTTON3) {
-
-				TOP_LEFT_X += mx/ZOOM_FACTOR;
-				TOP_LEFT_Y -= my/ZOOM_FACTOR;
-
-		 		ZOOM_FACTOR /= 2;
-
-		 		TOP_LEFT_X -= (IMAGE_SIZE/2)/ZOOM_FACTOR;
-		 		TOP_LEFT_Y += (IMAGE_SIZE/2)/ZOOM_FACTOR;
-
-			} // if
-
-			updateFractal();
+			else if (mouse.getButton() == MouseEvent.BUTTON3) {
+				adjustZoom(mx, my, ZOOM_FACTOR/2);
+				updateZoomSliderValue();
+			}
 
 		} // if
 
@@ -344,34 +333,64 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	@Override public void mouseEntered(MouseEvent e) { } 
 	@Override public void mouseClicked(MouseEvent e) { } 
 
-    private int doIterations(Complex c) {
+	/* Default method, zooms into/out of the center of the image */
+	private void adjustZoom(double newZoomFactor) {
 
-    	/*
+		adjustZoom(IMAGE_SIZE/2, IMAGE_SIZE/2, newZoomFactor);
 
-		if this sequence goes to infinity, then it is NOT in the mandelbrot set
-		otherwise it is in the mandelbrot. 
+	}
 
-    	z_0 = 0
-    	z_1 = (z_0)^2 + c = c
-    	...
-		z_n = (z_n-1)^2 + c
+	/* Zooms into/out of the specified part of the screen */
+	private void adjustZoom(double centerX, double centerY, double newZoomFactor) {
+
+		TOP_LEFT_X += centerX/ZOOM_FACTOR;
+		TOP_LEFT_Y -= centerY/ZOOM_FACTOR;
+
+ 		ZOOM_FACTOR = newZoomFactor;
+
+ 		TOP_LEFT_X -= (IMAGE_SIZE/2)/ZOOM_FACTOR;
+ 		TOP_LEFT_Y += (IMAGE_SIZE/2)/ZOOM_FACTOR;
+
+ 		updateFractal();
+
+	}
+
+	/* Make sure the slider matches the new zoom level */
+	private void updateZoomSliderValue() {
+
+		// Calculate the index the slider should be at 
+		double temp = ZOOM_FACTOR;
+		int zoomIndex = 1;
+		while (temp >= 3.125) {
+			temp /= 2;
+			zoomIndex++;
+		}
+
+		// Adjust slider
+		adjustZoomSlider.setValue(zoomIndex);
+
+	}
+
+
+	/*
+		- If this sequence goes to infinity, then it is NOT in the mandelbrot set.
+		- Otherwise it is in the mandelbrot set. 
+	
+		Reccurence Relation:
+			z_0 = 0
+			z_1 = (z_0)^2 + c = c
+			...
+			z_n = (z_n-1)^2 + c
 
 		Simplifications:
 		- If sequence ever leaves a circle of radius two, then 
 		sequence will go to infinity, so stop iterating.
-
-		- If it never leaves, (MAX_ITER ~ 150) then original point
+		- If it never leaves, (MAX_ITERERATIONS ~ 150) then the original point
 		c is in the mandelbrot set.
 
-		NOTE ON COLOR: 
-		- Use distance formula to calculate the distance from the
-		origin: dist = (a^2 + b^2) <= 2.
-		- Set ranges for the # of iterations, ex:
-		0-10 purple, 10-20 pink, 20-30 red.... 
-		
-		^^^ 0-10 is the background color
-
-    	*/
+		@return the number of iterations
+    */
+    private int doIterations(Complex c) {
 
 		Complex z = new Complex(0, 0);
 	    	
@@ -394,25 +413,21 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
     private void shiftLeft() {
 		TOP_LEFT_X -= 100.0/ZOOM_FACTOR;
-		returnToDefaultMenuItem.setEnabled(true);
 		updateFractal(-IMAGE_SIZE/6, 0);
     }
 
     private void shiftRight() {
-		TOP_LEFT_X += 1.0/(ZOOM_FACTOR/100);
-		returnToDefaultMenuItem.setEnabled(true);
+		TOP_LEFT_X += 100.0/ZOOM_FACTOR;
     	updateFractal(+IMAGE_SIZE/6, 0);
     }
 
     private void shiftDown() {
-		TOP_LEFT_Y -= 1.0/(ZOOM_FACTOR/100);
-		returnToDefaultMenuItem.setEnabled(true);
+		TOP_LEFT_Y -= 100.0/ZOOM_FACTOR;
 		updateFractal(0, -IMAGE_SIZE/6);
     }
 
     private void shiftUp() {
-		TOP_LEFT_Y += 1.0/(ZOOM_FACTOR/100);
-		returnToDefaultMenuItem.setEnabled(true);
+		TOP_LEFT_Y += 100.0/ZOOM_FACTOR;
 		updateFractal(0, +IMAGE_SIZE/6);
     }
 
@@ -542,8 +557,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
     	
     	// Pick an appropriate color for the pixel
     	else if (percentage < 0.5)
-			color = fadeBetweenColors(0, 16, 95, percentage*2, 171, 9, 0);    		
-			// color = fadeBetweenColors(255, 192, 0, percentage, 0, 30, 178);
+			color = fadeBetweenColors(0, 16, 95, percentage*2, 171, 9, 0);    	
 		else   
 			color = fadeBetweenColors(171, 9, 0, (percentage - 0.5)*2, 255, 192, 0);     		
 
