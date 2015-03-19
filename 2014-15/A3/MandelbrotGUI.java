@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.plaf.basic.*;
 import java.util.*;
 
 public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener, MouseListener {
@@ -76,7 +77,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 			/* Update fractal initially */
 
-		updateFractal();
+		updateFractal(true);
 
 	}
 
@@ -103,15 +104,22 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	/** Adds Buttons around the screen **/
 	private void addButtons() {
 
-		leftButton = new JButton("Left");
-		rightButton = new JButton("Right");
-		topButton = new JButton("Move Up");
-		bottomButton = new JButton("Move Down");
+		// leftButton = new JButton("Left");
+		// rightButton = new JButton("Right");
+		// topButton = new JButton("Move Up");
+		// bottomButton = new JButton("Move Down");
 
-		this.add(leftButton, BorderLayout.WEST);
-		this.add(rightButton, BorderLayout.EAST);
-		this.add(topButton, BorderLayout.NORTH);
-		this.add(bottomButton, BorderLayout.SOUTH);
+		// this.add(leftButton, BorderLayout.WEST);
+		// this.add(rightButton, BorderLayout.EAST);
+		// this.add(topButton, BorderLayout.NORTH);
+		// this.add(bottomButton, BorderLayout.SOUTH);
+
+		this.add(leftButton = new BasicArrowButton(BasicArrowButton.WEST), BorderLayout.WEST);
+		this.add(rightButton = new BasicArrowButton(BasicArrowButton.EAST), BorderLayout.EAST);
+		this.add(topButton = new BasicArrowButton(BasicArrowButton.NORTH), BorderLayout.NORTH);
+		this.add(bottomButton = new BasicArrowButton(BasicArrowButton.SOUTH), BorderLayout.SOUTH);
+
+
 
 	} // addButtons
 
@@ -228,7 +236,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	 			break;
 	 	} // switch
 
-	 	updateFractal();
+	 	updateFractal(true);
 
 	 } // actionPerformed
 
@@ -261,9 +269,11 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	@Override public void mousePressed(MouseEvent mouse) {
 
+		// Calculate mouse position on canvas
 		double mx = (double) mouse.getX();
 		double my = (double) (mouse.getY() - menuBar.getHeight() - menuBar.getInsets().top)  ;
  		
+ 		// Only change zoom if the click was on the canvas
 		if (mx >= 0 && my >= 0  && mx <= IMAGE_SIZE && my <= IMAGE_SIZE) {
 
 			// Left click to zoom in
@@ -279,6 +289,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 				returnToDefaultMenuItem.setEnabled(true);
 
+			// Right click to zoom out
 			} else if (mouse.getButton() == MouseEvent.BUTTON3) {
 
 				TOP_LEFT_X += mx/ZOOM_FACTOR;
@@ -291,7 +302,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 			} // if
 
-			updateFractal();
+			updateFractal(true);
 
 		} // if
 
@@ -349,58 +360,82 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
     }
 
     private void shiftLeft() {
-		TOP_LEFT_X -= 1.0/(ZOOM_FACTOR/100);
+		TOP_LEFT_X -= 100.0/ZOOM_FACTOR;
 		returnToDefaultMenuItem.setEnabled(true);
-		updateFractal();
+		updateFractal(false);
     }
 
     private void shiftRight() {
 		TOP_LEFT_X += 1.0/(ZOOM_FACTOR/100);
 		returnToDefaultMenuItem.setEnabled(true);
-    	updateFractal();
-    }
-
-    private void shiftDown() {
-		TOP_LEFT_Y += 1.0/(ZOOM_FACTOR/100);
-		returnToDefaultMenuItem.setEnabled(true);
-		updateFractal();
+    	updateFractal(false);
     }
 
     private void shiftUp() {
-		TOP_LEFT_Y -= 1.0/(ZOOM_FACTOR/100);
+		TOP_LEFT_Y += 1.0/(ZOOM_FACTOR/100);
 		returnToDefaultMenuItem.setEnabled(true);
-		updateFractal();
+		updateFractal(false);
     }
 
-    private void updateFractal() {
+    private void shiftDown() {
+		TOP_LEFT_Y -= 1.0/(ZOOM_FACTOR/100);
+		returnToDefaultMenuItem.setEnabled(true);
+		updateFractal(false);
+    }
 
-    	// Compute the number of iterations for each pixel in the image
-		totalIterations = new int[MAX_ITERATIONS+1];
-    	for (int y = 0; y < IMAGE_SIZE; y++) {
-			for (int x = 0; x < IMAGE_SIZE; x++) {
-				
-				int iterations = doIterations(getComplexPoint(x, y));
-				totalIterations[iterations]++;
+    private void updateFractal(boolean recalculateColorDistribution) {
 
-				// Store these values so that they don't need to be computed a second time
-				numIterations[y][x] = iterations;
+    	// Set the color of each pixel based on data that we will gather for this zoom level
+    	if (recalculateColorDistribution) {
 
+	    	// Compute the number of iterations for each pixel in the image
+			totalIterations = new int[MAX_ITERATIONS+1];
+	    	for (int y = 0; y < IMAGE_SIZE; y++) {
+				for (int x = 0; x < IMAGE_SIZE; x++) {
+					
+					int iterations = doIterations(getComplexPoint(x, y));
+					totalIterations[iterations]++;
+
+					// Store these values so that they don't need to be computed a second time
+					numIterations[y][x] = iterations;
+
+				} // for
 			} // for
-		} // for
 
-		// Using dynamic programming, store some totals we will use later to calculate how much each color should be weighted
-		summedTotalIterations = new int[MAX_ITERATIONS+1];
-		for (int i = 1; i < MAX_ITERATIONS; i++) {
-			summedTotalIterations[i] += summedTotalIterations[i - 1] + totalIterations[i - 1];
+			// Using dynamic programming, store some totals we will use later to calculate how much each color should be weighted
+			summedTotalIterations = new int[MAX_ITERATIONS+1];
+			for (int i = 1; i < MAX_ITERATIONS; i++) {
+				summedTotalIterations[i] += summedTotalIterations[i - 1] + totalIterations[i - 1];
+			}
+
+			// Set the color of each pixel based on the data that was gathered
+	    	for (int y = 0; y < IMAGE_SIZE; y++) {
+				for (int x = 0; x < IMAGE_SIZE; x++) {
+					int color = makeColor(numIterations[y][x]);
+					fractalImage.setRGB(x, y, color);
+				} // for 
+			} // for
+
+		// Set the color of each pixel based on the data that was previously gathered for that zoom level
+		} else {
+
+			long time = System.currentTimeMillis();
+
+			// Reduce computation time by a significant amount by simply copying the RGB values for 5/6 of the pixels (instead of re-computing)
+			for (int y = 0; y < IMAGE_SIZE; y++)
+				for (int x = 0; x < IMAGE_SIZE - 100; x++)
+					fractalImage.setRGB(x, y, fractalImage.getRGB(x + 100, y));
+
+			for (int y = 0; y < IMAGE_SIZE; y++) {
+				for (int x = IMAGE_SIZE - 100; x < IMAGE_SIZE; x++) {
+					int color = makeColor(doIterations(getComplexPoint(x, y)));
+					fractalImage.setRGB(x, y, color);
+				} // for 
+			} // for
+
+			System.out.println(System.currentTimeMillis() - time);
+
 		}
-
-		// Set the color of each pixel based on the data that was gathered
-    	for (int y = 0; y < IMAGE_SIZE; y++) {
-			for (int x = 0; x < IMAGE_SIZE; x++) {
-				int color = makeColor(numIterations[y][x]);
-				fractalImage.setRGB(x, y, color);
-			} // for 
-		} // for
 
 		canvas.repaint();
 
