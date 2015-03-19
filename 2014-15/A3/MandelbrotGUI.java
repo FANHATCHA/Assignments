@@ -12,7 +12,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.plaf.basic.*;
+import javax.imageio.*;
 import java.util.*;
+import java.io.*;
 
 public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener, MouseListener {
 
@@ -26,6 +28,8 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 							DEFAULT_TOP_LEFT_Y	= +3.0;
 
 		/* Instance variables */
+
+	private static final String iconName = "fractalIcon.png";
 
 	// Current view variables
 	private double 	ZOOM_FACTOR = 100,
@@ -49,6 +53,8 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	}
 
 	public MandelbrotGUI() {
+
+		addIconImage();
 
 			/* Add a canvas to the center of the window */
 
@@ -80,9 +86,26 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	}
 
-	/**
-	* Set some default GUI Properties
-	*/
+	public void addIconImage() {
+
+		try {
+
+			// Method One
+			// File iconFile = new File(iconName);
+			// BufferedImage buffImg = ImageIO.read(iconFile);
+			// this.setIconImage(buffImg);
+
+			// Method Two
+			setIconImage(new ImageIcon(iconName).getImage());
+
+		} catch(Exception e) {
+			System.err.println("Could Not set Icon Image.");
+			e.printStackTrace();
+		}
+
+	}
+
+	/** Set some default GUI Properties **/
 	private void setGUIproperties() {
 		
 		// Ensure our application will be closed when the user presses the "X" */
@@ -309,7 +332,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 		// Calculate mouse position on canvas
 		double mx = (double) mouse.getX();
-		double my = (double) (mouse.getY() - menuBar.getHeight() - menuBar.getInsets().top)  ;
+		double my = (double) (mouse.getY() - menuBar.getHeight() - getInsets().top);
  		
  		// Only change zoom if the click was on the canvas
 		if (mx >= 0 && my >= 0  && mx <= IMAGE_SIZE && my <= IMAGE_SIZE) {
@@ -337,9 +360,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	/* Default method, zooms into/out of the center of the image */
 	private void adjustZoom(double newZoomFactor) {
-
 		adjustZoom(IMAGE_SIZE/2, IMAGE_SIZE/2, newZoomFactor);
-
 	}
 
 	/* Zooms into/out of the specified part of the screen */
