@@ -100,9 +100,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	}
 
-	/**
-	* Adds Buttons aroudn the screen
-	*/
+	/** Adds Buttons around the screen **/
 	private void addButtons() {
 
 		leftButton = new JButton("Left");
@@ -114,35 +112,36 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		this.add(rightButton, BorderLayout.EAST);
 		this.add(topButton, BorderLayout.NORTH);
 		this.add(bottomButton, BorderLayout.SOUTH);
-	}
+
+	} // addButtons
 
 	private void addButtonActionListeners() {
 
 		leftButton.addActionListener(
 			new ActionListener() { public void actionPerformed(ActionEvent action) {
-				paneLeft();
+				shiftLeft();
 			}}
 		);
 
 		rightButton.addActionListener(
 			new ActionListener() { public void actionPerformed(ActionEvent action) {
-				paneRight();
+				shiftRight();
 			}}
 		);
 
 		topButton.addActionListener(
 			new ActionListener() { public void actionPerformed(ActionEvent action) {
-				paneUp();
+				shiftUp();
 			}}
 		);
 
 		bottomButton.addActionListener(
 			new ActionListener() { public void actionPerformed(ActionEvent action) {
-				paneDown();
+				shiftDown();
 			}}
 		);
 
-	}
+	} // addButtonActionListeners
 
 	/**
 	* Adds the menu system to the application, hooking up all of the proper
@@ -188,7 +187,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 		this.setJMenuBar(menuBar);
 
-	}
+	} // addMenu
 
 	/**
 	* This method handles all of the actions triggered when the user interacts
@@ -211,6 +210,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	 			ZOOM_FACTOR = DEFAULT_ZOOM;
 	 			TOP_LEFT_X = DEFAULT_TOP_LEFT_X;
 	 			TOP_LEFT_Y = DEFAULT_TOP_LEFT_Y;
+
 	 			break;
 
 	 		case "Zoom In":
@@ -226,54 +226,44 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	 			ZOOM_FACTOR /= 2.0;
 	 			
 	 			break;
-	 	}
+	 	} // switch
 
 	 	updateFractal();
 
-	 }
+	 } // actionPerformed
 
 	@Override public void keyPressed(KeyEvent e) {
 	
 		switch (e.getKeyCode()) {
 
 			case KeyEvent.VK_LEFT:
-
-				paneLeft();
+				shiftLeft();
 				break;
 
 			case KeyEvent.VK_RIGHT:
-				paneRight();
+				shiftRight();
 				break;
 
 			case KeyEvent.VK_UP:
-				paneUp();
+				shiftUp();
 				break;
 
 			case KeyEvent.VK_DOWN:
-				paneDown();
+				shiftDown();
 				break;
 
-				
-		}
+		} // switch  
 
-	} 
+	} // keyPressed
 
 	@Override public void keyReleased(KeyEvent e) { } 
 	@Override public void keyTyped(KeyEvent e) { } 
 
 	@Override public void mousePressed(MouseEvent mouse) {
 
-
-		/*
-		Convert coordinate system into complex corrdinates
-		to adjust TOP_LEFT_X and TOP_LEFT_Y
-		*/
-
 		double mx = (double) mouse.getX();
 		double my = (double) (mouse.getY() - menuBar.getHeight() - menuBar.getInsets().top)  ;
  		
-
-
 		if (mx >= 0 && my >= 0  && mx <= IMAGE_SIZE && my <= IMAGE_SIZE) {
 
 			// Left click to zoom in
@@ -299,11 +289,12 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		 		TOP_LEFT_X -= (IMAGE_SIZE/2)/ZOOM_FACTOR;
 		 		TOP_LEFT_Y += (IMAGE_SIZE/2)/ZOOM_FACTOR;
 
-			}
+			} // if
 
 			updateFractal();
-				
+
 		} // if
+
 	} // mousePressed
 
 	@Override public void mouseReleased(MouseEvent e) { }
@@ -343,38 +334,39 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		Complex z = new Complex(0, 0);
 	    	
     	for (int i = 0; i < MAX_ITERATIONS; i++) {
+
     		z.multiply(new Complex(z));
     		z.add(c);
 
     		// Not within Mandelbrot set
-    		if (z.modulus() > 2.0)
-    			return i;
-    	}
+    		if (z.modulus() > 2.0) return i;
+
+    	} // for
 
     	// Within Mandelbrot set
 	    return MAX_ITERATIONS;
 
     }
 
-    private void paneLeft() {
+    private void shiftLeft() {
 		TOP_LEFT_X -= 1.0/(ZOOM_FACTOR/100);
 		returnToDefaultMenuItem.setEnabled(true);
 		updateFractal();
     }
 
-    private void paneRight() {
+    private void shiftRight() {
 		TOP_LEFT_X += 1.0/(ZOOM_FACTOR/100);
 		returnToDefaultMenuItem.setEnabled(true);
     	updateFractal();
     }
 
-    private void paneDown() {
+    private void shiftDown() {
 		TOP_LEFT_Y += 1.0/(ZOOM_FACTOR/100);
 		returnToDefaultMenuItem.setEnabled(true);
 		updateFractal();
     }
 
-    private void paneUp() {
+    private void shiftUp() {
 		TOP_LEFT_Y -= 1.0/(ZOOM_FACTOR/100);
 		returnToDefaultMenuItem.setEnabled(true);
 		updateFractal();
@@ -384,7 +376,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
     	// Compute the number of iterations for each pixel in the image
 		totalIterations = new int[MAX_ITERATIONS+1];
-    	for (int y = 0; y < IMAGE_SIZE; y++)
+    	for (int y = 0; y < IMAGE_SIZE; y++) {
 			for (int x = 0; x < IMAGE_SIZE; x++) {
 				
 				int iterations = doIterations(getComplexPoint(x, y));
@@ -392,30 +384,34 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 				// Store these values so that they don't need to be computed a second time
 				numIterations[y][x] = iterations;
-			}
+
+			} // for
+		} // for
 
 		// Using dynamic programming, store some totals we will use later to calculate how much each color should be weighted
 		summedTotalIterations = new int[MAX_ITERATIONS+1];
-		for (int i = 1; i < MAX_ITERATIONS; i++)
+		for (int i = 1; i < MAX_ITERATIONS; i++) {
 			summedTotalIterations[i] += summedTotalIterations[i - 1] + totalIterations[i - 1];
+		}
 
 		// Set the color of each pixel based on the data that was gathered
-    	for (int y = 0; y < IMAGE_SIZE; y++)
+    	for (int y = 0; y < IMAGE_SIZE; y++) {
 			for (int x = 0; x < IMAGE_SIZE; x++) {
 				int color = makeColor(numIterations[y][x]);
 				fractalImage.setRGB(x, y, color);
-			}
+			} // for 
+		} // for
 
 		canvas.repaint();
 
-    }
+    } // update fractal
 
     /* Given an (x,y) co-ordinate of the image, return the corresponding co-ordinate in the current scope of the complex plane */
     private Complex getComplexPoint(double x, double y) {
 
     	return new Complex(x/ZOOM_FACTOR + TOP_LEFT_X, y/ZOOM_FACTOR - TOP_LEFT_Y);
 
-    }
+    } // getComplexPoint
 
     /* Given the number of iterations, calculate the appropriate color of the pixel */
     private int makeColor(int iterations) {
@@ -435,7 +431,8 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 			// color = fadeBetweenColors(255, 192, 0, percentage, 0, 30, 178);    		
 
     	return color.getRGB();
-    }
+    
+    } // makeColor
 
     /* Given two colors and a percentage, return a blended version of the pixel */
     private Color fadeBetweenColors(int r1, int g1, int b1, double percentage, int r2, int g2, int b2) {
@@ -463,7 +460,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	    		lowB + (int) ( ((double) (highB-lowB)) * (bLowToHigh ? percentage : 1.0 - percentage) )
 	    	);
 
-    }
+    } // fadeBetweenColors
 
 	/** PRIVATE INNER CLASS **/
 
@@ -485,7 +482,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	 		horizontal_padding = DEFAULT_PADDING;
 	 		vertical_padding = DEFAULT_PADDING;
 
-	 	}
+	 	} // Canvas
 
 	 	/**
 	 	* Returns the dimensions that the canvas should be, taking into consideration
@@ -496,7 +493,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	 		return new Dimension(DEFAULT_WIDTH + horizontal_padding*2, DEFAULT_HEIGHT + vertical_padding*2);
 	 	
-	 	}
+	 	} // getPreferredSize
 
 	 	/**
 	 	* Updates the canvas, drawing the image (or blank canvas) in the center,
@@ -515,7 +512,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	 		g.drawImage(fractalImage, horizontal_padding, vertical_padding, null);
 
-	 	}
+	 	} // paintComponent
 
 	 	/**
 	 	* Refreshes the canvas size, properly padding it
