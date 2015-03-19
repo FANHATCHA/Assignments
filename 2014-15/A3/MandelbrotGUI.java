@@ -367,9 +367,11 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
     		color = new Color(0, 0, 0);
     	
     	// Pick an appropriate color for the pixel
-    	else
-			color = fadeBetweenColors(0, 0, 0, percentage, 255, 192, 0);    		
-			// color = fadeBetweenColors(255, 192, 0, percentage, 0, 30, 178);    		
+    	else if (percentage < 0.5)
+			color = fadeBetweenColors(0, 16, 95, percentage*2, 171, 9, 0);    		
+			// color = fadeBetweenColors(255, 192, 0, percentage, 0, 30, 178);
+		else   
+			color = fadeBetweenColors(171, 9, 0, (percentage - 0.5)*2, 255, 192, 0);     		
 
     	return color.getRGB();
     }
