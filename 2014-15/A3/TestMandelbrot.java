@@ -9,9 +9,7 @@ public class TestMandelbrot {
     		new Complex(1.0/4.0,0),
 
     		new Complex(1,0),
-    		new Complex(1,0),
-    		new Complex(1,0),
-    		new Complex(1,0)
+
     	};
     	
     	boolean [] withinFractal = {
@@ -22,9 +20,6 @@ public class TestMandelbrot {
     		true,
     	
     		false,
-    		false,
-    		false,
-    		false
     	};
 
     	int cases = 0;

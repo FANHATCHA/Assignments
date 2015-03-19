@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.*;
 
 public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener, MouseListener {
 
@@ -26,6 +27,9 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 							DEFAULT_TOP_LEFT_X	= -3.0,
 							DEFAULT_TOP_LEFT_Y	= +3.0;
 
+	private static int CANVAS_X = 75,
+					   CANVAS_Y = 100;
+
 		/* Instance variables */
 
 	private Canvas canvas;
@@ -36,6 +40,8 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	private double 	ZOOM_FACTOR = 100,
 					TOP_LEFT_X  = -3.0,
 					TOP_LEFT_Y  = 3.0;
+	
+	private JMenuBar menuBar = new JMenuBar();
 
     public static void main(String[] args) {
 
@@ -95,7 +101,6 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	*/
 	private void addMenu () {
 
-		JMenuBar menuBar = new JMenuBar();
 		JMenuItem menuItem;
 		JMenu menu;
 
@@ -210,27 +215,53 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	public void keyReleased(KeyEvent e) { } 
 	public void keyTyped(KeyEvent e) { } 
 
-	public void mousePressed(MouseEvent e) {
+	public void mousePressed(MouseEvent mouse) {
 
-		// Left click to zoom in
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			returnToDefaultMenuItem.setEnabled(true);
-			// System.out.println(TOP_LEFT_X + " " + TOP_LEFT_Y);
-			
-			// TOP_LEFT_X += e.getX()/ZOOM_FACTOR;
-			// TOP_LEFT_Y += e.getY()/ZOOM_FACTOR;
-			// // System.out.println(TOP_LEFT_X + " " + TOP_LEFT_Y);
-	 		ZOOM_FACTOR *= 2;
-		} else if (e.getButton() == MouseEvent.BUTTON3) {
-			returnToDefaultMenuItem.setEnabled(true);
-			// TOP_LEFT_X += e.getX()/ZOOM_FACTOR;
-			// TOP_LEFT_Y += e.getY()/ZOOM_FACTOR;
-	 		ZOOM_FACTOR /= 2;
-		}
 
-		updateFractal();
+		/*
+		Convert coordinate system into complex corrdinates
+		to adjust TOP_LEFT_X and TOP_LEFT_Y
+		*/
 
-	} 
+		double mx = (double) mouse.getX();
+		double my = (double) (mouse.getY() - menuBar.getHeight() - menuBar.getInsets().top)  ;
+ 		
+
+
+		if (mx >= 0 && my >= 0  && mx <= IMAGE_SIZE && my <= IMAGE_SIZE) {
+
+			// Left click to zoom in
+			if (mouse.getButton() == MouseEvent.BUTTON1) {
+				
+				TOP_LEFT_X += mx/ZOOM_FACTOR;
+				TOP_LEFT_Y -= my/ZOOM_FACTOR;
+
+		 		ZOOM_FACTOR *= 2;
+
+		 		TOP_LEFT_X -= (IMAGE_SIZE/2)/ZOOM_FACTOR;
+		 		TOP_LEFT_Y += (IMAGE_SIZE/2)/ZOOM_FACTOR;
+
+				returnToDefaultMenuItem.setEnabled(true);
+
+			} else if (mouse.getButton() == MouseEvent.BUTTON3) {
+
+				TOP_LEFT_X += mx/ZOOM_FACTOR;
+				TOP_LEFT_Y -= my/ZOOM_FACTOR;
+
+		 		ZOOM_FACTOR /= 2;
+
+		 		TOP_LEFT_X -= (IMAGE_SIZE/2)/ZOOM_FACTOR;
+		 		TOP_LEFT_Y += (IMAGE_SIZE/2)/ZOOM_FACTOR;
+
+
+			}
+
+			// System.out.println( TOP_LEFT_X + " " + TOP_LEFT_Y );
+
+			updateFractal();
+				
+		} // if
+	} // mousePressed
 
 	public void mouseReleased(MouseEvent e) { }
 	public void mouseExited(MouseEvent e) { } 
@@ -281,15 +312,17 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
     }
 
-    private void updateFractal() {
+    static int[] arr;
 
+    private void updateFractal() {
+    	arr = new int[MAX_ITERATIONS+1];
     	for (int y = 0; y < IMAGE_SIZE; y++)
 			for (int x = 0; x < IMAGE_SIZE; x++) {
 				int colorValue = doIterations(getComplexPoint(x, y));
 				int color = makeColor(colorValue);
 				fractalImage.setRGB(x, y, color);
 			}
-
+		System.out.println(Arrays.toString(arr));
 		canvas.repaint();
 
     }
@@ -300,10 +333,13 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
     }
 
+
     private int makeColor(int iterations) {
 
     	double percentageOfIterations = ((double) iterations) / ((double) MAX_ITERATIONS);
     	Color color;
+
+    	arr[iterations]++;
 
     	// Black
     	if (iterations == MAX_ITERATIONS)
@@ -356,9 +392,9 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 			/* Constants */
 		
-		private final int DEFAULT_HEIGHT  = 600;
-		private final int DEFAULT_WIDTH   = 600;
-		private final int DEFAULT_PADDING = 75; 
+		public final static int DEFAULT_HEIGHT  = 600;
+		public final static int DEFAULT_WIDTH   = 600;
+		public final static int DEFAULT_PADDING = 0; 
 
 			/* Variables */
 
