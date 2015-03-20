@@ -28,7 +28,7 @@ import javax.swing.event.*;
 import javax.swing.plaf.basic.*;
 import java.util.*;
 
-public class MandelbrotGUI extends JFrame implements ActionListener, /*KeyListener,*/ MouseListener {
+public class MandelbrotGUI extends JFrame implements ActionListener, MouseListener {
 
 /*** CONSTANTS ***/
 
@@ -138,7 +138,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, /*KeyListen
 	}
 
 	/* Adds the menu system to the application, hooking up all of the proper keyboard short-cuts  */
-	private void addMenu () {
+	private void addMenu() {
 
 		JMenuItem menuItem;
 		JMenu menu, subMenu;
@@ -405,7 +405,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, /*KeyListen
 
 	 } // actionPerformed
 
-	/* Adjust the zoom of the image based on where the mouse click occured */
+	/* Adjust the zoom of the image based on where the mouse click occurred */
 	@Override public void mousePressed(MouseEvent mouse) {
 
 		// Calculate mouse position on canvas
@@ -502,10 +502,10 @@ public class MandelbrotGUI extends JFrame implements ActionListener, /*KeyListen
 /*** FRACTAL COMPUTATIONS ***/
 
 	/*
-		- If this sequence goes to infinity, then it is NOT in the mandelbrot set.
-		- Otherwise it is in the mandelbrot set. 
+		- If this sequence goes to infinity, then it is NOT in the Mandelbrot set.
+		- Otherwise it is in the Mandelbrot set. 
 	
-		Reccurence Relation:
+		Recurrence Relation:
 			z_0 = 0
 			z_1 = (z_0)^2 + c = c
 			...
@@ -514,8 +514,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, /*KeyListen
 		Simplifications:
 		- If sequence ever leaves a circle of radius two, then 
 		sequence will go to infinity, so stop iterating.
-		- If it never leaves, (MAX_ITERERATIONS ~ 150) then the original point
-		c is in the mandelbrot set.
+		- If it never leaves, then the original point c is in the Mandelbrot set.
 
 		@return the number of iterations
     */
@@ -583,7 +582,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, /*KeyListen
     	// Variables to denote the unchanged region of pixels (which do not need to re-calculated)
     	int startUnchangedX = 0, endUnchangedX = IMAGE_SIZE, startUnchangedY = 0, endUnchangedY = IMAGE_SIZE;
 
-    		/* Reduce computation time by a significant amount (~6x) by simply copying the RGB values for 5/6 of the pixels (instead of re-computing) */
+    		/* Reduce computation time by about 6x by simply copying the RGB values for 5/6 of the pixels (instead of re-computing) */
 
     	// Move left
 		if (dx < 0) {
@@ -626,7 +625,8 @@ public class MandelbrotGUI extends JFrame implements ActionListener, /*KeyListen
 					fractalImage.setRGB(x, y, fractalImage.getRGB(x, y - dy));
 		}
 
-		// Calculate the new pixels (1/6 of the image)
+			/* Calculate the new pixels (1/6 of the image) */
+		
 		for (int y = 0; y < IMAGE_SIZE; y++) {
 
 			for (int x = 0; x < IMAGE_SIZE; x++) {
