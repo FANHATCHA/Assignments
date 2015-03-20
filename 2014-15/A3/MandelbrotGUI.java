@@ -303,16 +303,6 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	 			System.exit(0);
 	 			break;
 
-	 		case "Return to Default":
-
-	 			ZOOM_FACTOR = DEFAULT_ZOOM;
-	 			TOP_LEFT_X = DEFAULT_TOP_LEFT_X;
-	 			TOP_LEFT_Y = DEFAULT_TOP_LEFT_Y;
-	 			updateFractal();
-	 			updateZoomSliderValue();
-
-	 			break;
-
 	 		case "Zoom In":
 
 	 			adjustZoom(ZOOM_FACTOR*2);
@@ -329,8 +319,16 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	 		// Adjust degree of fractal
 	 		default:
-	 			currentDegree = Integer.valueOf(event.getActionCommand());
+	 			currentDegree = Integer.valueOf(event.getActionCommand());	
+	 		
+	 		case "Return to Default":
+
+	 			ZOOM_FACTOR = DEFAULT_ZOOM;
+	 			TOP_LEFT_X = DEFAULT_TOP_LEFT_X;
+	 			TOP_LEFT_Y = DEFAULT_TOP_LEFT_Y;
 	 			updateFractal();
+	 			updateZoomSliderValue();
+
 	 			break;
 
 	 	} // switch
