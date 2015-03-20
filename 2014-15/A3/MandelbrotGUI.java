@@ -24,17 +24,17 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 						MAX_ITERATIONS 	= 150;
 
 	private static double  	DEFAULT_ZOOM		= 100.0,
-							DEFAULT_TOP_LEFT_X	= -3.0,
-							DEFAULT_TOP_LEFT_Y	= +3.0;
+							DEFAULT_TOP_LEFT_X	= -2.2,
+							DEFAULT_TOP_LEFT_Y	= +1.8;
 
 		/* Instance variables */
 
 	private static final String iconName = "fractalIcon.png";
 
 	// Current view variables
-	private double 	ZOOM_FACTOR = 100,
-					TOP_LEFT_X  = -3.0,
-					TOP_LEFT_Y  = 3.0;
+	private double 	ZOOM_FACTOR = DEFAULT_ZOOM,
+					TOP_LEFT_X  = DEFAULT_TOP_LEFT_X,
+					TOP_LEFT_Y  = DEFAULT_TOP_LEFT_Y;
 	
 	// UI components
 	private JMenuBar menuBar = new JMenuBar();
