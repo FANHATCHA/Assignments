@@ -21,7 +21,8 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		/* Constants */
 
 	public static int  	IMAGE_SIZE 		= 600,
-						MAX_ITERATIONS 	= 150;
+						MAX_ITERATIONS 	= 150,
+						DEFAULT_DEGREE  = 1;
 
 	private static double  	DEFAULT_ZOOM		= 100.0,
 							DEFAULT_TOP_LEFT_X	= -3.0,
@@ -32,9 +33,12 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	private static final String iconName = "fractalIcon.png";
 
 	// Current view variables
-	private double 	ZOOM_FACTOR = 100,
-					TOP_LEFT_X  = -3.0,
-					TOP_LEFT_Y  = 3.0;
+	private double 	ZOOM_FACTOR = DEFAULT_ZOOM,
+					TOP_LEFT_X  = DEFAULT_TOP_LEFT_X,
+					TOP_LEFT_Y  = DEFAULT_TOP_LEFT_Y;
+
+	// 'Degree' of fractal (normal Mandelbrot fractal has a degree of 1)
+	private int currentDegree = DEFAULT_DEGREE;
 	
 	// UI components
 	private JMenuBar menuBar = new JMenuBar();
@@ -126,8 +130,8 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		
 		// Set properties
 		adjustZoomSlider.setMinimum(1);
-		adjustZoomSlider.setMaximum(23);
-		adjustZoomSlider.setValue(7);
+		adjustZoomSlider.setMaximum(25);
+		adjustZoomSlider.setValue(9);
 		adjustZoomSlider.setSnapToTicks(true);
 		adjustZoomSlider.setMinorTickSpacing(1);
 		adjustZoomSlider.setPaintTicks(true);
@@ -135,18 +139,19 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		// Add labels
 	    adjustZoomSlider.setLabelTable(new Hashtable<Integer, JLabel>() {
 	    	{
-			    put(new Integer(1), new JLabel("<3.125%"));
-			    put(new Integer(3), new JLabel("6.25%"));
-			    put(new Integer(5), new JLabel("25%"));
-			    put(new Integer(7), new JLabel("100%"));
-			    //put(new Integer(9), new JLabel("4x"));
-			    put(new Integer(11), new JLabel("16x"));
-			    //put(new Integer(13), new JLabel("64x"));
-			    put(new Integer(15), new JLabel("256x"));
-			    //put(new Integer(17), new JLabel("1024x"));
-			    put(new Integer(19), new JLabel("4096x"));
-			    //put(new Integer(21), new JLabel("16384x"));
-			    put(new Integer(23), new JLabel(">32768x"));
+			    put(new Integer(1), new JLabel("<1/128x"));
+			    //put(new Integer(3), new JLabel("1/64x"));
+			    put(new Integer(5), new JLabel("1/16x"));
+			    //put(new Integer(7), new JLabel("1/4x"));
+			    put(new Integer(9), new JLabel("1x"));
+			    //put(new Integer(11), new JLabel("4x"));
+			    put(new Integer(13), new JLabel("16x"));
+			    //put(new Integer(15), new JLabel("64x"));
+			    put(new Integer(17), new JLabel("256x"));
+			    //put(new Integer(19), new JLabel("1024x"));
+			    put(new Integer(21), new JLabel("4096x"));
+			    //put(new Integer(23), new JLabel("16384x"));
+			    put(new Integer(25), new JLabel(">32768x"));
 			}
 		} );
 		adjustZoomSlider.setPaintLabels(true);
@@ -201,8 +206,8 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		adjustZoomSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 
-				// ...5 = 50%, 6 = 100%, 7 = 200%...
-				double newZoomFactor = 100.0 * Math.pow(2, adjustZoomSlider.getValue() - 7);
+				// ...8 = 50%, 9 = 100%, 10 = 200%...
+				double newZoomFactor = 100.0 * Math.pow(2, adjustZoomSlider.getValue() - 9);
 				adjustZoom(newZoomFactor);
 			}
 		});
@@ -213,12 +218,11 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	private void addMenu () {
 
 		JMenuItem menuItem;
-		JMenu menu;
+		JMenu menu, subMenu;
 
 			/* File Menu */
 
 		menu = new JMenu("File");
-		menu.getAccessibleContext().setAccessibleDescription("File");
 		menuBar.add(menu);
 
 		menuItem = new JMenuItem("Quit");
@@ -226,19 +230,18 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
-			/* Edit Menu */
+			/* View Menu */
 
 		menu = new JMenu("View");
-		menu.getAccessibleContext().setAccessibleDescription("View");
 		menuBar.add(menu);
 
 		menuItem = new JMenuItem("Zoom In");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke('i'));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, 0));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
 		menuItem = new JMenuItem("Zoom Out");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke('o'));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, 0));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
@@ -248,6 +251,39 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
+
+			/* Settings Menu */
+
+		menu = new JMenu("Settings");
+		menuBar.add(menu);
+
+		subMenu = new JMenu("Change Degree of Fractal");
+		menu.add(subMenu);
+
+		menuItem = new JMenuItem("0");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_0, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		subMenu.add(menuItem);
+
+		menuItem = new JMenuItem("1");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_1, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		subMenu.add(menuItem);
+
+		menuItem = new JMenuItem("2");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_2, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		subMenu.add(menuItem);
+
+		menuItem = new JMenuItem("3");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_3, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		subMenu.add(menuItem);
+
+		menuItem = new JMenuItem("4");
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_4, ActionEvent.CTRL_MASK));
+		menuItem.addActionListener(this);
+		subMenu.add(menuItem);
 
 		this.setJMenuBar(menuBar);
 
@@ -289,6 +325,12 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	 			adjustZoom(ZOOM_FACTOR/2);
 	 			updateZoomSliderValue();
 
+	 			break;
+
+	 		// Adjust degree of fractal
+	 		default:
+	 			currentDegree = Integer.valueOf(event.getActionCommand());
+	 			updateFractal();
 	 			break;
 
 	 	} // switch
@@ -378,7 +420,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		// Calculate the index the slider should be at 
 		double temp = ZOOM_FACTOR;
 		int zoomIndex = 1;
-		while (temp >= 3.125) {
+		while (temp >= 0.78125) {
 			temp /= 2;
 			zoomIndex++;
 		}
@@ -387,7 +429,6 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 		adjustZoomSlider.setValue(zoomIndex);
 
 	}
-
 
 	/**
 		- If this sequence goes to infinity, then it is NOT in the mandelbrot set.
@@ -413,7 +454,10 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 	    	
     	for (int i = 0; i < MAX_ITERATIONS; i++) {
 
-    		z.multiply(new Complex(z));
+    		// Default is a degree of 1
+    		for (int j = 0; j < currentDegree; j++)
+    			z.multiply(new Complex(z));
+    		
     		z.add(c);
 
     		// Not within Mandelbrot set
