@@ -656,68 +656,34 @@ public class MandelbrotGUI extends JFrame implements ActionListener, KeyListener
 
 	private class Canvas extends JPanel {
 
-			/* Constants */
-		
-		public final static int DEFAULT_HEIGHT  = 600;
-		public final static int DEFAULT_WIDTH   = 600;
-		public final static int DEFAULT_PADDING = 0; 
-
-			/* Variables */
-
-		private int horizontal_padding, vertical_padding;
-
 	 	public Canvas () {
 
 	 		setVisible(true);
-	 		horizontal_padding = DEFAULT_PADDING;
-	 		vertical_padding = DEFAULT_PADDING;
 
 	 	} // Canvas
 
 	 	/**
-	 	* Returns the dimensions that the canvas should be, taking into consideration
-	 	* the image size and padding.
+	 	* Returns the dimensions that the canvas should be
 	 	* @return preferred dimension
 	 	*/
 	 	@Override public Dimension getPreferredSize() {
 
-	 		return new Dimension(DEFAULT_WIDTH + horizontal_padding*2, DEFAULT_HEIGHT + vertical_padding*2);
+	 		return new Dimension(IMAGE_SIZE, IMAGE_SIZE);
 	 	
 	 	} // getPreferredSize
 
 	 	/**
-	 	* Updates the canvas, drawing the image (or blank canvas) in the center,
-	 	* with pre-defined padding around it.
+	 	* Updates the canvas, drawing the image in the center.
 	 	* @param g - Graphics object (which is passed through by Java)
 	 	*/
 	 	@Override protected void paintComponent(Graphics g) {
 
 	 		super.paintComponent(g);
 
-	 		refreshSize();
-
- 			// Draw canvas
- 			g.setColor(Color.LIGHT_GRAY);
-	 		g.fillRect(horizontal_padding, vertical_padding, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
-	 		g.drawImage(fractalImage, horizontal_padding, vertical_padding, null);
+	 		g.drawImage(fractalImage, 0, 0, null);
 
 	 	} // paintComponent
 
-	 	/**
-	 	* Refreshes the canvas size, properly padding it
-	 	*/
-	 	public void refreshSize() {
-	 		
-	 		int width  = DEFAULT_WIDTH;
-		    int height = DEFAULT_HEIGHT;
-
-	 		setSize(Math.max(width, getWidth()), Math.max(height, getHeight()));
-
-			horizontal_padding = (getWidth()  - width)  / 2;
-			vertical_padding   = (getHeight() - height) / 2;
-
-	 	}
 	 } // Canvas Class
 
 }
