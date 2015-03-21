@@ -9,6 +9,7 @@ public class TestMandelbrot {
     		new Complex(1.0/4.0,0),
 
     		new Complex(1,0),
+            new Complex(0.5, 0),
 
     	};
     	
@@ -20,6 +21,7 @@ public class TestMandelbrot {
     		true,
     	
     		false,
+            false,
     	};
 
     	int cases = 0;
@@ -27,7 +29,8 @@ public class TestMandelbrot {
     	cases += points.length;
 
     	for (int i =0; i < points.length; i++) {
-    		if (isWithinFractal(points[i]) == withinFractal[i] ) {
+    		System.out.println();
+            if (isWithinFractal(points[i]) == withinFractal[i] ) {
     			passes++;
     		}
     	}
@@ -45,9 +48,9 @@ public class TestMandelbrot {
 		Complex z = new Complex(0, 0);
 	    	
     	for (int i = 0; i < MandelbrotGUI.MAX_ITERATIONS; i++) {
-    		z.multiply(new Complex(z));
-    		z.add(c);
-
+            System.out.println(z);
+            z.multiply(new Complex(z));
+            z.add(c);
     		// Not within Mandelbrot set
     		if (z.modulus() > 2.0) return i;
     	}

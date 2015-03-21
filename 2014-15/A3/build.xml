@@ -1,0 +1,76 @@
+<!-- 
+
+This ant file allows you to build and run the Mandelbrot gui
+application. Here are the steps:
+
+1) Install Apache Ant
+2) Execute the commands:
+
+Windows:
+ant run 
+
+Mac:
+ant runmac 
+
+-->
+
+<project name="MandelbrotGUI Application">
+
+    <!-- Set the operating system properties -->
+    <condition property="isMac">
+        <os family="mac" />
+    </condition>
+
+    <condition property="isWindows">
+        <os family="windows" />
+    </condition>
+
+    <condition property="isUnix">
+        <os family="unix" />
+    </condition>
+
+    <!-- Define Targets -->
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <target name="build">
+        <mkdir dir="build/classes"/>
+        <javac srcdir="src" destdir="build/classes"/>
+    </target>
+
+    <!-- Runs Program on OSX (With Icon!) -->
+    <target name="runmac" depends="build" if="isMac">
+
+        <java classpath="build/classes/" classname="MandelbrotGUI" fork="true">
+            <jvmarg value="-Xdock:icon=fractalIcon.png"/>
+        </java>
+
+    </target>
+
+    <!-- Runs Program on Windows/UNIX machines -->
+    <target name="runwindows_unix" depends="build" if="isWindows">
+        <java classpath="build/classes/" classname="MandelbrotGUI" fork="true"/>
+    </target>
+
+    <target name="run" depends="runmac, runwindows_unix"/>
+
+    <!-- I also got ant to generate the jar file for the MandelbrotGUI -->
+    <target name="makejar">
+        <mkdir dir="build/jar"/>
+        <jar destfile="build/jar/Mandelbrot.jar" basedir="build/classes">
+            <manifest>
+                <attribute name="Main-Class" value="MandelbrotGUI"/>
+            </manifest>
+        </jar>
+    </target>
+
+
+</project>
+
+
+
+
+
+
+
