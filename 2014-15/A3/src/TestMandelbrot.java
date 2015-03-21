@@ -29,7 +29,6 @@ public class TestMandelbrot {
     	cases += points.length;
 
     	for (int i =0; i < points.length; i++) {
-    		System.out.println();
             if (isWithinFractal(points[i]) == withinFractal[i] ) {
     			passes++;
     		}
@@ -48,7 +47,6 @@ public class TestMandelbrot {
 		Complex z = new Complex(0, 0);
 	    	
     	for (int i = 0; i < MandelbrotGUI.MAX_ITERATIONS; i++) {
-            System.out.println(z);
             z.multiply(new Complex(z));
             z.add(c);
     		// Not within Mandelbrot set

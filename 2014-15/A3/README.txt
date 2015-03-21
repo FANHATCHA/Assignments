@@ -32,4 +32,25 @@ Here are the steps if you choose to use Apache Ant:
 
 
 2) Execute the command:
+    
     ant run
+
+We also included extra targets:
+
+ant clean
+ant build
+ant makejar
+ant test
+
+
+
+
+
+
+
+
+
+
+
+
+
