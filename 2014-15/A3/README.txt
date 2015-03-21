@@ -1,3 +1,5 @@
+Micah Stairs and Will Fiset
+
 The build.xml file allows you to build and run the Mandelbrot GUI application.
 Alternatively, you can run our code as you normally would (MandelbrotGUI.java
 and Complex.java can be found the in src folder). Using this build file automates
@@ -35,12 +37,12 @@ Here are the steps if you choose to use Apache Ant:
     
     ant run
 
-We also included extra targets:
+    We also included extra targets:
 
-ant clean
-ant build
-ant makejar
-ant test
+    ant clean
+    ant build
+    ant makejar
+    ant test
 
 
 
