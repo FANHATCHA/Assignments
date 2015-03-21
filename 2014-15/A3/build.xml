@@ -4,13 +4,8 @@ This ant file allows you to build and run the Mandelbrot gui
 application. Here are the steps:
 
 1) Install Apache Ant
-2) Execute the commands:
-
-Windows:
-ant run 
-
-Mac:
-ant runmac 
+2) Execute the command:
+    ant run
 
 -->
 
@@ -29,11 +24,13 @@ ant runmac
         <os family="unix" />
     </condition>
 
+
     <!-- Define Targets -->
     <target name="clean">
         <delete dir="build"/>
     </target>
 
+    <!-- builds java class files and put them in build/classes -->
     <target name="build">
         <mkdir dir="build/classes"/>
         <javac srcdir="src" destdir="build/classes"/>
@@ -49,13 +46,14 @@ ant runmac
     </target>
 
     <!-- Runs Program on Windows/UNIX machines -->
-    <target name="runwindows_unix" depends="build" if="isWindows">
+    <target name="runwindows_unix" depends="build" if="isWindows, isUnix">
         <java classpath="build/classes/" classname="MandelbrotGUI" fork="true"/>
     </target>
 
+    <!-- Executes the MandelbrotsetGUI program on the correct System -->
     <target name="run" depends="runmac, runwindows_unix"/>
 
-    <!-- I also got ant to generate the jar file for the MandelbrotGUI -->
+    <!-- Ant generates the jar file for the MandelbrotGUI and puts it in build/jar/ -->
     <target name="makejar">
         <mkdir dir="build/jar"/>
         <jar destfile="build/jar/Mandelbrot.jar" basedir="build/classes">
