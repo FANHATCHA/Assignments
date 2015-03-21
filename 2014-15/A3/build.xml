@@ -91,7 +91,7 @@ Here are the steps if you choose to use Apache Ant:
     <target name="run" depends="checkos, runmac, runwindows, rununix"/>
 
     <!-- Ant generates the jar file for the MandelbrotGUI and puts it in build/jar/ -->
-    <target name="makejar">
+    <target name="makejar" depends="build">
         <mkdir dir="build/jar"/>
         <jar destfile="build/jar/Mandelbrot.jar" basedir="build/classes">
             <manifest>
