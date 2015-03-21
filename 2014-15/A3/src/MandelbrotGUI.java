@@ -1,9 +1,19 @@
 /**
 
+MandelbrotGUI -	This class boasts a clean user interface used to explore the fascinating Mandelbrot fractal.
+
 COMP 2631: Data Structures and Algorithms II (Winter 2015)
 Mandelbrot Fractal Assignment
 @author William Fiset, Micah Stairs
 @professor Dr. Keliher
+
+KEYBOARD SHORTCUTS:
+-Arrow keys: Moves the view
+-I: Zoom in
+-O: Zoom out
+-D: Return to the default view
+-0-4: Change the degree of the fractal
+-Ctrl + W: Quit
 
 TABLE OF CONTENTS:
 -Constants
@@ -149,7 +159,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, MouseListen
 		menuBar.add(menu);
 
 		menuItem = new JMenuItem("Quit");
-		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
+		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK));
 		menuItem.addActionListener(this);
 		menu.add(menuItem);
 
