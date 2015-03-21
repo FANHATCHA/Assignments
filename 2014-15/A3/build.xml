@@ -12,9 +12,9 @@ application. Here are the steps:
 <project name="MandelbrotGUI Application">
 
     <!-- Set the operating system properties -->
-    <condition property="isMac">
+<!--     <condition property="isMac">
         <os family="mac" />
-    </condition>
+    </condition> -->
 
     <condition property="isWindows">
         <os family="windows" />
@@ -37,13 +37,14 @@ application. Here are the steps:
     </target>
 
     <!-- Runs Program on OSX (With Icon!) -->
-    <target name="runmac" depends="build" if="isMac">
+<!--     <target name="runmac" depends="build" if="isMac">
 
         <java classpath="build/classes/" classname="MandelbrotGUI" fork="true">
             <jvmarg value="-Xdock:icon=fractalIcon.png"/>
         </java>
 
     </target>
+ -->
 
     <!-- Runs Program on Windows machines -->
     <target name="runwindows" depends="build" if="isWindows">
@@ -52,11 +53,15 @@ application. Here are the steps:
 
     <!-- Runs Program on UNIX machines -->
     <target name="rununix" depends="build" if="isUnix">
-        <java classpath="build/classes/" classname="MandelbrotGUI" fork="true"/>
+
+        <java classpath="build/classes/" classname="MandelbrotGUI" fork="true">
+            <jvmarg value="-Xdock:icon=fractalIcon.png"/>
+        </java>
+
     </target>
 
     <!-- Executes the MandelbrotsetGUI program on the correct System -->
-    <target name="run" depends="runmac, runwindows, rununix"/>
+    <target name="run" depends="runwindows, rununix"/>
 
     <!-- Ant generates the jar file for the MandelbrotGUI and puts it in build/jar/ -->
     <target name="makejar">
