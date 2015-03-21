@@ -12,20 +12,23 @@ application. Here are the steps:
 <project name="MandelbrotGUI Application">
 
     <!-- Set the operating system properties -->
-<!--     <condition property="isMac">
-        <os family="mac" />
-    </condition> -->
+    <target name="checkos">
 
-    <condition property="isWindows">
-        <os family="windows" />
-    </condition>
+        <condition property="isWindows" value="true">
+                <os family="windows" />
+        </condition>
 
-    <condition property="isUnix">
-        <os family="unix" />
-    </condition>
+        <condition property="isUnix" value="true">
+                <os family="unix" />
+        </condition>
 
+        <condition property="isMac">
+            <os family="mac" />
+        </condition>
 
-    <!-- Define Targets -->
+    </target>
+
+    <!-- Cleans up project -->
     <target name="clean">
         <delete dir="build"/>
     </target>
@@ -37,31 +40,26 @@ application. Here are the steps:
     </target>
 
     <!-- Runs Program on OSX (With Icon!) -->
-<!--     <target name="runmac" depends="build" if="isMac">
+    <target name="runmac" depends="checkos, build" if="isMac">
 
         <java classpath="build/classes/" classname="MandelbrotGUI" fork="true">
             <jvmarg value="-Xdock:icon=fractalIcon.png"/>
         </java>
 
     </target>
- -->
 
     <!-- Runs Program on Windows machines -->
-    <target name="runwindows" depends="build" if="isWindows">
+    <target name="runwindows" depends="checkos, build" if="isWindows">
         <java classpath="build/classes/" classname="MandelbrotGUI" fork="true"/>
     </target>
 
-    <!-- Runs Program on UNIX machines -->
-    <target name="rununix" depends="build" if="isUnix">
-
-        <java classpath="build/classes/" classname="MandelbrotGUI" fork="true">
-            <jvmarg value="-Xdock:icon=fractalIcon.png"/>
-        </java>
-
+    <!-- Runs Program on UNIX machines, except the mac -->
+    <target name="rununix" depends="checkos, build" if="isUnix" unless="isMac" >
+        <java classpath="build/classes/" classname="MandelbrotGUI" fork="true"/>
     </target>
 
     <!-- Executes the MandelbrotsetGUI program on the correct System -->
-    <target name="run" depends="runwindows, rununix"/>
+    <target name="run" depends="checkos, runmac, runwindows, rununix"/>
 
     <!-- Ant generates the jar file for the MandelbrotGUI and puts it in build/jar/ -->
     <target name="makejar">
