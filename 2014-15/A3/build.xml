@@ -4,6 +4,30 @@ This ant file allows you to build and run the Mandelbrot gui
 application. Here are the steps:
 
 1) Install Apache Ant
+
+    Linux (Ubuntu Distro):
+        - sudo apt-get install ant
+
+    Mac:
+        Get homebrew:
+            - ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+        - brew install ant
+
+    Windows:
+        
+        GOTO:
+        - http://archive.apache.org/dist/ant/
+        
+        GET:
+        - ant-current-bin.zip   
+        - unzip and place somewhere, then add ant to the PATH:
+        - set PATH=%PATH%; path_to_ant_bin 
+        
+        NOTE:
+        My JAVA_HOME environment variable was not set which caused ant to crash
+        Set JAVA_HOME to your jdk path if this happens.
+
+
 2) Execute the command:
     ant run
 
