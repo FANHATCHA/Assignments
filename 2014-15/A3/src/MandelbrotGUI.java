@@ -42,13 +42,31 @@ public class MandelbrotGUI extends JFrame implements ActionListener, MouseListen
 
 /*** CONSTANTS ***/
 
-	public static int  	IMAGE_SIZE 		= 600,
-						MAX_ITERATIONS 	= 150,
-						DEFAULT_DEGREE  = 1;
+	public final static int IMAGE_SIZE 		= 600,
+							MAX_ITERATIONS 	= 150,
+							DEFAULT_DEGREE  = 1,
 
-	private static double  	DEFAULT_ZOOM		= 100.0,
-							DEFAULT_TOP_LEFT_X	= -3.0,
-							DEFAULT_TOP_LEFT_Y	= +3.0;
+							// Color 1
+							COLOR1_R		= 0,
+							COLOR1_G		= 16,
+							COLOR1_B		= 95,
+
+							// Color 2
+							COLOR2_R		= 171,
+							COLOR2_G		= 9,
+							COLOR2_B		= 0,
+
+							// Color 3
+							COLOR3_R		= 255,
+							COLOR3_G		= 192,
+							COLOR3_B		= 0;
+
+	private final static double DEFAULT_ZOOM					= 100.0,
+								DEFAULT_TOP_LEFT_X				= -3.0,
+								DEFAULT_TOP_LEFT_Y				= +3.0,
+								RADIUS 			    			= 2.0,
+								RADIUS_SQUARED 					= RADIUS*RADIUS,
+								MINIMUM_ZOOM_FACTOR_ON_SLIDER 	= 0.78125;
 
 /*** INSTANCE VARIABLES ***/
 
@@ -477,7 +495,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, MouseListen
 		// Calculate the index the slider should be at 
 		double temp = zoomFactor;
 		int zoomIndex = 1;
-		while (temp >= 0.78125) {
+		while (temp >= MINIMUM_ZOOM_FACTOR_ON_SLIDER) {
 			temp /= 2;
 			zoomIndex++;
 		}
@@ -541,7 +559,7 @@ public class MandelbrotGUI extends JFrame implements ActionListener, MouseListen
     		z.add(c);
 
     		// Not within Mandelbrot set
-    		if (z.modulus() > 2.0) return i;
+    		if (z.modulusSquared() > RADIUS_SQUARED) return i;
 
     	} // for
 
@@ -678,9 +696,9 @@ public class MandelbrotGUI extends JFrame implements ActionListener, MouseListen
     	
     	// Pick an appropriate color for the pixel
     	else if (percentage < 0.5)
-			color = fadeBetweenColors(0, 16, 95, percentage*2, 171, 9, 0);    	
+			color = fadeBetweenColors(COLOR1_R, COLOR1_G, COLOR1_B, percentage*2, COLOR2_R, COLOR2_G, COLOR2_B);    	
 		else   
-			color = fadeBetweenColors(171, 9, 0, (percentage - 0.5)*2, 255, 192, 0);     		
+			color = fadeBetweenColors(COLOR2_R, COLOR2_G, COLOR2_B, (percentage - 0.5)*2, COLOR3_R, COLOR3_G, COLOR3_B);     		
 
     	return color.getRGB();
     

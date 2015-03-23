@@ -59,6 +59,12 @@ public class Complex {
 		return Math.sqrt(getReal()*getReal() + getImag()*getImag());
 	}
 
+	/* Returns the square of the modulus of this complex number (distance from origin) 
+	   (This is useful, since we can speed up the computation time of the Mandelbrot algorithm) */
+	public double modulusSquared() {
+		return getReal()*getReal() + getImag()*getImag();
+	}
+
 	/* Formats this complex number as a String: (a + bi) */
 	@Override public String toString() {
 		return "(" + getReal() + " + " + getImag() + "i)";
