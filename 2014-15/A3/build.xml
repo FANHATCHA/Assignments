@@ -1,4 +1,4 @@
-<!-- 
+<!--
 
 This ant file allows you to build and run the Mandelbrot gui
 application. Here are the steps:
@@ -36,7 +36,7 @@ application. Here are the steps:
     <!-- builds java class files and put them in build/classes -->
     <target name="build">
         <mkdir dir="build/classes"/>
-        <javac srcdir="src" destdir="build/classes"/>
+        <javac srcdir="src" destdir="build/classes" includeantruntime="false"/>
     </target>
 
     <!-- Runs Program on OSX (With Icon!) -->
@@ -73,10 +73,3 @@ application. Here are the steps:
 
 
 </project>
-
-
-
-
-
-
-
