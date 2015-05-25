@@ -43,23 +43,23 @@ public class MandelbrotGUI extends JFrame implements ActionListener, MouseListen
 /*** CONSTANTS ***/
 
 	public final static int IMAGE_SIZE 		= 600,
-							MAX_ITERATIONS 	= 150,
+							MAX_ITERATIONS 	= 300,
 							DEFAULT_DEGREE  = 1,
 
 							// Color 1
-							COLOR1_R		= 0,
-							COLOR1_G		= 16,
-							COLOR1_B		= 95,
+							COLOR1_R		= 160,
+							COLOR1_G		= 100,
+							COLOR1_B		= 30,
 
 							// Color 2
-							COLOR2_R		= 171,
-							COLOR2_G		= 9,
-							COLOR2_B		= 0,
+							COLOR2_R		= 30,
+							COLOR2_G		= 171,
+							COLOR2_B		= 77,
 
 							// Color 3
-							COLOR3_R		= 255,
-							COLOR3_G		= 192,
-							COLOR3_B		= 0;
+							COLOR3_R		= 100,
+							COLOR3_G		= 45,
+							COLOR3_B		= 200;
 
 	private final static double DEFAULT_ZOOM					= 100.0,
 								DEFAULT_TOP_LEFT_X				= -3.0,
