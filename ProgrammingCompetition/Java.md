@@ -1,5 +1,5 @@
 
-  **CONVERSIONS**
+**CONVERSIONS**
 
   Character → Integer
     
@@ -50,3 +50,8 @@
      
  Catalan:
  
+     1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862…
+
+![Catalan Series Formula](/ProgrammingCompetition/CatalanSeries.png)
+     
+ Lazy Caterer: Formally also known as the central polygonal numbers, it describes the maximum number of pieces (or bounded/unbounded regions) of a circle (a pancake or pizza is usually used to describe the situation) that can be made with a given number of straight cuts. For example, three cuts across a pancake will produce six pieces if the cuts all meet at a common point, but seven if they do not.
