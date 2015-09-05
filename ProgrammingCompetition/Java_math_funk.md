@@ -26,6 +26,35 @@ static int gcf( int a, int b ) {
     return gcf( b, a % b );
 } 
 ```
+
+**Factors**
+```java
+// Returns the factors of a given number UNSORTED. 
+// Where n >= 0, does not account for negative numbers!
+static ArrayList<Integer> factors(int n) {
+    	
+	ArrayList<Integer> divs = new ArrayList<Integer>();
+	divs.add(1); 
+	
+	if (n > 1) {
+	    divs.add(n); 
+	    for (int f = 2; f < ((int)Math.pow(n, 0.5))+1; f++) {
+	    	if (n % f == 0) {
+	    		int c = n / f;
+	    		if (c != f) {
+					divs.add(f);
+					divs.add(c);
+	    		} else {
+	    			divs.add(f);
+	    		}
+	    	} 
+	    }
+	}
+	
+	return divs;
+}
+```
+
 **PHI**
 ``` java
 public static HashSet<Integer> getDistinctPrimeFactors( int n ) {
