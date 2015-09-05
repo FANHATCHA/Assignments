@@ -26,3 +26,27 @@
           return a;
         return gcf(b, a % b);
     }
+    
+  Co-Prime:
+  
+  Phi:
+  
+  Factorizing:
+  
+  Prime Factorization:
+    
+  Prime Checker:
+    
+  Prime Sieve:
+  
+  Pythagorean Triplets:
+  
+
+ **Number Series**
+ 
+ Fibonacci:
+ 
+     1,1,2,3,5,8,13,21,34,55,89…
+     
+ Catalan:
+ 
