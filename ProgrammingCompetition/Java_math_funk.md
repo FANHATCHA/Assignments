@@ -27,6 +27,14 @@ static int gcf( int a, int b ) {
 } 
 ```
 
+**Coprime**
+```java
+// Coprime is a fancy way of saying that two numbers share no factors 
+static boolean areCoprime(int a, int b) {
+	return gcf(a, b) == 1;
+}
+```
+
 **Factors**
 ```java
 // Returns the factors of a given number UNSORTED. 
