@@ -1,3 +1,5 @@
+**~/.vimrc**
+
 
 **CONVERSIONS**
 
@@ -9,13 +11,17 @@
     
     Character c = i + ‘0’
     
-  ArrayList -> Set
+  ArrayList → Set
     
     Set<Foo> listName = new HashSet<Foo>(arrayListName);
 
-  Set to ArrayList
+  Set → ArrayList
     
     ArrayList<Integer> arrayListName = new ArrayList<Integer>(mySet);
+  
+  Base x → Base 10 where 2 <= x <= 36
+  
+    int base10 = Integer.parseInt(strBaseX, x);
   
   **MATH**
   
