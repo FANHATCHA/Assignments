@@ -3,13 +3,29 @@
     set expandtab
     set shiftwidth=2
     set tabstop=2
-    set number
+    set nu
+    set autoindent
      
     command W w
     command Q q
     command WQ wq
     command Wq wq
 
+**VIM COMMANDS**
+
+Repeat last command: `.`
+
+Indent current line: `>>`
+
+Indent n lines, use ‘<’ for unindent, ‘>>’ for two indents, etc.: `>n`
+
+Goto line n: `:n`
+
+Skip n lines: `n` `ENTER`
+
+Replace ‘foo’ with ‘bar’, including ‘%’ searches the entire file: `:%s/foo/bar/g`
+
+Pastes n times: `np`
 
 **CONVERSIONS**
 
