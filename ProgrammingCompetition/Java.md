@@ -71,31 +71,6 @@ Base x → Base 10 where 2 <= x <= 36
     parseInt("99", 8) throws a NumberFormatException
     parseInt("Kona", 10) throws a NumberFormatException
     parseInt("Kona", 27) returns 411787
-  
-  **MATH**
-  
-Greatest Common Factor:
-    
-    int gcf(int a, int b) {
-        if (b == 0)
-          return a;
-        return gcf(b, a % b);
-    }
-  
-Co-Prime:
-  
-Phi:
-  
-Factorizing:
-  
-Prime Factorization:
-    
-Prime Checker:
-    
-Prime Sieve:
-  
-Pythagorean Triplets:
-  
 
  **Number Series**
  
