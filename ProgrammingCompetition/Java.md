@@ -1,16 +1,18 @@
 **~/.vimrc**
 
-    set expandtab
-    set shiftwidth=2
-    set tabstop=2
-    set nu
-    set autoindent
-    syntax on
-     
-    command W w
-    command Q q
-    command WQ wq
-    command Wq wq
+```vim
+set expandtab
+set shiftwidth=2
+set tabstop=2
+set nu
+set autoindent
+syntax on
+ 
+command W w
+command Q q
+command WQ wq
+command Wq wq
+```
 
 **VIM COMMANDS -- CONTROL MODE**
 
@@ -39,38 +41,39 @@ Return to console, putting vim in background: `ctrl`+`z` (NOTE: Running `fg` in 
 **CONVERSIONS**
 
 Character → Integer
-    
-    Character.getNumericValue(char c);
-    
+```java    
+Character.getNumericValue(char c);
+```
 Integer → Character 
-    
-    Character c = i + ‘0’
-    
+```java    
+Character c = i + ‘0’
+```
 ArrayList → Set
-    
-    Set<Foo> listName = new HashSet<Foo>(arrayListName);
-
+```java 
+Set<Foo> listName = new HashSet<Foo>(arrayListName);
+```
 Set → ArrayList
-    
-    ArrayList<Integer> arrayListName = new ArrayList<Integer>(mySet);
-  
+```java 
+ArrayList<Integer> arrayListName = new ArrayList<Integer>(mySet);
+```  
 Base x → Base 10 where 2 <= x <= 36
-  
-    int base10 = Integer.parseInt(strBaseX, x);
+```java  
+int base10 = Integer.parseInt(strBaseX, x);
 
-    // Examples:
-    parseInt("0", 10) returns 0
-    parseInt("473", 10) returns 473
-    parseInt("+42", 10) returns 42
-    parseInt("-0", 10) returns 0
-    parseInt("-FF", 16) returns -255
-    parseInt("1100110", 2) returns 102
-    parseInt("2147483647", 10) returns 2147483647
-    parseInt("-2147483648", 10) returns -2147483648
-    parseInt("2147483648", 10) throws a NumberFormatException
-    parseInt("99", 8) throws a NumberFormatException
-    parseInt("Kona", 10) throws a NumberFormatException
-    parseInt("Kona", 27) returns 411787
+// Examples:
+parseInt("0", 10) returns 0
+parseInt("473", 10) returns 473
+parseInt("+42", 10) returns 42
+parseInt("-0", 10) returns 0
+parseInt("-FF", 16) returns -255
+parseInt("1100110", 2) returns 102
+parseInt("2147483647", 10) returns 2147483647
+parseInt("-2147483648", 10) returns -2147483648
+parseInt("2147483648", 10) throws a NumberFormatException
+parseInt("99", 8) throws a NumberFormatException
+parseInt("Kona", 10) throws a NumberFormatException
+parseInt("Kona", 27) returns 411787
+```
 
  **Number Series**
  
