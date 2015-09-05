@@ -104,6 +104,7 @@ static int pollard_rho(int n) {
     return d;
 }
 
+// Returns an UNSORTED prime factorization of a number n >= 2
 static ArrayList<Integer> primeFactorization(int n) {
 
 	ArrayList<Integer> factors = new ArrayList<Integer> ();
