@@ -37,3 +37,6 @@ Go to end of line: `fn`+`→` (NOTE: Other arrows are used for start of line, pa
 Peek at the console: `fn`+`shift`+`→` (NOTE: This also works in insert mode, press any key to return to vim)
 
 Return to console, putting vim in background: `ctrl`+`z` (NOTE: Running `fg` in the terminal returns to vim)
+
+Duplicate line: `yy` to copy and `p` to paste. In short: `yyp`, I remember this because it looks like Yuppie!
+
