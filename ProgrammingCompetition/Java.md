@@ -1,5 +1,15 @@
 **~/.vimrc**
 
+    set expandtab
+    set shiftwidth=2
+    set tabstop=2
+    set number
+     
+    command W w
+    command Q q
+    command WQ wq
+    command Wq wq
+
 
 **CONVERSIONS**
 
