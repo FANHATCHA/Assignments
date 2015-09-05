@@ -55,6 +55,54 @@ static ArrayList<Integer> factors(int n) {
 }
 ```
 
+**Prime Factorization**
+```java
+static int pollard_rho(int n) {
+	
+	if (n % 2 == 0) return 2;
+
+	// Get a number between [2, 10^6] inclusive
+	int x = 2 + (int) ( ((1000000-2)+1) * Math.random());
+	int c = 2 + (int) ( ((1000000-2)+1) * Math.random());
+	int y = x;
+	int d = 1;
+	while (d == 1) {
+		x = (x * x + c) % n;
+		y = (y * y + c) % n;
+		y = (y * y + c) % n;
+		d = gcf( x - y, n);
+		if( d == n) break;
+	}
+    return d;
+}
+
+static ArrayList<Integer> primeFactorization(int n) {
+
+	ArrayList<Integer> factors = new ArrayList<Integer> ();
+	if (n <= 0) throw new IllegalArgumentException();
+	else if (n == 1) return factors;
+
+	PriorityQueue <Integer> divisorQueue = new PriorityQueue<Integer>();
+	divisorQueue.add(n);
+
+	while (!divisorQueue.isEmpty()) {
+		int divisor = divisorQueue.remove();
+		if (isprime(divisor)) {
+			factors.add(divisor);
+			continue;
+		}
+		int next_divisor = pollard_rho(divisor);
+		if (next_divisor == divisor) {
+			divisorQueue.add(divisor);
+		} else {
+			divisorQueue.add(next_divisor);
+			divisorQueue.add( divisor/next_divisor );
+		}
+	}
+	return factors;
+}
+```
+
 **PHI**
 ``` java
 public static HashSet<Integer> getDistinctPrimeFactors( int n ) {
