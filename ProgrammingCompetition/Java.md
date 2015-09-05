@@ -1,22 +1,22 @@
-**CONVERSIONS**
+**Conversions:**
 
-Character → Integer
+* Character → Integer
 ```java    
 Character.getNumericValue(char c);
 ```
-Integer → Character 
+* Integer → Character 
 ```java    
 Character c = i + ‘0’
 ```
-ArrayList → Set
+* ArrayList → Set
 ```java 
 Set<Foo> listName = new HashSet<Foo>(arrayListName);
 ```
-Set → ArrayList
+* Set → ArrayList
 ```java 
 ArrayList<Integer> arrayListName = new ArrayList<Integer>(mySet);
 ```  
-Base x → Base 10 where 2 <= x <= 36
+* Base x → Base 10 where 2 <= x <= 36
 ```java  
 int base10 = Integer.parseInt(strBaseX, x);
 
@@ -35,24 +35,36 @@ parseInt("Kona", 10) throws a NumberFormatException
 parseInt("Kona", 27) returns 411787
 ```
 
- **Number Series**
+ **Number Series:**
  
- Fibonacci:
+* Fibonacci:
  
     1,1,2,3,5,8,13,21,34,55,89…
  
-Catalan:
+* Catalan:
  
     1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862…
 
 ![Catalan Series Formula](/ProgrammingCompetition/Images/CatalanSeries.png)
      
-Lazy Caterer: Formally also known as the central polygonal numbers, it describes the maximum number of pieces (or bounded/unbounded regions) of a circle (a pancake or pizza is usually used to describe the situation) that can be made with a given number of straight cuts. For example, three cuts across a pancake will produce six pieces if the cuts all meet at a common point, but seven if they do not.
+* Lazy Caterer:
+
+Formally also known as the central polygonal numbers, it describes the maximum number of pieces (or bounded/unbounded regions) of a circle (a pancake or pizza is usually used to describe the situation) that can be made with a given number of straight cuts. For example, three cuts across a pancake will produce six pieces if the cuts all meet at a common point, but seven if they do not.
 
 ![Lazy Caterer Series Formula](/ProgrammingCompetition/Images/LazyCatererSeries.png)
 
-Triangle: https://edublognss.wordpress.com/2013/04/16/famous-mathematical-sequences-and-series/
+* Trianglar:
 
-Pentagonal: https://edublognss.wordpress.com/2013/04/16/famous-mathematical-sequences-and-series/
+    0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55...
 
-Hexagonal: https://edublognss.wordpress.com/2013/04/16/famous-mathematical-sequences-and-series/
+![Triangular Series Formula](/ProgrammingCompetition/Images/TriangleNumberSeries.png)
+
+![Triangular Series Visualization](/ProgrammingCompetition/Images/TriangleNumberSeriesVisualization.png)
+
+* Hexagonal:
+
+    1, 6, 15, 28, 45, 66, 91, 120, 153, 190, 231...
+
+![Hexagonal Series Formula](/ProgrammingCompetition/Images/HexagonalNumberSeries.png)
+
+![Hexagonal Series Visualization](/ProgrammingCompetition/Images/HexagonalNumberSeriesVisualization.png)
