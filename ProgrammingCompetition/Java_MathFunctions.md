@@ -1,5 +1,5 @@
 
-**isprime**
+**Prime Checker:**
 ```java
 static boolean isPrime(final long n) {
      if (n < 2) return false;
@@ -14,7 +14,7 @@ static boolean isPrime(final long n) {
 } 
 ```
 
-**Sieve of Eratosthenes (Prime Seive)**
+**Sieve of Eratosthenes (Prime Sieve):**
 ```java
 // Gets all primes up to, but not including limit
 static ArrayList<Integer> seive(int limit) {
@@ -39,7 +39,7 @@ static ArrayList<Integer> seive(int limit) {
 }
 ```
 
-**GCF (Greatest Common Factor)**
+**GCF (Greatest Common Factor):**
 ``` java
 static int gcf( int a, int b ) {
     if (b == 0) return a;
@@ -47,15 +47,15 @@ static int gcf( int a, int b ) {
 } 
 ```
 
-**Coprime**
+**Co-Prime:**
 ```java
-// Coprime is a fancy way of saying that two numbers share no factors 
+// Co-prime is a fancy way of saying that two numbers share no factors 
 static boolean areCoprime(int a, int b) {
 	return gcf(a, b) == 1;
 }
 ```
 
-**Factors**
+**Factorization:**
 ```java
 // Returns the factors of a given number UNSORTED. 
 // Where n >= 0, does not account for negative numbers!
@@ -83,7 +83,7 @@ static ArrayList<Integer> factors(int n) {
 }
 ```
 
-**Prime Factorization**
+**Prime Factorization:**
 ```java
 static int pollard_rho(int n) {
 	
@@ -132,7 +132,7 @@ static ArrayList<Integer> primeFactorization(int n) {
 }
 ```
 
-**PHI**
+**Euler's phi function (aka Euler's totient function):**
 ``` java
 public static HashSet<Integer> getDistinctPrimeFactors( int n ) {
 	
@@ -161,7 +161,7 @@ public static int phi(int n) {
 }
 ```
 
-**Pascals Triangle**
+**Pascal's Triangle:**
 ```java
 // Note: Switch to BigInteger if you want to generate more than 67 rows
 static long[][] generatePascalTriangle(int nRows) {
@@ -177,5 +177,3 @@ static long[][] generatePascalTriangle(int nRows) {
     return arr;
 }
 ```
-
-
