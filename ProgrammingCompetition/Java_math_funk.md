@@ -17,7 +17,7 @@ static boolean isPrime(final long n) {
 **Sieve of Eratosthenes (Prime Seive)**
 ```java
 // Gets all primes up to, but not including limit
-static ArrayList<Integer> sieve(int limit) {
+static ArrayList<Integer> seive(int limit) {
 
 	// See: http://mathworld.wolfram.com/PrimeCountingFunction.html
     final int numPrimes = (limit > 1 ? (int)(1.25506 * limit / Math.log((double)limit)) : 0);
