@@ -5,13 +5,14 @@
     set tabstop=2
     set nu
     set autoindent
+    syntax on
      
     command W w
     command Q q
     command WQ wq
     command Wq wq
 
-**VIM COMMANDS**
+**VIM COMMANDS -- CONTROL MODE**
 
 Repeat last command: `.`
 
@@ -26,6 +27,14 @@ Skip n lines: `n` `ENTER`
 Replace ‘foo’ with ‘bar’, including ‘%’ searches the entire file: `:%s/foo/bar/g`
 
 Pastes n times: `np`
+
+Undo: `u`
+
+Go to end of line: `fn`+`→` (NOTE: Other arrows are used for start of line, page up and page down)
+
+Peek at the console: `fn`+`shift`+`→` (NOTE: This also works in insert mode, press any key to return to vim)
+
+Return to console, putting vim in background: `ctrl`+`z` (NOTE: Running `fg` in the terminal returns to vim)
 
 **CONVERSIONS**
 
