@@ -1,4 +1,7 @@
 
 
 H = input()
-print H
+
+
+
+
