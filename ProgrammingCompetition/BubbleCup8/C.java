@@ -45,9 +45,9 @@ public class C {
 			j++;
 		}
 
-		int[] fridayMaxs = findNHighestValues(fridayClubs, N/2);
+		int[] fridayMaxs = findNHighestValues(fridayClubs);
+		int[] satMaxs = findNHighestValues(satClubs);
 		// System.out.println(Arrays.toString(fridayMaxs));
-		int[] satMaxs = findNHighestValues(satClubs, N/2);
 		// System.out.println(Arrays.toString(satMaxs));
 
 		int s = 0;
@@ -80,13 +80,13 @@ public class C {
     			}
 
     			if ( fridayClubVal > satClubVal ) {
-    				if (fridayClubVal > max) {
+    				if (fridayClubVal >= max) {
 	    				pickedFridayClub = true;
 	    				max = fridayClubVal;
 	    				maxIndex = i;    					
     				}
     			} else {
-    				if (satClubVal > max) {
+    				if (satClubVal >= max) {
 	    				pickedFridayClub = false;
 	    				max = satClubVal;
 	    				maxIndex = i;    					
@@ -111,7 +111,7 @@ public class C {
     	return max;
     }
 
-    static int[] findNHighestValues(int array[][], int numHighestVals) {
+    static int[] findNHighestValues(int array[][]) {
 
     	int [] colMaxs = new int[array.length];
     	

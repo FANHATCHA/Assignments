@@ -1,0 +1,4 @@
+
+
+H = input()
+print H
