@@ -181,17 +181,6 @@ static long[][] generatePascalTriangle(int nRows) {
 Convex Hull
 
 ``` java
-/******************************************************************************
- *  Compilation:  javac GrahamaScan.java
- *  Execution:    java GrahamScan < input.txt
- *  Dependencies: Point2D.java
- * 
- *  Create points from standard input and compute the convex hull using
- *  Graham scan algorithm.
- *
- *  May be floating-point issues if x- and y-coordinates are not integers.
- *
- ******************************************************************************/
 
 import java.util.*;
 import java.awt.geom.*;
