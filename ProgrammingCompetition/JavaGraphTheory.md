@@ -116,4 +116,96 @@ Minimum spanning tree
 
 -Can be used to solve problems with more than one source or sink by modifying the original graph (adding a new node and edges with capacities that will not inhibit the flow). Can also be used to solve problems where nodes have a capacity (split nodes in half and add a new edge between them with the desired capacity).
 
+``` java
+  static long fordFulkerson(Node source, Node target, int n) {
 
+    long maxFlow = 0;
+
+    boolean pathWasFound = true;
+    while (pathWasFound) {
+
+      pathWasFound = false;
+
+      // Find bottleneck from a path found using depth-first search from source to target
+      Long bottleneck = getBottleNeck(source, target, new boolean[n], Long.MAX_VALUE);
+
+      // Must larger than 0 or loop will not terminate
+      if (bottleneck != null && bottleneck > 0) {
+        pathWasFound = true;
+        maxFlow += bottleneck;
+      }
+
+    }
+
+    return maxFlow;
+
+  }
+
+  static Long getBottleNeck(Node current, Node target, boolean[] visited, long currentBottleNeck) {
+
+    // Already visited
+    if (visited[current.index])
+      return null;
+
+    // Reached the target
+    if (current.index == target.index)
+      return currentBottleNeck;
+
+    visited[current.index] = true;
+
+    for (Edge edge : current.adj)
+      if (edge.capacityLeft > 0) {
+
+        Long bottleneck = getBottleNeck(
+        	edge.target,
+        	target,
+        	visited,
+        	Math.min(currentBottleNeck, edge.capacityLeft)
+        );
+
+        // Found target
+        if (bottleneck != null) {
+
+          // Adjust capacities
+          edge.capacityLeft -= bottleneck;
+          edge.opposite.capacityLeft += bottleneck;
+
+          return bottleneck;
+        }
+      }
+
+    // Dead end
+    return null;
+
+}
+
+class Node {
+
+  List<Edge> adj = new ArrayList<Edge>();
+
+  int index;
+
+  public Node(int index) {
+    this.index = index;
+  }
+
+}
+
+class Edge {
+
+  Edge opposite = null;
+  Node initial, target;
+  
+  // residual edges should have a value of null, so that this
+  // can be used to determine which nodes are the originals
+  Long originalCapacity = null;
+  long capacityLeft;
+
+  public Edge(Node initial, Node target, long capacity) {
+    this.initial = initial;
+    this.target = target;
+    this.capacityLeft = capacity;
+  }
+  
+}
+```
