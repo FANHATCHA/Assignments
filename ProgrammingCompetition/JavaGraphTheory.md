@@ -112,4 +112,8 @@ Minimum spanning tree
 
 **Ford-Fulkerson:**
 
-Maximum flow
+-Solves maximum flow problems.
+
+-Can be used to solve problems with more than one source or sink by modifying the original graph (adding a new node and edges with capacities that will not inhibit the flow). Can also be used to solve problems where nodes have a capacity (split nodes in half and add a new edge between them with the desired capacity).
+
+
