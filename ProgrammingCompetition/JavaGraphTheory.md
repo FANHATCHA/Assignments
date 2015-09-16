@@ -97,4 +97,19 @@ static void floydWarshall(Double[][] dist, int n) {
        			dist[i][j] = dist[i][k] + dist[k][j];
 
 }
-```
+````
+
+**Bridge finder:**
+
+Get alg from algo.is
+
+**Eularian Path/Cycle:**
+
+
+**Prim's algorithm:**
+
+Minimum spanning tree
+
+**Ford-Fulkerson:**
+
+Maximum flow
