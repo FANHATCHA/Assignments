@@ -1,10 +1,10 @@
 **Dijkstra:**
 
+-Finds shortest path from a specified node to another specified node using a priority queue (or simply breadth first search if unweighted)
+
 -Complexity: O(V log E) using priority queue
 
--Find shortest path from a specified node to another specified node using a priority queue (or simply breadth first search if unweighted)
-
--Only works for non-negative weights
+-Only works with non-negative weights. Works on both directed and undirected graphs.
 
 -Can work for multiple-source or multiple-destination by modifying original graph (by adding new node and adding edges of weight 0)
 
@@ -82,12 +82,19 @@ class Node implements Comparable<Node> {
 
 -Computes all-pairs shortest paths
 
--Can be used to detect negative-weight cycles?????????????
+-Works with negative weights (acyclic). Works on both directed and undirected graphs.
 
--IS THE FOLLOWING CODE CORRECT?
+-Can be modified to detect negative-weight cycles (if running the algorithm on it a second time would result in anything being changed, then there is at least one negative-weight cycle)
+
 ``` java
-for (int k = 0; k < n; k++)
-  for (int i = 0; i < n; i++)
-    for (int j = 0; j < n; j++)
-      dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+static void floydWarshall(Double[][] dist, int n) {
+
+	for (int k = 0; k < n; k++)
+		for (int i = 0; i < n; i++)
+      for (int j = 0; j < n; j++)
+       	if (dist[i][k] != null && dist[k][j] != null)
+       		if (dist[i][j] == null || dist[i][k] + dist[k][j] < dist[i][j])
+       			dist[i][j] = dist[i][k] + dist[k][j];
+
+}
 ```
