@@ -116,6 +116,8 @@ Minimum spanning tree
 
 -Can be used to solve problems with more than one source or sink by modifying the original graph (adding a new node and edges with capacities that will not inhibit the flow). Can also be used to solve problems where nodes have a capacity (split nodes in half and add a new edge between them with the desired capacity).
 
+-Can also be used to find the minimum cut (see below).
+
 ``` java
   // NOTE: This only passed 12/49 tests on Kattis (Maximum Flow problem), but failed due to a time-out
   static long fordFulkerson(Node source, Node target, int nNodes) {
@@ -222,5 +224,32 @@ class Edge {
     this.capacityLeft = capacity;
   }
   
+}
+```
+
+This algorithm can easily be modified to return the minimum cut:
+
+``` java
+// NOTE: This only passed 12/49 tests on Kattis (Minimum Cut problem), but failed due to a time-out
+static boolean[] fordFulkerson(Node source, Node target, int n) {
+
+    boolean pathWasFound = true;
+    boolean[] minCut = new boolean[n];
+    while (pathWasFound) {
+
+      pathWasFound = false;
+      Arrays.fill(minCut, false);
+
+      // Find bottleneck from a path found using depth-first search from source to target
+      Long bottleneck = getBottleNeck(source, target, Long.MAX_VALUE, minCut);
+
+      // Must larger than 0 or loop will not terminate
+      if (bottleneck != null && bottleneck > 0)
+        pathWasFound = true;
+
+    }
+
+    return minCut;
+
 }
 ```
