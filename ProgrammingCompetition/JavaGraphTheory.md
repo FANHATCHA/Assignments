@@ -210,3 +210,22 @@ class Edge {
   
 }
 ```
+
+``` java
+// Sample setup when adding an edge
+String line = sc.nextLine().split(" +");
+int u = Integer.valueOf(line[0]);
+int v = Integer.valueOf(line[1]);
+long c = Long.valueOf(line[2]);
+
+Edge edge = new Edge(nodes[u], nodes[v], c);
+edge.originalCapacity = c;
+nodes[u].adj.add(edge);
+
+Edge reversed = new Edge(nodes[v], nodes[u], 0);
+nodes[v].adj.add(reversed);
+
+edge.opposite = reversed;
+reversed.opposite = edge;
+
+```
