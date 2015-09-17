@@ -34,3 +34,26 @@ parseInt("99", 8) throws a NumberFormatException
 parseInt("Kona", 10) throws a NumberFormatException
 parseInt("Kona", 27) returns 411787
 ```
+
+* Java Comparator
+
+``` java
+// Orders Planet objects by ID
+class PlanetIDOrder implements Comparator<Planet> {
+    @Override public int compare(Planet p1, Planet p2) {
+        Integer i1 = new Integer(p1.id);
+        Integer i2 = new Integer(p2.id);
+        return  i1.compareTo(i2);
+    }
+}
+```
+
+Usage:
+
+``` java
+
+Collections.sort( my+planets_arraylist, new PlanetIDOrder() );
+
+```
+
+
