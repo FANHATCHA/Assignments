@@ -29,16 +29,16 @@ Core Method:
 * size()
 
 ``` c++
-#include <stack>
-stack <string> s;
-s.push("Drinkin");
-s.push("all");
-s.push("dat tea");
-// Prints, "dat tea", "all", "Drinkin"
-while(!s.empty()) {
-	cout << s.top() << endl;
-	s.pop();
-}
+	#include <stack>
+	stack <string> s;
+	s.push("Drinkin");
+	s.push("all");
+	s.push("dat tea");
+	// Prints, "dat tea", "all", "Drinkin"
+	while(!s.empty()) {
+		cout << s.top() << endl;
+		s.pop();
+	}
 ```
 
 
