@@ -52,7 +52,7 @@ Usage:
 
 ``` java
 
-Collections.sort( my+planets_arraylist, new PlanetIDOrder() );
+Collections.sort( my_planets_arraylist, new PlanetIDOrder() );
 
 ```
 
