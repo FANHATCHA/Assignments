@@ -118,7 +118,7 @@ Minimum spanning tree
 
 ``` java
   // NOTE: This only passed 12/49 tests on Kattis (Maximum Flow problem), but failed due to a time-out
-  static long fordFulkerson(Node source, Node target, int n) {
+  static long fordFulkerson(Node source, Node target, int nNodes) {
 
     long maxFlow = 0;
 
@@ -128,7 +128,7 @@ Minimum spanning tree
       pathWasFound = false;
 
       // Find bottleneck from a path found using depth-first search from source to target
-      Long bottleneck = getBottleNeck(source, target, new boolean[n], Long.MAX_VALUE);
+      Long bottleneck = getBottleNeck(source, target, new boolean[nNodes], Long.MAX_VALUE);
 
       // Must larger than 0 or loop will not terminate
       if (bottleneck != null && bottleneck > 0) {
