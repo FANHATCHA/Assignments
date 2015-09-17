@@ -1,5 +1,6 @@
 
-**Queue**
+Queue
+###
 Core Method:
 * push()   
 * empty()  - Bool to check if Q is empty
