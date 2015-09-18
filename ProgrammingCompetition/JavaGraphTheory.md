@@ -103,8 +103,45 @@ static void floydWarshall(Double[][] dist, int n) {
 
 Get alg from algo.is
 
-**Eularian Path/Cycle:**
+**Eularian Path/Circuit:**
 
+Difference:  An Euler path starts and ends at different vertices. An Euler circuit starts and ends at the same vertex.
+
+Task: Given an undirected or a directed graph, find a path or circuit that passes through each edge exactly once.
+
+Complexity: O(V + E)
+
+Conditions for an undirected graph:
+
+- An undirected graph has an eulerian circuit if and only if it is connected and each vertex has an even degree (degree is the number of edges that are adjacent to that vertex).
+- An undirected graph has an eulerian path if and only if it is connected and all vertices except 2 have even degree. One of those 2 vertices that have an odd degree must be the start vertex, and the other one must be the end vertex.
+
+Conditions for a directed graph:
+
+- A directed graph has an eulerian circuit if and only if it is connected and each vertex has the same in-degree as out-degree.
+- A directed graph has an eulerian path if and only if it is connected and each vertex except 2 have the same in-degree as out-degree, and one of those 2 vertices has out-degree with one greater than in-degree (this is the start vertex), and the other vertex has in-degree with one greater than out-degree (this is the end vertex).
+
+Algorithm for undirected graphs:
+
+- Start with an empty stack and an empty circuit (eulerian path).
+    - If all vertices have even degree - choose any of them.
+    - If there are exactly 2 vertices having an odd degree - choose one of them.
+    - Otherwise no euler circuit or path exists.
+- If current vertex has no neighbors - add it to circuit, remove the last vertex from the stack and set it as the current one. Otherwise (in case it has neighbors) - add the vertex to the stack, take any of its neighbors, remove the edge between selected neighbor and that vertex, and set that neighbor as the current vertex.
+- Repeat step 2 until the current vertex has no more neighbors and the stack is empty.
+
+Note that obtained circuit will be in reverse order - from end vertex to start vertex.
+
+Algorithm for directed graphs:
+
+- Start with an empty stack and an empty circuit (eulerian path).
+    - If all vertices have same out-degrees as in-degrees - choose any of them.
+    - If all but 2 vertices have same out-degree as in-degree, and one of those 2 vertices has out-degree with one greater than its in-degree, and the other has in-degree with one greater than its out-degree - then choose the vertex that has its out-degree with one greater than its in-degree.
+    - Otherwise no euler circuit or path exists.
+- If current vertex has no out-going edges (i.e. neighbors) - add it to circuit, remove the last vertex from the stack and set it as the current one. Otherwise (in case it has out-going edges, i.e. neighbors) - add the vertex to the stack, take any of its neighbors, remove the edge between that vertex and selected neighbor, and set that neighbor as the current vertex.
+- Repeat step 2 until the current vertex has no more out-going edges (neighbors) and the stack is empty.
+
+Note that obtained circuit will be in reverse order - from end vertex to start vertex.
 
 **Prim's algorithm:**
 
@@ -116,7 +153,7 @@ Minimum spanning tree
 
 -Can be used to solve problems with more than one source or sink by modifying the original graph (adding a new node and edges with capacities that will not inhibit the flow). Can also be used to solve problems where nodes have a capacity (split nodes in half and add a new edge between them with the desired capacity).
 
--Can also be used to find the minimum cut (see below).
+-Can also be used to find the minimum cut by modifying a few lines (see below).
 
 ``` java
   // NOTE: This only passed 12/49 tests on Kattis (Maximum Flow problem), but failed due to a time-out
