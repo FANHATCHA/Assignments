@@ -85,3 +85,33 @@ static int[] kmpHelper(char[] ch) {
 
 }
 ```
+
+**Suffix Tree:**
+
+```java
+class Node {
+
+  Node[] nodes = new Node[26];
+
+  void add(String str, int start) {
+
+    if (start == str.length())
+      return;
+
+    int index = str.charAt(start) - 'a';
+
+    if (nodes[index] == null)
+      nodes[index] = new Node();
+    
+    nodes[index].add(str, start + 1);
+
+  }
+```
+Setup:
+```java
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+String str = br.readLine();
+Node root = new Node();
+for (int i = 0; i < str.length(); i++)
+  root.add(str, i);
+```
