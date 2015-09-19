@@ -178,7 +178,7 @@ static long[][] generatePascalTriangle(int nRows) {
 }
 ```
 
-Convex Hull
+**Convex Hull:**
 
 ``` java
 
