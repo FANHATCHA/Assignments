@@ -1,3 +1,12 @@
+**Input:**
+ * Fastest known way to read a large number of space-separated integers from a line (was tested with up to 200000 integers on one lines)
+```java
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+StringTokenizer token  = new StringTokenizer(br.readLine());
+for (int i = 0; i < n; i++)
+    int n = Integer.parseInt(token.nextToken());
+```
+
 **Conversions:**
 
 * Character → Integer
@@ -35,7 +44,7 @@ parseInt("Kona", 10) throws a NumberFormatException
 parseInt("Kona", 27) returns 411787
 ```
 
-* Java Comparator
+**Comparator:**
 
 ``` java
 // Orders Planet objects by ID
@@ -51,9 +60,7 @@ class PlanetIDOrder implements Comparator<Planet> {
 Usage:
 
 ``` java
-
 Collections.sort( my_planets_arraylist, new PlanetIDOrder() );
-
 ```
 
 
