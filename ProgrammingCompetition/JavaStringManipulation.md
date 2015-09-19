@@ -31,3 +31,55 @@ static int findMaxNumberOfPowerStrings(String str) {
 **Knuth–Morris–Pratt algorithm:**
 
 Given string `str` and substring `substr`, count the number of occurences of `substr` in `str` (which can be overlapping). The naive solution is O(n*m) where n is the length of `str` and m is the length of `substr`. The KMP algorithm is difficult to understand, but it is able to solve this problem in O(n).
+
+```java
+// returns -1 if not found, otherwise the start index of the pattern in the string
+static int kmp(String string, String pattern) {
+
+  char[] str = string.toCharArray();
+  char[] pat = pattern.toCharArray();
+
+  int[] arr = kmpHelper(pat);
+
+  int i = 0, j = 0;
+
+  while (i < str.length) {
+
+    if (str[i] == pat[j]) {
+      i++;
+      j++;
+    } else if (j == 0)
+      i++;
+    else
+      j = arr[j-1];
+
+    if (j == pat.length)
+      return i - j;
+
+  }
+
+  return -1;
+
+}
+
+static int[] kmpHelper(char[] ch) {
+
+  int[] arr = new int[ch.length];
+
+  int i = 1, j = 0;
+
+  while (i < ch.length) {
+
+    if (ch[i] == ch[j]) {
+      arr[i++] = j++ + 1;
+    } else if (j == 0)
+      i++;
+    else
+      j = arr[j-1];
+
+  }
+
+  return arr;
+
+}
+```
