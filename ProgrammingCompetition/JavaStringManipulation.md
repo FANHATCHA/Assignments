@@ -32,6 +32,8 @@ static int findMaxNumberOfPowerStrings(String str) {
 
 Given string `str` and substring `substr`, count the number of occurences of `substr` in `str` (which can be overlapping). The naive solution is O(n*m) where n is the length of `str` and m is the length of `substr`. The KMP algorithm is difficult to understand, but it is able to solve this problem in O(n).
 
+NOTE: This can easily be modified to work with other things such as integers, for example, instead of characters.
+
 ```java
 // returns -1 if not found, otherwise the start index of the pattern in the string
 static int kmp(String string, String pattern) {
