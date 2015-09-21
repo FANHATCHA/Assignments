@@ -1,18 +1,12 @@
+**NOTE:** Java's Math class has methods for toRadians(double degrees) and toDegrees(double radians). It also has a method called hypot(double x, double y), which returns sqrt(x^2 +y^2).
+
 **Convert Polar Co-ordinate to Cartesian Co-ordinate:**
 ```java
 static Point2D polarToCartesian(double degrees, double radius) {
-  double radians = degreesToRadians(degrees);
+  double radians = Math.toRadians(degrees);
   return new Point2D.Double(radius*Math.cos(radians), radius*Math.sin(radians));
 }
 ```
-
-**Convert Degrees to Radians:**
-```java
-static double degreesToRadians(double degrees) {
-  return degrees*(Math.PI/180.0);
-}
-```
-
 **Angle from Point A to B**
 ```java
 // Find the angle from point A to point B in radians
