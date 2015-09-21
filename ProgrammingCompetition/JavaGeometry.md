@@ -41,3 +41,138 @@ ABP = abs(x1 * (y2 - y)  + x2 * (y - y1)  + x  * (y1 - y2));
 APC = abs(x1 * (y  - y3) + x  * (y3 - y1) + x3 * (y1 - y));
 PBC = abs(x  * (y2 - y3) + x2 * (y3 - y)  + x3 * (y - y2));
 ```
+
+**Convex Hull:**
+
+``` java
+
+import java.util.*;
+import java.awt.geom.*;
+
+public class ConvexHull {
+    
+    static Stack<Point2D> hull;
+    static Scanner sc = new Scanner(System.in);
+
+    static void convexHull(Point2D[] pts) {
+
+        hull = new Stack<Point2D>();
+
+        int N = pts.length;
+        Point2D[] points = new Point2D.Double[N];
+        for (int i = 0; i < N; i++) points[i] = pts[i];
+
+        Arrays.sort(points, new PointOrder());
+        Arrays.sort(points, 1, N, new PolarOrder(points[0]));
+
+        hull.push(points[0]);
+
+        int k1;
+        for (k1 = 1; k1 < N; k1++)
+            if (!points[0].equals(points[k1])) break;
+        if (k1 == N) return;
+
+        int k2;
+        for (k2 = k1 + 1; k2 < N; k2++)
+            if (ccw(points[0], points[k1], points[k2]) != 0) break;
+        hull.push(points[k2-1]); 
+
+        for (int i = k2; i < N; i++) {
+            Point2D top = hull.pop();
+            while (ccw(hull.peek(), top, points[i]) <= 0) 
+                top = hull.pop();
+            hull.push(top);
+            hull.push(points[i]);
+        }
+
+    }
+
+    // compare other points relative to polar angle (between 0 and 2pi) they make with this Point
+    static class PolarOrder implements Comparator<Point2D> {
+        
+        Point2D pt;
+
+        public PolarOrder(Point2D pt) {
+            this.pt = pt;
+        }
+
+        @Override public int compare(Point2D q1, Point2D q2) {
+            double dx1 = q1.getX() - pt.getX();
+            double dy1 = q1.getY() - pt.getY();
+            double dx2 = q2.getX() - pt.getX();
+            double dy2 = q2.getY() - pt.getY();
+
+            if      (dy1 >= 0 && dy2 < 0) return -1;    
+            else if (dy2 >= 0 && dy1 < 0) return +1;    
+            else if (dy1 == 0 && dy2 == 0) {            
+                if      (dx1 >= 0 && dx2 < 0) return -1;
+                else if (dx2 >= 0 && dx1 < 0) return +1;
+                else                          return  0;
+            }
+            else return -ccw(pt, q1, q2);
+        }
+    }
+
+    // put lower Y co-ordinates first, with lower X in the case of ties
+    static class PointOrder implements Comparator<Point2D> {
+        
+        @Override public int compare(Point2D q1, Point2D q2) {
+
+            if (q1.getY() < q2.getY()) return -1;
+
+            if (q1.getY() == q2.getY()) {
+                if (q1.getX() < q2.getX()) return -1;
+                else if (q1.getX() > q2.getX()) return 1;
+                else return 0;
+            }
+
+            return 1;
+
+        }
+    }
+
+    static int ccw(Point2D a, Point2D b, Point2D c) {
+        double area = (b.getX() - a.getX())*(c.getY() - a.getY()) - (b.getY() - a.getY())*(c.getX() - a.getX());
+        return (int) Math.signum(area);
+    }
+
+    // check that boundary of hull is strictly convex
+    static boolean isConvex() {
+        int N = hull.size();
+        if (N <= 2) return true;
+
+        Point2D[] points = new Point2D.Double[N];
+        int n = 0;
+        for (Point2D p : hull) 
+            points[n++] = p;
+
+        for (int i = 0; i < N; i++) 
+            if (ccw(points[i], points[(i+1) % N], points[(i+2) % N]) <= 0) 
+                return false;
+        return true;
+    }
+
+    // test client
+    public static void main(String[] args) {
+        
+        while (true) {
+
+            int N = sc.nextInt();
+            Point2D[] points = new Point2D.Double[N];
+            if (N == 0) break;
+            for (int i = 0; i < N; i++) {
+                int x = sc.nextInt();
+                int y = sc.nextInt();
+                points[i] = new Point2D.Double(x, y);
+            }
+            
+            convexHull(points);
+    
+            System.out.println(hull.size());
+            for (Point2D p : hull)
+                System.out.println( (int)p.getX() + " " + (int)p.getY());
+        }
+    }
+
+}
+```
