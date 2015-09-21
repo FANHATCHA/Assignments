@@ -152,7 +152,7 @@ public class ConvexHull {
         return true;
     }
 
-    // test client
+    // Sample Usage
     public static void main(String[] args) {
         
         while (true) {
@@ -168,9 +168,8 @@ public class ConvexHull {
             
             convexHull(points);
     
-            System.out.println(hull.size());
             for (Point2D p : hull)
-                System.out.println( (int)p.getX() + " " + (int)p.getY());
+                System.out.println( p.getX() + " " + p.getY());
         }
     }
 
