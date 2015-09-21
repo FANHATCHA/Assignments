@@ -23,7 +23,7 @@ static double area(Point2D a, Point2D b, Point2D c) {
 }
 ```
 
-**Triangle Conatins Point:**
+**Triangle Contains Point:**
 ```java
 static boolean containsPoint(Point2D a, Point2D b, Point2D c, double area, double x, double y) {
   double ABC = Math.abs (a.getX() * (b.getY() - c.getY()) + b.getX() * (c.getY() - a.getY()) + c.getX() * (a.getY() - b.getY()));
@@ -31,6 +31,35 @@ static boolean containsPoint(Point2D a, Point2D b, Point2D c, double area, doubl
   double APC = Math.abs (a.getX() * (y - c.getY()) + x   * (c.getY() - a.getY()) + c.getX() * (a.getY() - y));
   double PBC = Math.abs (x  * (b.getY() - c.getY()) + b.getX() * (c.getY() - y) + c.getX() * (y - b.getY()));
   return ABP + APC + PBC == ABC;
+}
+```
+**Area of Polygon:**
+
+```java
+// Points must be ordered (either clockwise or counter-clockwise)
+static double findAreaOfPolygon(Point2D[] pts) {
+
+  double area = 0;
+
+  for (int i = 1; i + 1 < pts.length; i++)
+    area += areaOfTriangulation(pts[0], pts[i], pts[i+1]);
+
+  return Math.abs(area);
+
+}
+
+// May return positive or negative value (important for polygon method)
+static double areaOfTriangulation(Point2D a, Point2D b, Point2D c) {
+  return crossProduct(subtract(a, b), subtract(a, c))/2.0;
+}
+
+// Find the difference between two points
+static Point2D subtract(Point2D a, Point2D b) {
+  return new Point2D.Double(a.getX() - b.getX(), a.getY() - b.getY());
+}
+
+static double crossProduct(Point2D a, Point2D b) {
+  return a.getX()*b.getY() - a.getY()*b.getX();
 }
 ```
 
