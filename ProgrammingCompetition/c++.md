@@ -1,6 +1,6 @@
 **Standard Input (stdin)**
 
-Read Lines:
+## getline
 ``` c++
 string line;
 while ( getline(cin, line) ) {
