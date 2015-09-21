@@ -1,27 +1,5 @@
 **Standard Input (stdin)**
 
-Get known finite input:
-
-``` c++
-#include <stdio.h>
-
-// In this example we are reading in a word with a maximum of 9 characters, a single character and an integer
-char word[10];
-char c;
-int num;
- 
-scanf("%s %c %d", word, &c, &num);
-printf("%s - %c - %d\n", word, c, num);
-```
-
-Grab next token:
-``` c++
-string token;
-while( getline(cin, token, ' ')){
-  cout << token << endl;
-}
-```
-
 Read Lines:
 ``` c++
 string line;
@@ -30,7 +8,20 @@ while ( getline(cin, line) ) {
 }
 ```
 
-#include <climits>
+##cin
+``` c++
+int n;
+string s, s1;
+long a;
+
+cin >> n;
+while (n-- > 0) {
+ cin >> s >> s1 >> a; // reads a line with a string, another string and a long.
+}
+
+```
+
+##\<climits>
 ``` c++
 - CHAR_MIN	Minimum value for an object of type char	either SCHAR_MIN or 0
 - CHAR_MAX	Maximum value for an object of type char	either SCHAR_MAX or UCHAR_MAX
