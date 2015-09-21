@@ -21,7 +21,7 @@ while (n-- > 0) {
 
 ```
 
-##\<climits>
+##\<climits> (integer min/max values)
 ``` c++
 - CHAR_MIN	Minimum value for an object of type char	either SCHAR_MIN or 0
 - CHAR_MAX	Maximum value for an object of type char	either SCHAR_MAX or UCHAR_MAX
@@ -37,5 +37,12 @@ while (n-- > 0) {
 - LLONG_MIN	Minimum value for an object of type long long int	-9223372036854775807 (-263+1) or less*
 - LLONG_MAX	Maximum value for an object of type long long int	9223372036854775807 (263-1) or greater*
 - ULLONG_MAX	Maximum value for an object of type unsigned long long int	18446744073709551615 (264-1) or greater*
+```
 
+##\<cfloat> (floating point number min/max values)
+``` c++
+- FLT_MAX 
+- DBL_MAX 
+- FLT_MIN 
+- DBL_MIN
 ```
