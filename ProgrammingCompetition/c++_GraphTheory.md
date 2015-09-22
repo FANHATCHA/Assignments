@@ -4,6 +4,8 @@
 ``` c++
 #include <queue>
 #include <vector>
+
+// PITFALL: Make sure **weights is setup correctly and points to the correct array pointers
 int dijkstra( int **weights, int n, int start, int end ) {
 
 	int dist[n];
