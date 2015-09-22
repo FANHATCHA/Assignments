@@ -76,5 +76,21 @@ Core Methods:
 		cout << min_heap.top() << endl;
 		min_heap.pop();
 	}
+	
+	
+	// PQ with nodes, sorted by distance
+	priority_queue <Node> nodes;
+	
+	struct Node {
+	
+	    int index, dist;
+	    Node (int i, int d) : index(i), dist(d) { }
+
+	    bool operator < (const Node& rhs) const {
+	        return dist < rhs.dist;
+	    }
+	
+	};
+	
 ```
 
