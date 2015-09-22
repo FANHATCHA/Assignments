@@ -39,4 +39,13 @@ int dijkstra( int **weights, int n, int start, int end ) {
 	return -1;
 }
 
+struct Node {
+    int index, dist;
+    Node (int i, int d) : index(i), dist(d) { }
+
+    bool operator < (const Node& rhs) const {
+        return dist < rhs.dist;
+    }
+};
+
 ```
