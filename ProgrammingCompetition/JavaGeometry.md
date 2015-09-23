@@ -36,6 +36,13 @@ static boolean containsPoint(Point2D a, Point2D b, Point2D c, double area, doubl
   return ABP + APC + PBC == ABC;
 }
 ```
+For readability purposes, here is what is going on:
+```
+ABC = abs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
+ABP = abs(x1 * (y2 - y)  + x2 * (y - y1)  + x  * (y1 - y2));
+APC = abs(x1 * (y  - y3) + x  * (y3 - y1) + x3 * (y1 - y));
+PBC = abs(x  * (y2 - y3) + x2 * (y3 - y)  + x3 * (y - y2));
+```
 **Area of Polygon:**
 
 ```java
@@ -64,14 +71,6 @@ static Point2D subtract(Point2D a, Point2D b) {
 static double crossProduct(Point2D a, Point2D b) {
   return a.getX()*b.getY() - a.getY()*b.getX();
 }
-```
-
-For readability purposes, here is what is going on:
-```
-ABC = abs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
-ABP = abs(x1 * (y2 - y)  + x2 * (y - y1)  + x  * (y1 - y2));
-APC = abs(x1 * (y  - y3) + x  * (y3 - y1) + x3 * (y1 - y));
-PBC = abs(x  * (y2 - y3) + x2 * (y3 - y)  + x3 * (y - y2));
 ```
 
 **Convex Hull:**
