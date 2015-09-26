@@ -9,6 +9,7 @@
 -Can work for multiple-source or multiple-destination by modifying original graph (by adding new node and adding edges of weight 0)
 
 ``` java
+// Using adjacency matrix
 // UNTESTED
 static int dijkstra(Integer[][] weights, int n, int start, int end) {
 
@@ -33,7 +34,7 @@ static int dijkstra(Integer[][] weights, int n, int start, int end) {
 
         // Check neighbours
 		for (int i = 0; i < n; i++) {
-			if (factors[node.index][i] != null) {
+			if (weights[node.index][i] != null) {
 				double newDist = dist[node.index] + weights[node.index][i];
 				if (newDist < dist[i]) {
 					dist[i] = newDist;
