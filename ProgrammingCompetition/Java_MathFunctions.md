@@ -16,8 +16,8 @@ static boolean isPrime(final long n) {
 
 **Sieve of Eratosthenes (Prime Sieve):**
 ```java
-// Gets all primes up to, but not including limit
-static ArrayList<Integer> seive(int limit) {
+// Gets all primes up to, but not including limit, return as a list of primes
+static ArrayList<Integer> sieve(int limit) {
 
 	// See: http://mathworld.wolfram.com/PrimeCountingFunction.html
     final int numPrimes = (limit > 1 ? (int)(1.25506 * limit / Math.log((double)limit)) : 0);
@@ -36,6 +36,29 @@ static ArrayList<Integer> seive(int limit) {
         if (!isComposite [i])
             primes.add(i);
     return primes;
+}
+```
+
+```java
+// Gets all primes up to, but not including limit, return as a boolean array
+static boolean[] sieve(int limit) {
+
+  boolean[] isPrime = new boolean[limit];
+  Arrays.fill(isPrime, true);
+  if (limit >= 1)
+    isPrime[0] = false;
+  if (limit >= 2)
+    isPrime[1] = false;
+
+  final int sqrtLimit = (int)Math.sqrt(limit);
+  for (int i = 2; i <= sqrtLimit; i++) {
+      if (isPrime[i])
+        for (int j = i*i; j < limit; j += i)
+          isPrime[j] = false;
+  }
+
+  return isPrime;
+  
 }
 ```
 
