@@ -1,4 +1,12 @@
-**Standard Input (stdin)**
+**Input/Ouput Optimizations:**
+
+Place `ios_base::sync_with_stdio(false);` in the beginning of the program, before any input/output. This command turns off iostreams and stdio synchronization (description). It is on by default, which means that calls to iostreams and stdio functions can be freely interleaved even for the same underlying stream. When synchronization is turned off, mixing calls is no longer allowed, but iostreams can potentially operate faster.
+
+Untie cin from cout using `cin.tie(NULL);`. By default, cin is tied to cout, which means that cout is flushed before any operation on cin (description). Turning this feature off allows iostreams, again, to operate faster.
+
+Frequent use of `endl` also negatively affects iostreams performance, because `endl` not only outputs a newline character, but also flushes the stream's buffer (decription). You can simply output `\n` instead of `endl`.
+
+**Standard Input (stdin):**
 
 ## getline
 ``` c++
