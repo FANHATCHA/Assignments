@@ -100,10 +100,6 @@ static void floydWarshall(Double[][] dist, int n) {
 }
 ````
 
-**Bridge finder:**
-
-Get alg from algo.is
-
 **Eularian Path/Circuit:**
 
 Difference:  An Euler path starts and ends at different vertices. An Euler circuit starts and ends at the same vertex.
@@ -146,7 +142,51 @@ Note that obtained circuit will be in reverse order - from end vertex to start v
 
 **Prim's algorithm:**
 
-Minimum spanning tree
+-Finds the minimum spanning tree of an undirected graph. Can be modified to find the minimum spanning forest.
+
+-O(n^2) using adjacency matrix, however the naive implementation is O(n^3).
+
+``` java
+static long prims(int[][] dist) {
+
+	long total = 0;
+	boolean[] isConnected = new boolean[n];
+	isConnected[0] = true;
+
+	// Initialize the minimum distances from the starting node
+	int[] minDist = new int[n];
+	for (int i = 1; i < n; i++)
+		minDist[i] = dist[0][i];
+	
+	// Greedily add shortest edge from connected part to disconnect part each time
+	for (int nConnected = 1; nConnected < n; nConnected++) {
+
+		// Find smallest distance
+		int smallest = Integer.MAX_VALUE;
+		int index = -1;
+		for (int i = 0; i < n; i++) {
+			if (!isConnected[i] && minDist[i] < smallest) {
+				smallest = minDist[i];
+				index = i;
+			}
+		}
+
+		// Connect to selected node
+		isConnected[index] = true;
+		total += smallest;
+
+		// Update minimum distances
+		for (int i = 0; i < n; i++)
+			if (!isConnected[i])
+				minDist[i] = Math.min(minDist[i], dist[index][i]);
+
+	}
+
+	return total;
+
+}
+```
+
 
 **Ford-Fulkerson:**
 
