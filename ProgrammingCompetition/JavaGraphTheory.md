@@ -10,7 +10,7 @@
 
 ``` java
 // Using adjacency matrix
-// UNTESTED
+// PARTIALLY TESTED
 static int dijkstra(Integer[][] weights, int n, int start, int end) {
 
     int[] dist = new int[n];
@@ -147,6 +147,7 @@ Note that obtained circuit will be in reverse order - from end vertex to start v
 -O(n^2) using adjacency matrix, however the naive implementation is O(n^3).
 
 ``` java
+// PARTIALLY TESTED
 static long prims(int[][] dist) {
 
 	long total = 0;
