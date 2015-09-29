@@ -28,3 +28,10 @@ Formally also known as the central polygonal numbers, it describes the maximum n
 ![Hexagonal Series Formula](/ProgrammingCompetition/Images/HexagonalNumberSeries.png)
 
 ![Hexagonal Series Visualization](/ProgrammingCompetition/Images/HexagonalNumberSeriesVisualization.png)
+
+* Subfactorial denoted !n represents a lot of common patterns, notably the number of ways elements can be
+* arranged such that each element is not found in it's starting position.
+
+``` 0 1 2 9 44 265 1854 14833 ... ```
+
+![Subfactorial formula](/ProgrammingCompetition/Images/subfactorial.png)
