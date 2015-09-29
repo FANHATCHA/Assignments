@@ -1,3 +1,7 @@
+**Find Center of Circle given three points**
+
+// Fill in
+
 **Inradius**
 
 ![Inradius](/ProgrammingCompetition/Images/Inradius.png)
