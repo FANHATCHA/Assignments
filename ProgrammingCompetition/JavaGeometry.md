@@ -1,6 +1,10 @@
 **Inradius**
 
+![Inradius](/ProgrammingCompetition/Images/inradius.png)
+
 **Incenter**
+
+![Incenter](/ProgrammingCompetition/Images/incenter.png)
 
 
 **NOTE:** Java's Math class has methods for toRadians(double degrees) and toDegrees(double radians). It also has a method called hypot(double x, double y), which returns sqrt(x^2 +y^2).
