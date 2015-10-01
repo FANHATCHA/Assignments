@@ -1,4 +1,15 @@
-**Input/Ouput Optimizations:**
+### Compiling 
+``` shell
+# Standard compile:
+Make file_name
+
+# Compile with c++11 and warnings on:
+g++ -Wall -g -std=c++11 file.cpp -o executable_name
+
+# If the above gives you trouble try the following:
+g++ -std=c++0x your_file.cpp -o your_program
+```
+### Input/Ouput Optimizations:
 
 Place `ios_base::sync_with_stdio(false);` in the beginning of the program, before any input/output. This command turns off iostreams and stdio synchronization (description). It is on by default, which means that calls to iostreams and stdio functions can be freely interleaved even for the same underlying stream. When synchronization is turned off, mixing calls is no longer allowed, but iostreams can potentially operate faster.
 
@@ -8,7 +19,7 @@ Frequent use of `endl` also negatively affects iostreams performance, because `e
 
 **Standard Input (stdin):**
 
-## getline
+### getline
 ``` c++
 string line;
 while ( getline(cin, line) ) {
@@ -16,7 +27,7 @@ while ( getline(cin, line) ) {
 }
 ```
 
-##cin
+###cin
 ``` c++
 int n;
 string s, s1;
@@ -29,7 +40,7 @@ while (n-- > 0) {
 
 ```
 
-##\<climits> (integer min/max values)
+###\<climits> (integer min/max values)
 ``` c++
 - CHAR_MIN	Minimum value for an object of type char	either SCHAR_MIN or 0
 - CHAR_MAX	Maximum value for an object of type char	either SCHAR_MAX or UCHAR_MAX
@@ -47,7 +58,7 @@ while (n-- > 0) {
 - ULLONG_MAX	Maximum value for an object of type unsigned long long int	18446744073709551615 (264-1) or greater*
 ```
 
-##\<cfloat> (floating point number min/max values)
+###\<cfloat> (floating point number min/max values)
 ``` c++
 - FLT_MAX 
 - DBL_MAX 
