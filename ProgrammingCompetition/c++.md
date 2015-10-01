@@ -1,7 +1,7 @@
 ### Compiling 
 ``` shell
 # Standard compile:
-Make file_name
+make file_name
 
 # Compile with c++11 and warnings on:
 g++ -Wall -g -std=c++11 file.cpp -o executable_name
