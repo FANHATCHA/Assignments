@@ -40,9 +40,9 @@ Sample Usage:
 ```java
 Integer[] c = new Integer[] {2, -5, 3, 3};
 System.out.println(Arrays.toString(c));
-while ((c = nextPermutation(c)) != null)
+do {
   System.out.println(Arrays.toString(c));
-  
+} while ((c = nextPermutation(c)) != null);
 ```
 
 Output: 
