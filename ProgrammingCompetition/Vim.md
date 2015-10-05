@@ -16,6 +16,8 @@ command Wq wq
 
 **Control Mode Commands:**
 
+Repeat insertion n times: `n` `i` `TYPE_WHILE_IN_INSERT_MODE` `ESCAPE`
+
 Repeat last command: `.`
 
 Indent current line: `>>`
