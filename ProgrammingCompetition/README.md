@@ -4,5 +4,6 @@
 - [ ] Given a directed graph, find all sets of strongly connected components
 - [ ] Given a directed, acyclic graph, do a topological sort
 - [ ] Given three points find the center of a circle (two points does not give a unique center)
+- [ ] Given a weighted complete graph, find the minimum perfect matching
 - [x] Get equation for Incenter
 - [x] Get equation for Inradius
