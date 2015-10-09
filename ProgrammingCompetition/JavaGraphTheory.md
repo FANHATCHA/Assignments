@@ -336,9 +336,10 @@ static boolean[] fordFulkerson(Node source, Node target, int n) {
 
 **Find Strongly Connected Components:**
 
-The complexity of this algorithm (which we came up with) is O(m*(n+m)) to remove the bridges. After the bridges have been removed, we are left with connected components (indicating those which were originally strongly connected), and we can simply find the components in O(n+m).
+The complexity of this algorithm (which we came up with) is O(m*(n+m)) to remove the "bridges". After the "bridges" have been removed, we are left with connected components (indicating those which were originally strongly connected), and we can simply find the components in O(n+m).
 
 NOTE: It may be possible to improve our algorithm by removing all bridges at once, instead of one at a time.
+NOTE: Our use of the word "bridge" is slightly different than the normal definition. We're using it to refer to any edge that when followed, you would never be able to return to the starting spot (so we are dealing with directed graphs).
 
 ``` java
 // Remove all bridges
