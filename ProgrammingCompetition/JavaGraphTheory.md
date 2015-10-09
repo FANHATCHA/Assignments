@@ -332,3 +332,68 @@ static boolean[] fordFulkerson(Node source, Node target, int n) {
 
 }
 ```
+
+
+**Find Strongly Connected Components:**
+
+The complexity of this algorithm (which we came up with) is O(m*(n+m)) to remove the bridges. After the bridges have been removed, we are left with connected components (indicating those which were originally strongly connected), and we can simply find the components in O(n+m).
+
+NOTE: It may be possible to improve our algorithm by removing all bridges at once, instead of one at a time.
+
+``` java
+// Remove all bridges
+boolean removed = true;
+while (removed) {
+	removed = false;
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+			if (arr[i][j] && isBridge(arr, j, i, new boolean[n])) {
+				arr[i][j] = false;
+				removed = true;
+			}
+}
+
+// Find largest connected component
+int max = 0;
+boolean[] visited = new boolean[n];
+for (int i = 0; i < n; i++) {
+	if (!visited[i])  {
+		int size = findSize(arr, i, visited);
+		max = Math.max(max, size);
+	}
+}
+
+static int findSize(boolean[][] arr, int cur, boolean[] visited) {
+
+	int total = 0;
+
+	visited[cur] = true;
+
+	for (int i = 0; i < arr.length; i++) {
+		if (!visited[i] && arr[cur][i]) {
+			total += findSize(arr, i, visited);
+		}
+	}
+	return total + 1;
+
+}
+
+static boolean isBridge(boolean[][] arr, int cur, int target, boolean[] visited) {
+	
+	if (cur == target)
+		return false;
+
+	visited[cur] = true;
+
+	for (int i = 0; i < arr.length; i++) {
+		if (!visited[i] && arr[cur][i]) {
+			boolean result = isBridge(arr, i, target, visited);
+			if (!result)
+				return false;
+		}
+	}
+
+	return true;
+
+}
+```
