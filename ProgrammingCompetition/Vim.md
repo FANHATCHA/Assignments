@@ -42,3 +42,4 @@ Return to console, putting vim in background: `ctrl`+`z` (NOTE: Running `fg` in 
 
 Duplicate line: `yy` to copy and `p` to paste. In short: `yyp`, I remember this because it looks like Yuppie!
 
+Print current file (incuding syntax highlighting) : `:hardcopy`
