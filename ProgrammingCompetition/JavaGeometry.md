@@ -1,5 +1,5 @@
 
-** Find Center of Circle given two points and a radius**
+**Find Center of Circle given two points and a radius**
 
 ``` java
 // Note: Make sure you specify either both cx and cy to have plus be true or both be false! Since 
