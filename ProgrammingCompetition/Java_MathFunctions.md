@@ -5,7 +5,6 @@ static boolean isPrime(final long n) {
      if (n < 2) return false;
      if (n == 2 || n == 3) return true;
      if (n % 2 == 0 || n % 3 == 0) return false;
-
      int limit = (int) Math.sqrt(n);
      for (int i = 5; i <= limit; i += 6)
      	if (n % i == 0 || n % (i + 2) == 0)
@@ -109,9 +108,7 @@ static ArrayList<Integer> factors(int n) {
 **Prime Factorization:**
 ```java
 static int pollard_rho(int n) {
-
     if (n % 2 == 0) return 2;
-
     // Get a number between [2, 10^6] inclusive
     int x = 2 + (int) ( ((1000000-2)+1) * Math.random());
     int c = 2 + (int) ( ((1000000-2)+1) * Math.random());
@@ -124,7 +121,6 @@ static int pollard_rho(int n) {
         d = gcf(Math.abs(x - y), n);
         if (d == n) break;
     }
-
     return d;
 }
 
@@ -160,7 +156,6 @@ static ArrayList<Integer> primeFactorization(int n) {
 **Euler's phi function (aka Euler's totient function):**
 ``` java
 public static HashSet<Integer> getDistinctPrimeFactors( int n ) {
-	
 	HashSet <Integer> set = new HashSet<Integer>();
 	for(int f = 2; f < Math.pow(n, 0.5) + 1; f++ ) {
 		if (n % f == 0) {
@@ -190,10 +185,8 @@ public static int phi(int n) {
 ```java
 // Note: Switch to BigInteger if you want to generate more than 67 rows
 static long[][] generatePascalTriangle(int nRows) {
-
     long[][] arr = new long[nRows][nRows];
     arr[0][0] = 1;
-
     for (int y = 1; y < nRows; y++) {
     	arr[y][0] = arr[y - 1][0];
     	for (int x = 1; x <= y; x++)
