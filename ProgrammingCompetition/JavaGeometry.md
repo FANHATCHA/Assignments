@@ -13,7 +13,7 @@ static double cx(double a, double b, double c, double d, double r, boolean plus)
   return x3 - Math.sqrt(r*r-(q/2)*(q/2))*(b-d)/q;
 }
 
-static double cy( double a, double b, double c, double d, double r, boolean plus) {
+static double cy(double a, double b, double c, double d, double r, boolean plus) {
   double q = Math.sqrt( (a-c)*(a-c) + (b-d)*(b-d)  );
   double y3 = (b+d)/2.0;
   if (plus)
