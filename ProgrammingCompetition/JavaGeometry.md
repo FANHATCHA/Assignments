@@ -36,10 +36,6 @@ static Point2D findCenter(double x1, double y1, double x2, double y2, double x3,
 	double ma = (y2 - y1)/(x2 - x1);
 	double mb = (y3 - y2)/(x3 - x2);
 
-	// No circle
-	if (ma == mb)
-		return null;
-
 	double x = ((ma*mb*(y1 - y3)) + (mb*(x1 + x2)) - (ma*(x2 + x3))) / (2.0*(mb - ma));
 
 	double y;
