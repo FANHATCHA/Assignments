@@ -13,23 +13,23 @@ for (int i = 0; i < n; i++)
 
 **Conversions:**
 
-* Character → Integer
+* Character to Integer
 ```java    
 Character.getNumericValue(char c);
 ```
-* Integer → Character 
+* Integer to Character 
 ```java    
 Character c = i + ‘0’
 ```
-* ArrayList → Set
+* ArrayList to Set
 ```java 
 Set<Foo> listName = new HashSet<Foo>(arrayListName);
 ```
-* Set → ArrayList
+* Set to ArrayList
 ```java 
 ArrayList<Integer> arrayListName = new ArrayList<Integer>(mySet);
 ```  
-* Base x → Base 10 where 2 <= x <= 36
+* Base x to Base 10 (where 2 <= x <= 36)
 ```java  
 int base10 = Integer.parseInt(strBaseX, x);
 
