@@ -3,7 +3,7 @@
 **Find Center of Circle given two points and a radius:**
 
 ``` java
-// Note: Make sure you specify either both cx and cy to have plus be true or both be false! Since they give different centers
+// Note: plus=TRUE gives one possible point, plus=FALSE gives the other possible point
 static double cx(double a, double b, double c, double d, double r, boolean plus) {
   double q = Math.sqrt( (a-c)*(a-c) + (b-d)*(b-d)  );
   double x3 = (a+c)/2.0; 
