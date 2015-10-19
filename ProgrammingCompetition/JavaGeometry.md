@@ -1,29 +1,27 @@
 
-**Find Center of Circle given two points and a radius**
+**Find Center of Circle given two points and a radius:**
 
 ``` java
-// Note: Make sure you specify either both cx and cy to have plus be true or both be false! Since 
-// They give different centers
-  static double cx(double a, double b, double c, double d, double r, boolean plus) {
-    double q = Math.sqrt( (a-c)*(a-c) + (b-d)*(b-d)  );
-    double x3 = (a+c)/2.0; 
-    double y3 = (b+d)/2.0;
-    if (plus)
-    	return x3 + Math.sqrt(r*r-(q/2)*(q/2))*(b-d)/q;
-    return x3 - Math.sqrt(r*r-(q/2)*(q/2))*(b-d)/q;
-  }
+// Note: Make sure you specify either both cx and cy to have plus be true or both be false! Since they give different centers
+static double cx(double a, double b, double c, double d, double r, boolean plus) {
+  double q = Math.sqrt( (a-c)*(a-c) + (b-d)*(b-d)  );
+  double x3 = (a+c)/2.0; 
+  double y3 = (b+d)/2.0;
+  if (plus)
+    return x3 + Math.sqrt(r*r-(q/2)*(q/2))*(b-d)/q;
+  return x3 - Math.sqrt(r*r-(q/2)*(q/2))*(b-d)/q;
+}
 
-  static double cy( double a, double b, double c, double d, double r, boolean plus) {
-    double q = Math.sqrt( (a-c)*(a-c) + (b-d)*(b-d)  );
-    double y3 = (b+d)/2.0;
-    if (plus)
-      return y3 + Math.sqrt(r*r-(q/2.0)*(q/2.0))*(c-a)/q;
-	return y3 - Math.sqrt(r*r-(q/2.0)*(q/2.0))*(c-a)/q;
-  }
-
+static double cy( double a, double b, double c, double d, double r, boolean plus) {
+  double q = Math.sqrt( (a-c)*(a-c) + (b-d)*(b-d)  );
+  double y3 = (b+d)/2.0;
+  if (plus)
+    return y3 + Math.sqrt(r*r-(q/2.0)*(q/2.0))*(c-a)/q;
+  return y3 - Math.sqrt(r*r-(q/2.0)*(q/2.0))*(c-a)/q;
+}
 ```
 
-**Find Center of Circle given three points**
+**Find Center of Circle given three points:**
 
 // Fill in
 
