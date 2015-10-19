@@ -110,14 +110,10 @@ PBC = abs(x  * (y2 - y3) + x2 * (y3 - y)  + x3 * (y - y2));
 ```java
 // Points must be ordered (either clockwise or counter-clockwise)
 static double findAreaOfPolygon(Point2D[] pts) {
-
   double area = 0;
-
   for (int i = 1; i + 1 < pts.length; i++)
     area += areaOfTriangulation(pts[0], pts[i], pts[i+1]);
-
   return Math.abs(area);
-
 }
 
 // May return positive or negative value (important for polygon method)
@@ -138,13 +134,11 @@ static double crossProduct(Point2D a, Point2D b) {
 **Convex Hull:**
 
 ``` java
-
 import java.util.*;
 import java.awt.geom.*;
-
 public class ConvexHull {
     
-    static Stack<Point2D> hull;
+    static Stack<Point2D> hull; // Clear this each time
     static Scanner sc = new Scanner(System.in);
 
     static void convexHull(Point2D[] pts) {
@@ -208,7 +202,6 @@ public class ConvexHull {
 
     // put lower Y co-ordinates first, with lower X in the case of ties
     static class PointOrder implements Comparator<Point2D> {
-        
         @Override public int compare(Point2D q1, Point2D q2) {
 
             if (q1.getY() < q2.getY()) return -1;
@@ -220,7 +213,6 @@ public class ConvexHull {
             }
 
             return 1;
-
         }
     }
 
@@ -247,9 +239,7 @@ public class ConvexHull {
 
     // Sample Usage
     public static void main(String[] args) {
-        
         while (true) {
-
             int N = sc.nextInt();
             Point2D[] points = new Point2D.Double[N];
             if (N == 0) break;
@@ -258,9 +248,7 @@ public class ConvexHull {
                 int y = sc.nextInt();
                 points[i] = new Point2D.Double(x, y);
             }
-            
             convexHull(points);
-    
             for (Point2D p : hull)
                 System.out.println( p.getX() + " " + p.getY());
         }
