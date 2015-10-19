@@ -42,11 +42,13 @@ static Point2D findCenter(double x1, double y1, double x2, double y2, double x3,
 }
 ```
 
-**Inradius**
+
+
+**Inradius:**
 
 ![Inradius](/ProgrammingCompetition/Images/Inradius.png)
 
-**Incenter**
+**Incenter:**
 
 ![Incenter](/ProgrammingCompetition/Images/Incenter.png)
 
@@ -57,7 +59,7 @@ static Point2D polarToCartesian(double degrees, double radius) {
   return new Point2D.Double(radius*Math.cos(radians), radius*Math.sin(radians));
 }
 ```
-**Angle from Point A to B**
+**Angle from Point A to B:**
 ```java
 // Find the angle from point A to point B in radians (NOTE: Not entirely tested yet)
 static double findAngleBetweenPoints(Point2D a, Point2D b) {
