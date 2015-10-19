@@ -17,21 +17,7 @@ for (int i = 0; i < n; i++)
 * Integer to Character: `Character c = i + '0;'`
 * ArrayList to Set: `Set<Foo> listName = new HashSet<Foo>(arrayListName);`
 * Set to ArrayList: `ArrayList<Integer> arrayListName = new ArrayList<Integer>(mySet);`
-* Base x to Base 10 (where 2 <= x <= 36):
-```java
-int base10 = Integer.parseInt(strBaseX, x);
-
-// Examples:
-parseInt("+42", 10) returns 42
-parseInt("-0", 10) returns 0
-parseInt("-FF", 16) returns -255
-parseInt("1100110", 2) returns 102
-parseInt("2147483647", 10) returns 2147483647
-parseInt("2147483648", 10) throws a NumberFormatException
-parseInt("99", 8) throws a NumberFormatException
-parseInt("Kona", 10) throws a NumberFormatException
-parseInt("Kona", 27) returns 411787
-```
+* Base x to Base 10 (where 2 <= x <= 36): `int base10 = Integer.parseInt(strBaseX, x);`
 
 **Comparator:**
 ``` java
