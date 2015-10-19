@@ -31,7 +31,7 @@ static int dijkstra(Integer[][] weights, int n, int start, int end) {
 		if (node.index == end)
 			return node.dist;
 
-        // Check neighbours
+        	// Check neighbours
 		for (int i = 0; i < n; i++) {
 			if (weights[node.index][i] != null) {
 				int newDist = dist[node.index] + weights[node.index][i];
