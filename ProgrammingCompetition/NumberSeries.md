@@ -6,14 +6,14 @@
 * Catalan:
 ```1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862...```
 
-![Catalan Series Formula](/ProgrammingCompetition/Images/CatalanSeries.png)
+<img src="/ProgrammingCompetition/Images/CatalanSeries.png" alt="Catalan Series Formula" width="50%">
      
 * Lazy Caterer:
 ```1, 2, 4, 7, 11, 16, 22, 29, 37, 46, 56, 67, 79, 92, 106, 121, 137, 154, 172, 191, 211...```
 
 Formally also known as the central polygonal numbers, it describes the maximum number of pieces (or bounded/unbounded regions) of a circle (a pancake or pizza is usually used to describe the situation) that can be made with a given number of straight cuts. For example, three cuts across a pancake will produce six pieces if the cuts all meet at a common point, but seven if they do not.
 
-![Lazy Caterer Series Formula](/ProgrammingCompetition/Images/LazyCatererSeries.png)
+<img src="/ProgrammingCompetition/Images/LazyCatererSeries.png" alt="Lazy Caterer Series Formula" width="50%">
 
 * Trianglar:
 ```0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55...```
