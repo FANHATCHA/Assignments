@@ -1,7 +1,6 @@
  **Number Series:**
  
 * Fibonacci: `1,1,2,3,5,8,13,21,34,55,89... `
- 
 * Catalan: `1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862...`
 
 <img src="/ProgrammingCompetition/Images/CatalanSeries.png" alt="Catalan Series Formula" width="40%">
@@ -29,3 +28,7 @@ The maximum number of pieces of a circle that can be made with a given number of
 Denoted !n, this represents a lot of common patterns, notably the number of ways elements can be arranged such that each element is not found in it's starting position.
 
 <img src="/ProgrammingCompetition/Images/subfactorial.png" width="20%">
+
+* Catalan: `1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796...`
+
+This series has many appearances in combinatorics. Starting with C_0 = 1, the we can calculate using the recurrence relation `C_(n+1) = ((2(2n+1))/(n+2))*C_n`.
