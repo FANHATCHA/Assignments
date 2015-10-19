@@ -7,7 +7,6 @@ set tabstop=2
 set nu
 set autoindent
 syntax on
- 
 command W w
 command Q q
 command WQ wq
