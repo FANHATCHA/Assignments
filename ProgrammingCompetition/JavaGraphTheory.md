@@ -143,7 +143,7 @@ Note that obtained circuit will be in reverse order - from end vertex to start v
 
 -Finds the minimum spanning tree of an undirected graph. Can be modified to find the minimum spanning forest.
 
--O(n^2) using adjacency matrix, however the naive implementation is O(n^3).
+-O(n^2) using adjacency matrix, however the naive implementation is O(n^3). NOTE: If we use a priority queue we might be able to get this to O(n*log(m)).
 
 ``` java
 // PARTIALLY TESTED
