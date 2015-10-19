@@ -1,3 +1,7 @@
+**Command line flags:**
+ - Set maximum Java heap size: `-Xmx<size>` (**For example:** `-Xmx1024k`, `-Xmx512m`, `-Xmx8g`)
+ - Set maxmimum Java thread stack size: `-Xss<size>`
+
 **Input:**
  * Fastest known way to read a large number of space-separated integers from a line (was tested with up to 200000 integers on one lines). NOTE: This method of using a BufferedReader is faster than Scanner for other uses too.
 ```java
