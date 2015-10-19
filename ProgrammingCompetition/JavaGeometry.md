@@ -26,12 +26,14 @@ static double cy(double a, double b, double c, double d, double r, boolean plus)
 
 ```java
 static Point2D findCenter(double x1, double y1, double x2, double y2, double x3, double y3) {
-	if (x1 == x2 && x1 == x3) return null; // No circle exists (points are on the same line)
+	if (x1 == x2 && x1 == x3)
+		return null; // No circle exists (points are on the same line)
 	// Hack to avoid division by zero (for a vertical slope)
 	if (x2 == x1 || x3 == x2) return findCenter(x3, y3, x1, y1, x2, y2);
 	double ma = (y2 - y1)/(x2 - x1);
 	double mb = (y3 - y2)/(x3 - x2);
-	if (ma == mb) return null; // No circle exists (points are on the same line)
+	if (ma == mb)
+		return null; // No circle exists (points are on the same line)
 	double x = ((ma*mb*(y1 - y3)) + (mb*(x1 + x2)) - (ma*(x2 + x3))) / (2.0*(mb - ma));
 	double y;
 	if (ma != 0)
@@ -41,8 +43,6 @@ static Point2D findCenter(double x1, double y1, double x2, double y2, double x3,
 	return new Point2D.Double(x, y);
 }
 ```
-
-
 
 **Inradius:**
 
