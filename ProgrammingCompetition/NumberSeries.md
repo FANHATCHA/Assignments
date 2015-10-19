@@ -4,7 +4,7 @@
  
 * Catalan: `1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862...`
 
-<img src="/ProgrammingCompetition/Images/CatalanSeries.png" alt="Catalan Series Formula" width="25%">
+<img src="/ProgrammingCompetition/Images/CatalanSeries.png" alt="Catalan Series Formula" width="40%">
      
 * Lazy Caterer: `1, 2, 4, 7, 11, 16, 22, 29, 37, 46, 56, 67, 79, 92, 106, 121, 137...`
 
