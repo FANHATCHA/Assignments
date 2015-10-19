@@ -5,7 +5,7 @@
 ``` java
 // Note: plus=TRUE gives one possible point, plus=FALSE gives the other possible point
 static double cx(double a, double b, double c, double d, double r, boolean plus) {
-  double q = Math.sqrt( (a-c)*(a-c) + (b-d)*(b-d)  );
+  double q = Math.sqrt((a-c)*(a-c) + (b-d)*(b-d));
   double x3 = (a+c)/2.0; 
   double y3 = (b+d)/2.0;
   if (plus)
@@ -14,7 +14,7 @@ static double cx(double a, double b, double c, double d, double r, boolean plus)
 }
 
 static double cy(double a, double b, double c, double d, double r, boolean plus) {
-  double q = Math.sqrt( (a-c)*(a-c) + (b-d)*(b-d)  );
+  double q = Math.sqrt((a-c)*(a-c) + (b-d)*(b-d));
   double y3 = (b+d)/2.0;
   if (plus)
     return y3 + Math.sqrt(r*r-(q/2.0)*(q/2.0))*(c-a)/q;
@@ -26,17 +26,12 @@ static double cy(double a, double b, double c, double d, double r, boolean plus)
 
 ```java
 static Point2D findCenter(double x1, double y1, double x2, double y2, double x3, double y3) {
-	// No circle exists (points are on the same line)
-	if (x1 == x2 && x1 == x3)
-		return null;
+	if (x1 == x2 && x1 == x3) return null; // No circle exists (points are on the same line)
 	// Hack to avoid division by zero (for a vertical slope)
-	if (x2 == x1 || x3 == x2)
-		return findCenter(x3, y3, x1, y1, x2, y2);
+	if (x2 == x1 || x3 == x2) return findCenter(x3, y3, x1, y1, x2, y2);
 	double ma = (y2 - y1)/(x2 - x1);
 	double mb = (y3 - y2)/(x3 - x2);
-	// No circle exists (points are on the same line)
-	if (ma == mb)
-		return null;
+	if (ma == mb) return null; // No circle exists (points are on the same line)
 	double x = ((ma*mb*(y1 - y3)) + (mb*(x1 + x2)) - (ma*(x2 + x3))) / (2.0*(mb - ma));
 	double y;
 	if (ma != 0)
@@ -86,9 +81,12 @@ static boolean containsPoint(Point2D a, Point2D b, Point2D c,
                              double area, double x, double y) {
   double ABC = Math.abs (a.getX()*(b.getY()-c.getY())
                + b.getX()*(c.getY()-a.getY()) + c.getX()*(a.getY()-b.getY()));
-  double ABP = Math.abs (a.getX()*(b.getY()-y) + b.getX()*(y-a.getY()) + x*(a.getY()-b.getY()));
-  double APC = Math.abs (a.getX()*(y-c.getY()) + x*(c.getY()-a.getY()) + c.getX()*(a.getY()-y));
-  double PBC = Math.abs (x*(b.getY()-c.getY()) + b.getX()*(c.getY()-y) + c.getX()*(y-b.getY()));
+  double ABP = Math.abs (a.getX()*(b.getY()-y)
+               + b.getX()*(y-a.getY()) + x*(a.getY()-b.getY()));
+  double APC = Math.abs (a.getX()*(y-c.getY())
+               + x*(c.getY()-a.getY()) + c.getX()*(a.getY()-y));
+  double PBC = Math.abs (x*(b.getY()-c.getY())
+               + b.getX()*(c.getY()-y) + c.getX()*(y-b.getY()));
   return ABP + APC + PBC == ABC;
 }
 ```
@@ -125,10 +123,8 @@ static double crossProduct(Point2D a, Point2D b) {
 import java.util.*;
 import java.awt.geom.*;
 public class ConvexHull {
-    
     static Stack<Point2D> hull; // Clear this each time
     static Scanner sc = new Scanner(System.in);
-
     static void convexHull(Point2D[] pts) {
         hull = new Stack<Point2D>();
         int N = pts.length;
@@ -188,7 +184,8 @@ public class ConvexHull {
     }
 
     static int ccw(Point2D a, Point2D b, Point2D c) {
-        double area = (b.getX() - a.getX())*(c.getY() - a.getY()) - (b.getY() - a.getY())*(c.getX() - a.getX());
+        double area = (b.getX() - a.getX())*(c.getY()
+                    - a.getY()) - (b.getY() - a.getY())*(c.getX() - a.getX());
         return (int) Math.signum(area);
     }
 
@@ -198,8 +195,7 @@ public class ConvexHull {
         if (N <= 2) return true;
         Point2D[] points = new Point2D.Double[N];
         int n = 0;
-        for (Point2D p : hull) 
-            points[n++] = p;
+        for (Point2D p : hull) points[n++] = p;
         for (int i = 0; i < N; i++) 
             if (ccw(points[i], points[(i+1) % N], points[(i+2) % N]) <= 0) 
                 return false;
@@ -208,19 +204,13 @@ public class ConvexHull {
 
     // Sample Usage
     public static void main(String[] args) {
-        while (true) {
-            int N = sc.nextInt();
-            Point2D[] points = new Point2D.Double[N];
-            if (N == 0) break;
-            for (int i = 0; i < N; i++) {
-                int x = sc.nextInt();
-                int y = sc.nextInt();
-                points[i] = new Point2D.Double(x, y);
-            }
-            convexHull(points);
-            for (Point2D p : hull)
-                System.out.println( p.getX() + " " + p.getY());
-        }
+        int N = sc.nextInt();
+        Point2D[] points = new Point2D.Double[N];
+        for (int i = 0; i < N; i++)
+        	points[i] = new Point2D.Double(sc.nextInt(), sc.nextInt());
+        convexHull(points);
+        for (Point2D p : hull)
+        	System.out.println( p.getX() + " " + p.getY());
     }
 }
 ```
