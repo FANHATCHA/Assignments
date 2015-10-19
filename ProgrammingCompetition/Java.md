@@ -17,7 +17,9 @@ for (int i = 0; i < n; i++)
 * Integer to Character: `Character c = i + '0;'`
 * ArrayList to Set: `Set<Foo> listName = new HashSet<Foo>(arrayListName);`
 * Set to ArrayList: `ArrayList<Integer> arrayListName = new ArrayList<Integer>(mySet);`
-* Base x to Base 10 (where 2 <= x <= 36): `int base10 = Integer.parseInt(strBaseX, x);`
+* Base x to Base 10 (where 2 <= x <= 36):
+```java
+int base10 = Integer.parseInt(strBaseX, x);
 
 // Examples:
 parseInt("+42", 10) returns 42
@@ -32,7 +34,6 @@ parseInt("Kona", 27) returns 411787
 ```
 
 **Comparator:**
-
 ``` java
 // Example: Sort YourObjects by ID
 class YourComparator implements Comparator<YourObject> {
