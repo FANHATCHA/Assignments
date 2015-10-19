@@ -1,11 +1,12 @@
  **Number Series:**
  
 * Fibonacci: `1,1,2,3,5,8,13,21,34,55,89... `
+
 * Catalan: `1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796...`
 
 This series has many appearances in combinatorics. Starting with C_0 = 1, we can calculate using the recurrence relation `C_(n+1) = ((2(2n+1))/(n+2))*C_n`, or the following formulas can be used:
 
-<img src="/ProgrammingCompetition/Images/CatalanSeries.png" alt="Catalan Series Formula" width="40%">
+<img src="/ProgrammingCompetition/Images/CatalanSeries.png" alt="Catalan Series Formula" width="50%">
      
 * Lazy Caterer: `1, 2, 4, 7, 11, 16, 22, 29, 37, 46, 56, 67, 79, 92, 106, 121, 137...`
 
