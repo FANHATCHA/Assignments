@@ -61,7 +61,8 @@ static Point2D polarToCartesian(double degrees, double radius) {
 ```
 **Angle from Point A to B:**
 ```java
-// Find the angle from point A to point B in radians (NOTE: Not entirely tested yet)
+// Find the angle from point A to point B in radians
+// NOTE: Not entirely tested yet
 static double findAngleBetweenPoints(Point2D a, Point2D b) {
   return Math.atan2(b.getY() - a.getY(), b.getX() - a.getX());
 }
