@@ -15,14 +15,17 @@ The maximum number of pieces of a circle that can be made with a given number of
 * Trianglar: `0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55...`
 
 <img src="/ProgrammingCompetition/Images/TriangleNumberSeries.png" alt="Triangular Series Formula" width="45%">
+
 <img src="/ProgrammingCompetition/Images/TriangleNumberSeriesVisualization.png" alt="Triangular Series Visualization" width="25%">
 
 * Hexagonal: `1, 6, 15, 28, 45, 66, 91, 120, 153, 190, 231...`
 
-<img src="/ProgrammingCompetition/Images/HexagonalNumberSeries.png" width="45%"><img src="/ProgrammingCompetition/Images/HexagonalNumberSeriesVisualization.png" width="25%">
+<img src="/ProgrammingCompetition/Images/HexagonalNumberSeries.png" width="45%">
+
+<img src="/ProgrammingCompetition/Images/HexagonalNumberSeriesVisualization.png" width="25%">
 
 * Subfactorial: `0 1 2 9 44 265 1854 14833...`
 
 Denoted !n, this represents a lot of common patterns, notably the number of ways elements can be arranged such that each element is not found in it's starting position.
 
-<img src="/ProgrammingCompetition/Images/subfactorial.png" width="15%">
+<img src="/ProgrammingCompetition/Images/subfactorial.png" width="20%">
