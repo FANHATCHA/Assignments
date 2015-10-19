@@ -27,14 +27,20 @@ static double cy( double a, double b, double c, double d, double r, boolean plus
 ```java
 static Point2D findCenter(double x1, double y1, double x2, double y2, double x3, double y3) {
 
+	// No circle exists (points are on the same line)
+	if (x1 == x2 && x1 == x3)
+		return null;
+
 	// Hack to avoid division by zero (for a vertical slope)
-	if (x2 - x1 == 0 || x3 - x2 == 0) {
-		Point2D pt = findCenter(y1, x1, y2, x2, y3, x3);
-		return new Point2D.Double(pt.getY(), pt.getX());
-	}
+	if (x2 == x1 || x3 == x2)
+		return findCenter(x3, y3, x1, y1, x2, y2);
 
 	double ma = (y2 - y1)/(x2 - x1);
 	double mb = (y3 - y2)/(x3 - x2);
+
+	// No circle exists (points are on the same line)
+	if (ma == mb)
+		return null;
 
 	double x = ((ma*mb*(y1 - y3)) + (mb*(x1 + x2)) - (ma*(x2 + x3))) / (2.0*(mb - ma));
 
@@ -45,7 +51,6 @@ static Point2D findCenter(double x1, double y1, double x2, double y2, double x3,
 		y = ((y2 + y3)/2.0) - ((x - (x2 + x3)/2.0)/mb);
 
 	return new Point2D.Double(x, y);
-
 }
 ```
 
