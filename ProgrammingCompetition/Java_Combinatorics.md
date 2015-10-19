@@ -11,7 +11,8 @@ private static <T extends Comparable<? super T>> T[] nextPermutation(final T[] c
     --toSwap;
   swap(c, first++, toSwap);
   toSwap = c.length - 1;
-  while (first < toSwap) swap(c, first++, toSwap--);
+  while (first < toSwap)
+  	swap(c, first++, toSwap--);
   return c;
 }
 
