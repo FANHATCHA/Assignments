@@ -19,7 +19,7 @@ Character.getNumericValue(char c);
 ```
 * Integer to Character 
 ```java    
-Character c = i + ‘0’
+Character c = i + '0'
 ```
 * ArrayList to Set
 ```java 
@@ -66,5 +66,3 @@ Usage:
 ``` java
 Collections.sort( my_planets_arraylist, new PlanetIDOrder() );
 ```
-
-
