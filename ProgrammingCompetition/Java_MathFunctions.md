@@ -125,14 +125,11 @@ static int pollard_rho(int n) {
 }
 
 static ArrayList<Integer> primeFactorization(int n) {
-
     ArrayList<Integer> factors = new ArrayList<Integer> ();
     if (n <= 0) throw new IllegalArgumentException();
     else if (n == 1) return factors;
-
     PriorityQueue <Integer> divisorQueue = new PriorityQueue<Integer>();
     divisorQueue.add(n);
-
     while (!divisorQueue.isEmpty()) {
         int divisor = divisorQueue.remove();
         if (isPrime(divisor)) {
@@ -147,9 +144,7 @@ static ArrayList<Integer> primeFactorization(int n) {
             divisorQueue.add(divisor/next_divisor);
         }
     }
-
     return factors;
-
 }
 ```
 
