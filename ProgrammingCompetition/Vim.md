@@ -39,6 +39,6 @@ Peek at the console: `fn`+`shift`+`→` (NOTE: This also works in insert mode, p
 
 Return to console, putting vim in background: `ctrl`+`z` (NOTE: Running `fg` in the terminal returns to vim)
 
-Duplicate line: `yy` to copy and `p` to paste. In short: `yyp`, I remember this because it looks like Yuppie!
+Duplicate line: `yy` to copy and `p` to paste.
 
-Print current file (incuding syntax highlighting) : `:hardcopy`
+Print current file (incuding syntax highlighting): `:hardcopy`
