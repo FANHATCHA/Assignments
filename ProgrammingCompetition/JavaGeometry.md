@@ -1,3 +1,4 @@
+**NOTE:** Java's Math class has methods for toRadians(double degrees) and toDegrees(double radians). It also has a method called hypot(double x, double y), which returns sqrt(x^2 +y^2).
 
 **Find Center of Circle given two points and a radius:**
 
@@ -23,7 +24,34 @@ static double cy( double a, double b, double c, double d, double r, boolean plus
 
 **Find Center of Circle given three points:**
 
-// Fill in
+```java
+static Point2D findCenter(double x1, double y1, double x2, double y2, double x3, double y3) {
+
+	// Hack to avoid division by zero (for a vertical slope)
+	if (x2 - x1 == 0 || x3 - x2 == 0) {
+		Point2D pt = findCenter(y1, x1, y2, x2, y3, x3);
+		return new Point2D.Double(pt.getY(), pt.getX());
+	}
+
+	double ma = (y2 - y1)/(x2 - x1);
+	double mb = (y3 - y2)/(x3 - x2);
+
+	// No circle
+	if (ma == mb)
+		return null;
+
+	double x = ((ma*mb*(y1 - y3)) + (mb*(x1 + x2)) - (ma*(x2 + x3))) / (2.0*(mb - ma));
+
+	double y;
+	if (ma != 0)
+		y = ((y1 + y2)/2.0) - ((x - (x1 + x2)/2.0)/ma);
+	else
+		y = ((y2 + y3)/2.0) - ((x - (x2 + x3)/2.0)/mb);
+
+	return new Point2D.Double(x, y);
+
+}
+```
 
 **Inradius**
 
@@ -32,9 +60,6 @@ static double cy( double a, double b, double c, double d, double r, boolean plus
 **Incenter**
 
 ![Incenter](/ProgrammingCompetition/Images/Incenter.png)
-
-
-**NOTE:** Java's Math class has methods for toRadians(double degrees) and toDegrees(double radians). It also has a method called hypot(double x, double y), which returns sqrt(x^2 +y^2).
 
 **Convert Polar Co-ordinate to Cartesian Co-ordinate:**
 ```java
