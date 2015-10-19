@@ -52,8 +52,7 @@ static int dijkstra(Integer[][] weights, int n, int start, int end) {
 
 class Node implements Comparable<Node> {
 
-    int index;
-    int dist;
+    int index, dist;
 
     public Node(int index, int dist) {
         this.index = index;
@@ -63,7 +62,6 @@ class Node implements Comparable<Node> {
     @Override public int compareTo(Node other) {
         return ((Integer) dist).compareTo(other.dist);
     } 
-
 }
 
 ```
@@ -88,14 +86,12 @@ class Node implements Comparable<Node> {
 
 ``` java
 static void floydWarshall(Double[][] dist, int n) {
-
 	for (int k = 0; k < n; k++)
 		for (int i = 0; i < n; i++)
 			for (int j = 0; j < n; j++)
 				if (dist[i][k] != null && dist[k][j] != null)
 					if (dist[i][j] == null || dist[i][k] + dist[k][j] < dist[i][j])
 						dist[i][j] = dist[i][k] + dist[k][j];
-
 }
 ````
 
@@ -197,32 +193,30 @@ static long prims(int[][] dist) {
 -Can also be used to find the minimum cut by modifying a few lines (see below).
 
 ``` java
-  // NOTE: This only passed 12/49 tests on Kattis (Maximum Flow problem), but failed due to a time-out
-  static long fordFulkerson(Node source, Node target, int nNodes) {
+// NOTE: This only passed 12/49 tests on Kattis (Maximum Flow problem), but failed due to a time-out
+static long fordFulkerson(Node source, Node target, int nNodes) {
 
-    long maxFlow = 0;
+  long maxFlow = 0;
+  boolean pathWasFound = true;
+  while (pathWasFound) {
 
-    boolean pathWasFound = true;
-    while (pathWasFound) {
+    pathWasFound = false;
 
-      pathWasFound = false;
+    // Find bottleneck from a path found using depth-first search from source to target
+    Long bottleneck = getBottleNeck(source, target, new boolean[nNodes], Long.MAX_VALUE);
 
-      // Find bottleneck from a path found using depth-first search from source to target
-      Long bottleneck = getBottleNeck(source, target, new boolean[nNodes], Long.MAX_VALUE);
-
-      // Must larger than 0 or loop will not terminate
-      if (bottleneck != null && bottleneck > 0) {
-        pathWasFound = true;
-        maxFlow += bottleneck;
-      }
-
+    // Must larger than 0 or loop will not terminate
+    if (bottleneck != null && bottleneck > 0) {
+      pathWasFound = true;
+      maxFlow += bottleneck;
     }
-
-    return maxFlow;
 
   }
 
-  static Long getBottleNeck(Node current, Node target, boolean[] visited, long currentBottleNeck) {
+  return maxFlow;
+}
+
+static Long getBottleNeck(Node current, Node target, boolean[] visited, long currentBottleNeck) {
 
     // Already visited
     if (visited[current.index])
@@ -237,27 +231,19 @@ static long prims(int[][] dist) {
     for (Edge edge : current.adj)
       if (edge.capacityLeft > 0) {
 
-        Long bottleneck = getBottleNeck(
-        	edge.target,
-        	target,
-        	visited,
-        	Math.min(currentBottleNeck, edge.capacityLeft)
-        );
+        Long bottleneck = getBottleNeck(edge.target, target, visited, Math.min(currentBottleNeck, edge.capacityLeft));
 
         // Found target
         if (bottleneck != null) {
-
           // Adjust capacities
           edge.capacityLeft -= bottleneck;
           edge.opposite.capacityLeft += bottleneck;
-
           return bottleneck;
         }
       }
 
     // Dead end
     return null;
-
 }
 
 class Node {
@@ -281,9 +267,7 @@ class Node {
 
     edge.opposite = reversed;
     reversed.opposite = edge;
-
   }
-
 }
 
 class Edge {
@@ -326,12 +310,9 @@ static boolean[] fordFulkerson(Node source, Node target, int n) {
         pathWasFound = true;
 
     }
-
     return minCut;
-
 }
 ```
-
 
 **Find Strongly Connected Components:**
 
