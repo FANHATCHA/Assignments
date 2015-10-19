@@ -43,13 +43,11 @@ static Point2D findCenter(double x1, double y1, double x2, double y2, double x3,
 		return null;
 
 	double x = ((ma*mb*(y1 - y3)) + (mb*(x1 + x2)) - (ma*(x2 + x3))) / (2.0*(mb - ma));
-
 	double y;
 	if (ma != 0)
 		y = ((y1 + y2)/2.0) - ((x - (x1 + x2)/2.0)/ma);
 	else
 		y = ((y2 + y3)/2.0) - ((x - (x2 + x3)/2.0)/mb);
-
 	return new Point2D.Double(x, y);
 }
 ```
@@ -91,10 +89,10 @@ static double area(Point2D a, Point2D b, Point2D c) {
 **Triangle Contains Point:**
 ```java
 static boolean containsPoint(Point2D a, Point2D b, Point2D c, double area, double x, double y) {
-  double ABC = Math.abs (a.getX() * (b.getY() - c.getY()) + b.getX() * (c.getY() - a.getY()) + c.getX() * (a.getY() - b.getY()));
-  double ABP = Math.abs (a.getX() * (b.getY() - y) + b.getX()  * (y - a.getY()) + x * (a.getY() - b.getY()));
-  double APC = Math.abs (a.getX() * (y - c.getY()) + x   * (c.getY() - a.getY()) + c.getX() * (a.getY() - y));
-  double PBC = Math.abs (x  * (b.getY() - c.getY()) + b.getX() * (c.getY() - y) + c.getX() * (y - b.getY()));
+  double ABC = Math.abs (a.getX()*(b.getY()-c.getY()) + b.getX()*(c.getY()-a.getY()) + c.getX()*(a.getY()-b.getY()));
+  double ABP = Math.abs (a.getX()*(b.getY()-y) + b.getX()*(y-a.getY()) + x*(a.getY()-b.getY()));
+  double APC = Math.abs (a.getX()*(y-c.getY()) + x*(c.getY()-a.getY()) + c.getX()*(a.getY()-y));
+  double PBC = Math.abs (x*(b.getY()-c.getY()) + b.getX()*(c.getY()-y) + c.getX()*(y-b.getY()));
   return ABP + APC + PBC == ABC;
 }
 ```
