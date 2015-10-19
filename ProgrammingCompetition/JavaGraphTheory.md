@@ -2,15 +2,14 @@
 
 -Finds shortest path from a specified node to another specified node using a priority queue (or simply breadth first search if unweighted)
 
--Complexity: O(V log E) using priority queue
+-Complexity: O(V*log(E)) using priority queue
 
 -Only works with non-negative weights. Works on both directed and undirected graphs.
 
--Can work for multiple-source or multiple-destination by modifying original graph (by adding new node and adding edges of weight 0)
+-Can work for multiple-source or multiple-destination by modifying original graph (by adding new node and adding edges of weight 0).
 
 ``` java
 // Using adjacency matrix
-// PARTIALLY TESTED
 static int dijkstra(Integer[][] weights, int n, int start, int end) {
 
     int[] dist = new int[n];
@@ -35,7 +34,7 @@ static int dijkstra(Integer[][] weights, int n, int start, int end) {
         // Check neighbours
 		for (int i = 0; i < n; i++) {
 			if (weights[node.index][i] != null) {
-				double newDist = dist[node.index] + weights[node.index][i];
+				int newDist = dist[node.index] + weights[node.index][i];
 				if (newDist < dist[i]) {
 					dist[i] = newDist;
 					q.offer(new Node(i, newDist));
@@ -47,7 +46,7 @@ static int dijkstra(Integer[][] weights, int n, int start, int end) {
 	}
 
     // Does not connect
-	return -1;
+    return -1;
 
 }
 
