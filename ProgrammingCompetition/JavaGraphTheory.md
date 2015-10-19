@@ -51,19 +51,14 @@ static int dijkstra(Integer[][] weights, int n, int start, int end) {
 }
 
 class Node implements Comparable<Node> {
-
     int index, dist;
-
     public Node(int index, int dist) {
-        this.index = index;
-        this.dist = dist;
+        this.index = index; this.dist = dist;
     }
-
     @Override public int compareTo(Node other) {
         return ((Integer) dist).compareTo(other.dist);
     } 
 }
-
 ```
 
 **Bellman-Ford:**
@@ -183,7 +178,6 @@ static long prims(int[][] dist) {
 }
 ```
 
-
 **Ford-Fulkerson:**
 
 -Solves maximum flow problems.
@@ -193,30 +187,32 @@ static long prims(int[][] dist) {
 -Can also be used to find the minimum cut by modifying a few lines (see below).
 
 ``` java
-// NOTE: This only passed 12/49 tests on Kattis (Maximum Flow problem), but failed due to a time-out
-static long fordFulkerson(Node source, Node target, int nNodes) {
+  // NOTE: This only passed 12/49 tests on Kattis (Maximum Flow problem), but failed due to a time-out
+  static long fordFulkerson(Node source, Node target, int nNodes) {
 
-  long maxFlow = 0;
-  boolean pathWasFound = true;
-  while (pathWasFound) {
+    long maxFlow = 0;
 
-    pathWasFound = false;
+    boolean pathWasFound = true;
+    while (pathWasFound) {
 
-    // Find bottleneck from a path found using depth-first search from source to target
-    Long bottleneck = getBottleNeck(source, target, new boolean[nNodes], Long.MAX_VALUE);
+      pathWasFound = false;
 
-    // Must larger than 0 or loop will not terminate
-    if (bottleneck != null && bottleneck > 0) {
-      pathWasFound = true;
-      maxFlow += bottleneck;
+      // Find bottleneck from a path found using depth-first search from source to target
+      Long bottleneck = getBottleNeck(source, target, new boolean[nNodes], Long.MAX_VALUE);
+
+      // Must larger than 0 or loop will not terminate
+      if (bottleneck != null && bottleneck > 0) {
+        pathWasFound = true;
+        maxFlow += bottleneck;
+      }
+
     }
+
+    return maxFlow;
 
   }
 
-  return maxFlow;
-}
-
-static Long getBottleNeck(Node current, Node target, boolean[] visited, long currentBottleNeck) {
+  static Long getBottleNeck(Node current, Node target, boolean[] visited, long currentBottleNeck) {
 
     // Already visited
     if (visited[current.index])
@@ -235,21 +231,23 @@ static Long getBottleNeck(Node current, Node target, boolean[] visited, long cur
 
         // Found target
         if (bottleneck != null) {
+
           // Adjust capacities
           edge.capacityLeft -= bottleneck;
           edge.opposite.capacityLeft += bottleneck;
+
           return bottleneck;
         }
       }
 
     // Dead end
     return null;
+
 }
 
 class Node {
 
   List<Edge> adj = new ArrayList<Edge>();
-
   int index;
 
   public Node(int index) {
@@ -267,7 +265,9 @@ class Node {
 
     edge.opposite = reversed;
     reversed.opposite = edge;
+
   }
+
 }
 
 class Edge {
@@ -281,9 +281,7 @@ class Edge {
   long capacityLeft;
 
   public Edge(Node initial, Node target, long capacity) {
-    this.initial = initial;
-    this.target = target;
-    this.capacityLeft = capacity;
+    this.initial = initial; this.target = target; this.capacityLeft = capacity;
   }
   
 }
@@ -304,11 +302,10 @@ static boolean[] fordFulkerson(Node source, Node target, int n) {
 
       // Find bottleneck from a path found using depth-first search from source to target
       Long bottleneck = getBottleNeck(source, target, Long.MAX_VALUE, minCut);
-
+      
       // Must larger than 0 or loop will not terminate
       if (bottleneck != null && bottleneck > 0)
         pathWasFound = true;
-
     }
     return minCut;
 }
@@ -337,44 +334,31 @@ while (removed) {
 // Find largest connected component
 int max = 0;
 boolean[] visited = new boolean[n];
-for (int i = 0; i < n; i++) {
+for (int i = 0; i < n; i++)
 	if (!visited[i])  {
 		int size = findSize(arr, i, visited);
 		max = Math.max(max, size);
 	}
-}
 
 static int findSize(boolean[][] arr, int cur, boolean[] visited) {
-
 	int total = 0;
-
 	visited[cur] = true;
-
-	for (int i = 0; i < arr.length; i++) {
-		if (!visited[i] && arr[cur][i]) {
+	for (int i = 0; i < arr.length; i++)
+		if (!visited[i] && arr[cur][i])
 			total += findSize(arr, i, visited);
-		}
-	}
 	return total + 1;
-
 }
 
 static boolean isBridge(boolean[][] arr, int cur, int target, boolean[] visited) {
-	
 	if (cur == target)
 		return false;
-
 	visited[cur] = true;
-
-	for (int i = 0; i < arr.length; i++) {
+	for (int i = 0; i < arr.length; i++)
 		if (!visited[i] && arr[cur][i]) {
 			boolean result = isBridge(arr, i, target, visited);
 			if (!result)
 				return false;
 		}
-	}
-
 	return true;
-
 }
 ```
