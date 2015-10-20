@@ -8,3 +8,4 @@
 - [x] Get equation for Incenter
 - [x] Get equation for Inradius
 - [ ] Find the number of paths from A to B of length n in a graph (NOTE: This can be done efficiently using matrix multiplication).
+- [ ] Bellman-Ford - Complexity: O(V × E), works on negative weights, can be used to detect negative-weight cycles.
