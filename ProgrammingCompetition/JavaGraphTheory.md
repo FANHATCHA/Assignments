@@ -1,9 +1,4 @@
-**Dijkstra:**
-
-* Finds shortest path from a specified node to another specified node using a priority queue (or simply breadth first search if unweighted).
-* Complexity: O(V*log(E)) using priority queue.
-* Only works with non-negative weights. Works on both directed and undirected graphs.
-* Can work for multiple-source or multiple-destination by modifying original graph (by adding new node and adding edges of weight 0).
+**Dijkstra:** Finds shortest path from a specified node to another specified node using a priority queue (or simply breadth first search if unweighted). Complexity: O(V*log(E)) using priority queue. Only works with non-negative weights. Works on both directed and undirected graphs. Can work for multiple-source or multiple-destination by modifying original graph (by adding new node and adding edges of weight 0).
 
 ``` java
 // Using adjacency matrix
@@ -39,18 +34,7 @@ class Node implements Comparable<Node> {
 }
 ```
 
-**Bellman-Ford:**
-
-* Complexity: O(V × E)
-* Works on negative weights.
-* Can be used to detect negative-weight cycles.
-
-**Floyd-Warshall:**
-
-* Complexity: O(V^3)
-* Computes all-pairs shortest paths.
-* Works with negative weights (acyclic). Works on both directed and undirected graphs.
-* Can be modified to detect negative-weight cycles (if running the algorithm on it a second time would result in anything being changed, then there is at least one negative-weight cycle).
+**Floyd-Warshall:** Complexity: O(V^3). Computes all-pairs shortest paths. Works with negative weights (acyclic). Works on both directed and undirected graphs. Can be modified to detect negative-weight cycles (if running the algorithm on it a second time would result in anything being changed, then there is at least one negative-weight cycle).
 
 ``` java
 static void floydWarshall(Double[][] dist, int n) {
@@ -74,12 +58,10 @@ Conditions for an undirected graph:
 * An undirected graph has an eulerian path if and only if it is connected and all vertices except 2 have even degree. One of those 2 vertices that have an odd degree must be the start vertex, and the other one must be the end vertex.
 
 Conditions for a directed graph:
-
 * A directed graph has an eulerian circuit if and only if it is connected and each vertex has the same in-degree as out-degree.
 * A directed graph has an eulerian path if and only if it is connected and each vertex except 2 have the same in-degree as out-degree, and one of those 2 vertices has out-degree with one greater than in-degree (this is the start vertex), and the other vertex has in-degree with one greater than out-degree (this is the end vertex).
 
 Algorithm for undirected graphs:
-
 * Start with an empty stack and an empty circuit (eulerian path).
   * If all vertices have even degree - choose any of them.
   * If there are exactly 2 vertices having an odd degree - choose one of them.
@@ -90,7 +72,6 @@ Algorithm for undirected graphs:
 Note that obtained circuit will be in reverse order - from end vertex to start vertex.
 
 Algorithm for directed graphs:
-
 * Start with an empty stack and an empty circuit (eulerian path).
     * If all vertices have same out-degrees as in-degrees - choose any of them.
     * If all but 2 vertices have same out-degree as in-degree, and one of those 2 vertices has out-degree with one greater than its in-degree, and the other has in-degree with one greater than its out-degree - then choose the vertex that has its out-degree with one greater than its in-degree.
@@ -100,10 +81,7 @@ Algorithm for directed graphs:
 
 Note that obtained circuit will be in reverse order - from end vertex to start vertex.
 
-**Prim's algorithm:**
-
-* Finds the minimum spanning tree of an undirected graph. Can be modified to find the minimum spanning forest.
-* O(n^2) using adjacency matrix, however the naive implementation is O(n^3). NOTE: If we use a priority queue we might be able to get this to O(n*log(m)).
+**Prim's algorithm:** Finds the minimum spanning tree of an undirected graph. Can be modified to find the minimum spanning forest. O(n^2) using adjacency matrix, however the naive implementation is O(n^3). NOTE: If we use a priority queue we might be able to get this to O(n*log(m)).
 
 ``` java
 // PARTIALLY TESTED
@@ -137,44 +115,37 @@ static long prims(int[][] dist) {
 }
 ```
 
-**Ford-Fulkerson:**
-
-* Solves maximum flow problems.
-* Can be used to solve problems with more than one source or sink by modifying the original graph (adding a new node and edges with capacities that will not inhibit the flow). Can also be used to solve problems where nodes have a capacity (split nodes in half and add a new edge between them with the desired capacity).
-* Can also be used to find the minimum cut by modifying a few lines (see below).
+**Ford-Fulkerson:** Solves maximum flow problems. Can be used to solve problems with more than one source or sink by modifying the original graph (adding a new node and edges with capacities that will not inhibit the flow). Can also be used to solve problems where nodes have a capacity (split nodes in half and add a new edge between them with the desired capacity). Can also be used to find the minimum cut by modifying a few lines (see below).
 
 ``` java
-  // NOTE: This only passed 12/49 tests on Kattis (Maximum Flow problem), but failed due to a time-out
-  static long fordFulkerson(Node source, Node target, int nNodes) {
-    long maxFlow = 0;
-    boolean pathWasFound = true;
-    while (pathWasFound) {
-      pathWasFound = false;
-      Long bottleneck = getBottleNeck(source, target, new boolean[nNodes], Long.MAX_VALUE);
-      if (bottleneck != null && bottleneck > 0) {
-        pathWasFound = true;
-        maxFlow += bottleneck;
+static long fordFulkerson(Node source, Node target, int nNodes) {
+  long maxFlow = 0;
+  boolean pathWasFound = true;
+  while (pathWasFound) {
+    pathWasFound = false;
+    Long bottleneck = getBottleNeck(source, target, new boolean[nNodes], Long.MAX_VALUE);
+    if (bottleneck != null && bottleneck > 0) {
+      pathWasFound = true;
+      maxFlow += bottleneck;
+    }
+  }
+  return maxFlow;
+}
+static Long getBottleNeck(Node current, Node target, boolean[] visited, long currentBottleNeck) {
+  if (visited[current.index]) return null;
+  if (current.index == target.index) return currentBottleNeck;
+  visited[current.index] = true;
+  for (Edge edge : current.adj)
+    if (edge.capacityLeft > 0) {
+      Long bottleneck = getBottleNeck(edge.target, target, visited, Math.min(currentBottleNeck, edge.capacityLeft));
+      if (bottleneck != null) {
+        edge.capacityLeft -= bottleneck;
+        edge.opposite.capacityLeft += bottleneck;
+        return bottleneck;
       }
     }
-    return maxFlow;
-  }
-
-  static Long getBottleNeck(Node current, Node target, boolean[] visited, long currentBottleNeck) {
-    if (visited[current.index]) return null;
-    if (current.index == target.index) return currentBottleNeck;
-    visited[current.index] = true;
-    for (Edge edge : current.adj)
-      if (edge.capacityLeft > 0) {
-        Long bottleneck = getBottleNeck(edge.target, target, visited, Math.min(currentBottleNeck, edge.capacityLeft));
-        if (bottleneck != null) {
-          edge.capacityLeft -= bottleneck;
-          edge.opposite.capacityLeft += bottleneck;
-          return bottleneck;
-        }
-      }
-    return null; // Dead-end
+  return null; // Dead-end
 }
-
 class Node {
   List<Edge> adj = new ArrayList<Edge>();
   int index;
@@ -189,12 +160,11 @@ class Node {
     reversed.opposite = edge;
   }
 }
-
 class Edge {
   Edge opposite = null;
   Node initial, target;
-  // Residual edges should have a value of null, so that this
-  // can be used to determine which nodes are the originals
+  // Residual edges should have originalCapacity=null 
+  // so that this can be used to determine which nodes are the originals
   Long originalCapacity = null;
   long capacityLeft;
   public Edge(Node initial, Node target, long capacity) {
@@ -214,8 +184,7 @@ static boolean[] fordFulkerson(Node source, Node target, int n) {
       pathWasFound = false;
       Arrays.fill(minCut, false);
       Long bottleneck = getBottleNeck(source, target, Long.MAX_VALUE, minCut);
-      if (bottleneck != null && bottleneck > 0)
-        pathWasFound = true;
+      if (bottleneck != null && bottleneck > 0) pathWasFound = true;
     }
     return minCut;
 }
@@ -254,20 +223,16 @@ static int findSize(boolean[][] arr, int cur, boolean[] visited) {
 	int total = 0;
 	visited[cur] = true;
 	for (int i = 0; i < arr.length; i++)
-		if (!visited[i] && arr[cur][i])
-			total += findSize(arr, i, visited);
+		if (!visited[i] && arr[cur][i]) total += findSize(arr, i, visited);
 	return total + 1;
 }
-
 static boolean isBridge(boolean[][] arr, int cur, int target, boolean[] visited) {
-	if (cur == target)
-		return false;
+	if (cur == target) return false;
 	visited[cur] = true;
 	for (int i = 0; i < arr.length; i++)
 		if (!visited[i] && arr[cur][i]) {
 			boolean result = isBridge(arr, i, target, visited);
-			if (!result)
-				return false;
+			if (!result) return false;
 		}
 	return true;
 }
