@@ -8,45 +8,26 @@
 ``` java
 // Using adjacency matrix
 static int dijkstra(Integer[][] weights, int n, int start, int end) {
-
     int[] dist = new int[n];
     Arrays.fill(dist, INFINITY);
     dist[start] = 0;
-
 	PriorityQueue<Node> q = new PriorityQueue<Node>();
 	q.offer(new Node(start, 0));
-
 	while (q.size() > 0) {
-
 		Node node = q.poll();
-
-		// Check to see if its stale
-		if (dist[node.index] < node.dist)
-			continue;
-
-		// Reached destination
-		if (node.index == end)
-			return node.dist;
-
-        	// Check neighbours
-		for (int i = 0; i < n; i++) {
+		if (dist[node.index] < node.dist) continue; // Check to see if its stale
+		if (node.index == end) return node.dist; // Reached destination
+		for (int i = 0; i < n; i++)
 			if (weights[node.index][i] != null) {
 				int newDist = dist[node.index] + weights[node.index][i];
 				if (newDist < dist[i]) {
 					dist[i] = newDist;
 					q.offer(new Node(i, newDist));
 				}
-
 			}
-		}
-
 	}
-
-    // Does not connect
-    return -1;
-
+    return -1; // Does not connect
 }
-
 class Node implements Comparable<Node> {
     int index, dist;
     public Node(int index, int dist) {
