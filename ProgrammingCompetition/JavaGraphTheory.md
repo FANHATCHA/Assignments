@@ -137,7 +137,8 @@ static Long getBottleNeck(Node current, Node target, boolean[] visited, long cur
   visited[current.index] = true;
   for (Edge edge : current.adj)
     if (edge.capacityLeft > 0) {
-      Long bottleneck = getBottleNeck(edge.target, target, visited, Math.min(currentBottleNeck, edge.capacityLeft));
+      Long bottleneck = getBottleNeck(
+      	edge.target, target, visited, Math.min(currentBottleNeck, edge.capacityLeft));
       if (bottleneck != null) {
         edge.capacityLeft -= bottleneck;
         edge.opposite.capacityLeft += bottleneck;
