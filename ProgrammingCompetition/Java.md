@@ -14,7 +14,7 @@ for (int i = 0; i < n; i++)
 **Conversions:**
 
 * Character to Integer: `int val = Character.getNumericValue(char c);`
-* Integer to Character: `Character c = i + '0;'`
+* Integer to Character: `Character c = i + '0';`
 * ArrayList to Set: `Set<Foo> listName = new HashSet<Foo>(arrayListName);`
 * Set to ArrayList: `ArrayList<Integer> arrayListName = new ArrayList<Integer>(mySet);`
 * Base x to Base 10 (where 2 <= x <= 36): `int base10 = Integer.parseInt(strBaseX, x);`
