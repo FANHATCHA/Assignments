@@ -62,12 +62,20 @@ static Point2D polarToCartesian(double degrees, double radius) {
 **Angle from Point A to B:**
 ```java
 // Find the angle from point A to point B in radians
-// NOTE: Not entirely tested yet
 static double findAngleBetweenPoints(Point2D a, Point2D b) {
   return Math.atan2(b.getY() - a.getY(), b.getX() - a.getX());
 }
 ```
-
+**Angle of ABC:**
+```java
+// Returns the angle of the corner ABC in radians (0 <= return_value <= PI)
+static double findAngleOfCorner(Point2D a, Point2D b, Point2D c) {
+	double TWO_PI = Math.PI*2.0;
+	double angle1 = findAngleBetweenPoints(a, b);
+	double angle2 = findAngleBetweenPoints(b, c);
+        return Math.PI - (((angle1 - angle2) % TWO_PI + TWO_PI) % TWO_PI);
+}
+```
 **Area of Triangle:**
 ```java
 static double area(Point2D a, Point2D b, Point2D c) {
