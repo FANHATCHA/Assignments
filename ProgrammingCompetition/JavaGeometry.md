@@ -58,6 +58,7 @@ static double angleBetweenPoints(Point2D a, Point2D b) {
 **Angle of ABC:**
 ```java
 // Returns the angle of the corner ABC in radians (0 <= return_value <= PI)
+// NOTE: THERE SEEMS TO BE A MISTAKE HERE, SHOULDN'T THAT BE % Math.PI??
 static double angleOfCorner(Point2D a, Point2D b, Point2D c) {
 	double TWO_PI = Math.PI*2.0;
 	double angle1 = findAngleBetweenPoints(a, b);
