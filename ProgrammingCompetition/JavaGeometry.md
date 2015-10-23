@@ -4,21 +4,13 @@
 
 ``` java
 // Note: plus=TRUE gives one possible point, plus=FALSE gives the other possible point
-static double cx(double a, double b, double c, double d, double r, boolean plus) {
+static Point2D findCenter(double a, double b, double c, double d, double r, boolean plus) {
   double q = Math.sqrt((a-c)*(a-c) + (b-d)*(b-d));
-  double x3 = (a+c)/2.0; 
+  double x3 = (a+c)/2.0;
   double y3 = (b+d)/2.0;
   if (plus)
-    return x3 + Math.sqrt(r*r-(q/2)*(q/2))*(b-d)/q;
-  return x3 - Math.sqrt(r*r-(q/2)*(q/2))*(b-d)/q;
-}
-
-static double cy(double a, double b, double c, double d, double r, boolean plus) {
-  double q = Math.sqrt((a-c)*(a-c) + (b-d)*(b-d));
-  double y3 = (b+d)/2.0;
-  if (plus)
-    return y3 + Math.sqrt(r*r-(q/2.0)*(q/2.0))*(c-a)/q;
-  return y3 - Math.sqrt(r*r-(q/2.0)*(q/2.0))*(c-a)/q;
+    return new Point2D.Double(x3 + Math.sqrt(r*r-(q/2)*(q/2))*(b-d)/q, y3 + Math.sqrt(r*r-(q/2.0)*(q/2.0))*(c-a)/q);
+  return new Point2D.Double(x3 - Math.sqrt(r*r-(q/2)*(q/2))*(b-d)/q, y3 - Math.sqrt(r*r-(q/2.0)*(q/2.0))*(c-a)/q);
 }
 ```
 
