@@ -1,24 +1,32 @@
 **Edit Distance:**
-Using dynamic programming, computes the edit distance between 2 strings. The complexity is O(nm) when n is the length of the first string, and m is the length of the second string. NOTE: This technique can also be used to find the edit distance for other things, not just strings.
+Using dynamic programming, computes the edit distance between from string A to string B. The complexity is O(nm) when n is the length of the first string, and m is the length of the second string. NOTE: This technique can also be used to find the edit distance for other things, not just strings.
 ```java
-// Calculate the edit distance between 2 strings (cost of insertions, deletions, and substitutions are currently set at 1)
-static int editDistance(String a, String b) {
+static int editDistance(String a, String b, int insertionCost, int deletionCost, int substitutionCost) {
 
-	int[][] arr = new int[a.length()][b.length()];
-	for (int i = 0; i < a.length(); i++)
-		arr[i][0] = i;
-	for (int j = 0; j < b.length(); j++)
-		arr[0][j] = j;
+	int[][] arr = new int[a.length()+1][b.length()+1];
 	
-	for (int i = 1; i < a.length(); i++)
-		for (int j = 1; j < b.length(); j++) {
-			int substitution = arr[i-1][j-1] + (a.charAt(i) == b.charAt(j) ? 0 : 1);
-			int deletion  = arr[i-1][j] + 1;
-			int insertion = arr[i][j-1] + 1;
-			arr[i][j] = Math.min(substitution, Math.min(deletion, insertion));
+	for (int i = 0; i <= a.length(); i++)
+		for (int j = (i == 0 ? 1 : 0); j <= b.length(); j++) {
+
+			int min = Integer.MAX_VALUE;
+
+			// Substitution
+			if (i > 0 && j > 0)
+				min = arr[i-1][j-1] + (a.charAt(i-1) == b.charAt(j-1) ? 0 : substitutionCost);
+			// Deletion
+			if (i > 0)
+				min = Math.min(min, arr[i-1][j] + deletionCost);
+			// Insertion
+			if (j > 0)
+				min = Math.min(min, arr[i][j-1] + insertionCost);
+				
+			arr[i][j] = min;
 		}
+
+	for (int i = 0; i <= a.length(); i++)
+		System.out.println(Arrays.toString(arr[i]));
 	
-	return arr[a.length()-1][b.length()-1];
+	return arr[a.length()][b.length()];
 
 }
 ```
