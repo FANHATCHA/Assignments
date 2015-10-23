@@ -8,11 +8,10 @@ static Point2D findCenter(double a, double b, double c, double d, double r, bool
   double q = Math.sqrt((a-c)*(a-c) + (b-d)*(b-d));
   double x3 = (a+c)/2.0;
   double y3 = (b+d)/2.0;
+  double temp = Math.sqrt(r*r-(q/2.0)*(q/2.0));
   if (plus)
-    return new Point2D.Double(x3 + Math.sqrt(r*r-(q/2.0)*(q/2.0))*(b-d)/q,
-                              y3 + Math.sqrt(r*r-(q/2.0)*(q/2.0))*(c-a)/q);
-  return new Point2D.Double(x3 - Math.sqrt(r*r-(q/2.0)*(q/2.0))*(b-d)/q,
-                            y3 - Math.sqrt(r*r-(q/2.0)*(q/2.0))*(c-a)/q);
+    return new Point2D.Double(x3 + temp*(b-d)/q, y3 + temp*(c-a)/q);
+  return new Point2D.Double(x3 - temp*(b-d)/q, y3 - temp*(c-a)/q);
 }
 ```
 
