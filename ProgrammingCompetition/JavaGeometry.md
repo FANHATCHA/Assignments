@@ -9,9 +9,9 @@ static Point2D findClosestPointToLine(Point2D a, Point2D b, Point2D c, boolean i
 	double dx = b.getX() - a.getX();
 	double dy = b.getY() - a.getY();
 	double u = ((c.getX() - a.getX())*dx + (c.getY() - a.getY())*dy)/(dx*dx + dy*dy);
-	if      (u < 0 && isSegment) return a;
-	else if (u > 1 && isSegment) return b;		
-	return new Point2D.Double(a.getX() + u * dx, a.getY() + u * dy);
+	if (u < 0 && isSegment) return a;
+	if (u > 1 && isSegment) return b;		
+	return new Point2D.Double(a.getX() + u*dx, a.getY() + u*dy);
 }
 ```
 
