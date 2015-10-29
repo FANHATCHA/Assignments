@@ -1,5 +1,20 @@
 **NOTE:** Java's Math class has methods for toRadians(double degrees) and toDegrees(double radians). It also has a method called hypot(double x, double y), which returns sqrt(x^2 +y^2).
 
+**Find Closest Point on Line to Point:**
+
+```java
+// Find the closest point on AB to the point C (assumes that A != B)
+// If isSegment==true then it returns a point on the finite line, otherwise the infinite line
+public static Point2D findClosestPointToLine(Point2D a, Point2D b, Point2D c, boolean isSegment) {
+	double dx = b.getX() - a.getX();
+	double dy = b.getY() - a.getY();
+	double u = ((c.getX() - a.getX())*dx + (c.getY() - a.getY())*dy)/(dx*dx + dy*dy);
+	if      (u < 0 && isSegment) return a;
+	else if (u > 1 && isSegment) return b;		
+	return new Point2D.Double(a.getX() + u * dx, a.getY() + u * dy);
+}
+```
+
 **Find Center of Circle given two points and a radius:**
 
 ``` java
