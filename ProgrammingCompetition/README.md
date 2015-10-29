@@ -1,5 +1,5 @@
 **Algorithms to add:**
-- [ ] Given a line and a point, find the closest point on the line to the point
+- [ ] Given a line and a point, find the closest point on the line to the point (formula to find the distance here: http://www.intmath.com/plane-analytic-geometry/perpendicular-distance-point-line.php)
 - [ ] Given two circles, find the intersection points of those circles
 - [x] Given a directed graph, find all sets of strongly connected components
 - [ ] Given a directed, acyclic graph, do a topological sort
