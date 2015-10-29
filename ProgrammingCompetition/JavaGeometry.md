@@ -5,7 +5,7 @@
 ```java
 // Find the closest point on AB to the point C (assumes that A != B)
 // If isSegment==true then it returns a point on the finite line, otherwise the infinite line
-public static Point2D findClosestPointToLine(Point2D a, Point2D b, Point2D c, boolean isSegment) {
+static Point2D findClosestPointToLine(Point2D a, Point2D b, Point2D c, boolean isSegment) {
 	double dx = b.getX() - a.getX();
 	double dy = b.getY() - a.getY();
 	double u = ((c.getX() - a.getX())*dx + (c.getY() - a.getY())*dy)/(dx*dx + dy*dy);
