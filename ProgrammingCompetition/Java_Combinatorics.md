@@ -3,7 +3,7 @@
 NOTE: This method accounts for duplicates (which is wherever compareTo() returns 0). By modifying the two lines indicated below, this method can also be used to get the previous permutation.
 
 ```java
-static <T extends Comparable<? super T>> T[] nextPermutation(final T[] c) {
+static <T extends Comparable<? super T>> T[] nextPermutation(T[] c) {
   int first = getFirst(c);
   if (first == -1) return null;
   int toSwap = c.length - 1;
@@ -16,15 +16,15 @@ static <T extends Comparable<? super T>> T[] nextPermutation(final T[] c) {
   return c;
 }
 
-static <T extends Comparable<? super T>> int getFirst(final T[] c) {
+static <T extends Comparable<? super T>> int getFirst(T[] c) {
   for (int i = c.length - 2; i >= 0; --i)
     if (c[i].compareTo(c[i + 1]) < 0) // Change to > for descending
       return i;
   return -1;
 }
 
-static <T extends Comparable<? super T>> void swap(final T[] c, final int i, final int j) {
-  final T tmp = c[i];
+static <T extends Comparable<? super T>> void swap(T[] c, int i, int j) {
+  T tmp = c[i];
   c[i] = c[j];
   c[j] = tmp;
 }
