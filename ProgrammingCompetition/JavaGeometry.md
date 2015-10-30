@@ -136,24 +136,19 @@ static double crossProduct(Point2D a, Point2D b) {
 **Convex Hull:**
 
 ``` java
-import java.util.*;
-import java.awt.geom.*;
-public class ConvexHull {
-    static Stack<Point2D> hull; // Clear this each time
-    static Scanner sc = new Scanner(System.in);
-    static void convexHull(Point2D[] pts) {
-        hull = new Stack<Point2D>();
+    static Stack<Point2D> createConvexHull(Point2D[] pts) {
+
+        int k1, k2;
         int N = pts.length;
+        Stack<Point2D> hull = new Stack<Point2D>();
         Point2D[] points = new Point2D.Double[N];
         for (int i = 0; i < N; i++) points[i] = pts[i];
         Arrays.sort(points, new PointOrder());
         Arrays.sort(points, 1, N, new PolarOrder(points[0]));
         hull.push(points[0]);
-        int k1;
         for (k1 = 1; k1 < N; k1++)
             if (!points[0].equals(points[k1])) break;
-        if (k1 == N) return;
-        int k2;
+        if (k1 == N) return null;
         for (k2 = k1 + 1; k2 < N; k2++)
             if (ccw(points[0], points[k1], points[k2]) != 0) break;
         hull.push(points[k2-1]); 
@@ -164,6 +159,7 @@ public class ConvexHull {
             hull.push(top);
             hull.push(points[i]);
         }
+        return hull;
     }
 
     // Compare other points relative to polar angle (between 0 and 2pi) they make with this Point
@@ -200,13 +196,12 @@ public class ConvexHull {
     }
 
     static int ccw(Point2D a, Point2D b, Point2D c) {
-        double area = (b.getX() - a.getX())*(c.getY()
-                    - a.getY()) - (b.getY() - a.getY())*(c.getX() - a.getX());
+        double area = (b.getX() - a.getX())*(c.getY() - a.getY()) - (b.getY() - a.getY())*(c.getX() - a.getX());
         return (int) Math.signum(area);
     }
 
     // check that boundary of hull is strictly convex
-    static boolean isConvex() {
+    static boolean isConvex(Stack<Point2D> hull) {
         int N = hull.size();
         if (N <= 2) return true;
         Point2D[] points = new Point2D.Double[N];
@@ -217,16 +212,4 @@ public class ConvexHull {
                 return false;
         return true;
     }
-
-    // Sample Usage
-    public static void main(String[] args) {
-        int N = sc.nextInt();
-        Point2D[] points = new Point2D.Double[N];
-        for (int i = 0; i < N; i++)
-        	points[i] = new Point2D.Double(sc.nextInt(), sc.nextInt());
-        convexHull(points);
-        for (Point2D p : hull)
-        	System.out.println( p.getX() + " " + p.getY());
-    }
-}
 ```
