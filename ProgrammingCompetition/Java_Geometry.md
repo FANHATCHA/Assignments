@@ -72,6 +72,11 @@ static Point2D findCenter(double x1, double y1, double x2, double y2, double x3,
 }
 ```
 
+**Circle Arc Length/Sector Area**
+
+![CircleSector](/ProgrammingCompetition/Images/circular_sector.png)
+
+
 **Inradius:**
 
 ![Inradius](/ProgrammingCompetition/Images/Inradius.png)
