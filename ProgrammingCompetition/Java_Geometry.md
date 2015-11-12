@@ -10,7 +10,7 @@ public static Point2D intersection(Point2D a, Point2D b, Point2D c, Point2D d, b
 	double x3 = c.getX(), y3 = c.getY(), x4 = d.getX(), y4 = d.getY();
 	double D = (x1-x2)*(y3-y4) - (y1-y2)*(x3-x4);
 	// Returns null if lines are parallel
-	if (D == 0) return null;
+	if (Math.abs(D) < EPS) return null; // Where EPS is something like 0.000001
 	double u = (x1*y2 - y1*x2);
 	double v = (x3*y4 - y3*x4);
 	double x = (u*(x3-x4)-(x1-x2)*v)/D;
