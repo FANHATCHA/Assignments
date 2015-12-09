@@ -1,0 +1,44 @@
+If the semaphore operations are failing in your program, you can get
+more information on the error as follows:
+
+- add a global declaration for errno
+
+extern int errno;
+
+- modify the macro(s) to print out errno during a failure, such as
+#define WAIT_SEM(s) { \\
+	struct sembuf sb; \\
+	sb.sem_num = (s); \\
+	sb.sem_op = -1; \\
+	sb.sem_flag = 0; \\
+	if (semop(semid, &sb, 1) < 0) { \\
+		fprintf(stderr, "Wait sem failed errno=%d\\n", errno); \\
+		exit(4); \\
+	} }
+
+- Now, look up the number in /usr/include/asm/errno.h to get the name
+	and a short description. Then look in "man semop" near the end
+	for a description of what the error means.
+
+If general, all Unix/POSIX system services return -1 upon error after
+setting the global int called "errno" to an error number that is in
+errno.h. (The location of errno.h varies, but will always be somewhere
+under /usr/include. For RedHat6.2, it is in /usr/include/asm.)
+
+Another macro that might be useful, is the following one that prints out
+the current value of all the semaphores:
+
+#define GET_SEM { \
+	union semun semarg; \
+	unsigned short xxx[NUM_SEM]; \
+	int iii; \
+	semarg.array = xxx; \
+	if (semctl(semid, 0, GETALL, semarg) < 0) { \
+		fprintf(stderr, "Initialize sem failed\\n"); \
+		exit(4); \
+	} \
+	fprintf(stderr, "sem set"); \
+	for (iii = 0; iii < NUM_SEM; iii++) \
+		fprintf(stderr, " %d", xxx[iii]); \
+	fprintf(stderr, "\\n"); \
+	}
