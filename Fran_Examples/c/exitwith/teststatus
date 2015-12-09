@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# tests the exit status of the "exitwith" program
+
+if ./exitwith "$@"
+then
+	echo "program exitted with TRUE : $?"
+else
+	echo "program exitted with FALSE : $?"
+fi

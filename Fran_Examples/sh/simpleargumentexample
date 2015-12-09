@@ -1,0 +1,13 @@
+#!/bin/sh
+
+echo "Start of program"
+for argument in "$@"
+do
+	echo "an argument: ${argument}"
+done
+
+echo "arg 1 : $1"
+echo "arg 2 : $2"
+echo "arg 3 : $3"
+echo "arg 4 : $4"
+echo "arg 5 : $5"

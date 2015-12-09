@@ -1,0 +1,37 @@
+#!/usr/bin/env python
+
+# Print out some data
+#
+
+import sys
+
+
+sys.stdout.write("Echoing data, line by line,\n")
+sys.stdout.write("on standard output:\n")
+
+sys.stdout.write(">>>\n")
+
+## read the first line
+line = sys.stdin.readline()
+
+## now we can check if the line has no data
+## (even a blank line will contain a newline)
+##
+while len(line) > 0:
+	## print the line as we read it
+	sys.stdout.write("read [%s]\n" % line)
+
+	## we can remove the troublesome newline as in C
+	lineWithoutNL = line[:len(line)-1]
+	sys.stdout.write("NL removed [%s]\n" % lineWithoutNL)
+
+	## this will trim whitespace from both ends
+	lineStripped = line.strip()
+	sys.stdout.write("stripped [%s]\n" % lineStripped)
+
+	## don't forget to read the next line within the loop!
+	line = sys.stdin.readline()
+
+sys.stdout.write("<<<\n")
+sys.stdout.write("Done\n")
+

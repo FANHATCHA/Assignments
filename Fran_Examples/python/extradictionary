@@ -1,0 +1,14 @@
+#!/usr/bin/env python
+
+key1 = "a key"
+key2 = "another key"
+
+data = [ 1, 2, 3, "some data" ]
+
+dictionary = {	key1 : data, key2 : data }
+
+print dictionary
+
+
+
+

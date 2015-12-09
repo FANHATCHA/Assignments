@@ -1,0 +1,35 @@
+## Generated on:
+## AMD Dual-Core AMD Opteron(tm) Processor 2218 HE stepping 03
+## nodename   : fran.mta.ca
+## Intel/AMD: little-endian
+##
+
+&c = 0xbff7b1e3
+&e = 0xbff7b1d3
+sizeof(char) = 1
+sizeof(char *) = 4
+Life as a char *
+0xBFF7B1E3 :   long: f7b1e35a  char: 5a 'Z'
+0xBFF7B1E2 :   long: b1e25aa7  char: a7 '\247'
+0xBFF7B1E1 :   long: e15aa72e  char: 2e '.'
+0xBFF7B1E0 :   long: 5aa72e25  char: 25 '%'
+0xBFF7B1DF :   long: a72e25c0  char: c0 '\300'
+0xBFF7B1DE :   long: 2e25c0de  char: de '\336'
+0xBFF7B1DD :   long: 25c0debe  char: be '\276'
+0xBFF7B1DC :   long: c0debeef  char: ef '\357'
+0xBFF7B1DB :   long: debeefbf  char: bf '\277'
+0xBFF7B1DA :   long: beefbff7  char: f7 '\367'
+0xBFF7B1D9 :   long: efbff700  char: 00 '\0'
+0xBFF7B1D8 :   long: bff7006f  char: 6f 'o'
+0xBFF7B1D7 :   long: f7006f6c  char: 6c 'l'
+0xBFF7B1D6 :   long: 006f6c6c  char: 6c 'l'
+0xBFF7B1D5 :   long: 6f6c6c65  char: 65 'e'
+0xBFF7B1D4 :   long: 6c6c6548  char: 48 'H'
+
+sizeof(int) = 4
+sizeof(int *) = 4
+Life as an int *
+0xBFF7B1E3 :   long: f7b1d35a  char:  'Z'
+0xBFF7B1DF :   long: a72e25c0  char:  '\300'
+0xBFF7B1DB :   long: debeefbf  char:  '\277'
+0xBFF7B1D7 :   long: f7006f6c  char:  'l'

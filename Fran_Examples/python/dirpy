@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+
+#
+# Read a directory using Python and print out the entries
+#
+
+import sys
+import string
+import os
+
+
+
+def listPath(pathToList, performLongList):
+
+	entryCount = 0
+
+	sys.stdout.write("Contents of '%s':\n" % pathToList)
+	for direntry in os.listdir( pathToList ):
+		sys.stdout.write("%4d : %24s" % (entryCount, direntry))
+		if performLongList:
+
+			fullyQualifiedName = os.path.join(pathToList, direntry)
+
+
+			if os.path.isfile( fullyQualifiedName ):
+				statinfo = os.stat( fullyQualifiedName )
+				sys.stdout.write(" - FILE of %5d bytes)" % statinfo.st_size)
+
+			elif os.path.isdir( fullyQualifiedName ):
+				sys.stdout.write(" - DIR")
+
+			else:
+				sys.stdout.write(" - OTHER")
+
+		sys.stdout.write("\n")
+		entryCount = entryCount + 1
+
+
+
+performLongList = 0
+didSomeWork = 0
+
+
+# if arguments were given, check if the argument is "-l"
+if len(sys.argv) > 1:
+	if sys.argv[1] == "-l":
+		performLongList = 1;
+	else:
+		sys.stderr.write("Unknown argument '%s' - ignoring\n" % sys.argv[1])
+	
+listPath(".", performLongList)
+
+
+

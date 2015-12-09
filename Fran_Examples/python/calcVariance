@@ -1,0 +1,57 @@
+#!/usr/bin/env python
+
+# Process a list of numbers, separated either by commas or by
+# newlines, and print the variance of the list
+
+import sys
+import string
+import math
+
+lineNumber = 0
+numValues = 0
+mean = 0
+sum = 0
+data = []
+
+# read the first line to start
+line = sys.stdin.readline()
+while len(line) > 0:
+
+	# keep track of the line number
+	lineNumber = lineNumber + 1
+
+	# split up by commas
+	for token in string.split(line, ','):
+
+		if len(token) > 0:
+			# convert the values to floats
+			try:
+				floatvalue = float(token)
+			except ValueError:
+				sys.stderr.write("Bad value '%s' on line %d\n" %
+							(token, lineNumber))
+				sys.exit(1)
+
+			# store the values
+			data.append( floatvalue )
+			numValues = numValues + 1
+
+			# and add to our running total
+			sum = sum + floatvalue
+	line = sys.stdin.readline()
+
+mean = sum / numValues
+
+if numValues == 1:
+	variance = 0
+else:
+
+	sum = 0
+	for value in data:
+		difference = mean - value
+		sum = sum + ( difference * difference )
+	variance = sum / (numValues - 1)
+
+sys.stdout.write("Variance  : %f\n" % variance);
+sys.stdout.write("Std. Dev. : %f\n" % math.sqrt(variance));
+

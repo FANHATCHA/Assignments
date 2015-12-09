@@ -1,0 +1,22 @@
+K 10
+svn:ignore
+V 118
+*.bak
+*.idl
+*.log
+*.opt
+*.out
+*.plg
+.*.swp
+.DS*
+Debug
+Release
+abw
+backup
+badalloc
+badindex
+nullreference
+tags
+working
+
+END

@@ -1,0 +1,213 @@
+
+hello:     file format elf32-i386
+
+Disassembly of section .init:
+
+08048250 <_init>:
+ 8048250:	55                   	push   %ebp
+ 8048251:	89 e5                	mov    %esp,%ebp
+ 8048253:	83 ec 08             	sub    $0x8,%esp
+ 8048256:	e8 61 00 00 00       	call   80482bc <call_gmon_start>
+ 804825b:	e8 bc 00 00 00       	call   804831c <frame_dummy>
+ 8048260:	e8 93 01 00 00       	call   80483f8 <__do_global_ctors_aux>
+ 8048265:	c9                   	leave  
+ 8048266:	c3                   	ret    
+Disassembly of section .plt:
+
+08048268 <.plt>:
+ 8048268:	ff 35 40 95 04 08    	pushl  0x8049540
+ 804826e:	ff 25 44 95 04 08    	jmp    *0x8049544
+ 8048274:	00 00                	add    %al,(%eax)
+ 8048276:	00 00                	add    %al,(%eax)
+ 8048278:	ff 25 48 95 04 08    	jmp    *0x8049548
+ 804827e:	68 00 00 00 00       	push   $0x0
+ 8048283:	e9 e0 ff ff ff       	jmp    8048268 <_init+0x18>
+ 8048288:	ff 25 4c 95 04 08    	jmp    *0x804954c
+ 804828e:	68 08 00 00 00       	push   $0x8
+ 8048293:	e9 d0 ff ff ff       	jmp    8048268 <_init+0x18>
+Disassembly of section .text:
+
+08048298 <_start>:
+ 8048298:	31 ed                	xor    %ebp,%ebp
+ 804829a:	5e                   	pop    %esi
+ 804829b:	89 e1                	mov    %esp,%ecx
+ 804829d:	83 e4 f0             	and    $0xfffffff0,%esp
+ 80482a0:	50                   	push   %eax
+ 80482a1:	54                   	push   %esp
+ 80482a2:	52                   	push   %edx
+ 80482a3:	68 b4 83 04 08       	push   $0x80483b4
+ 80482a8:	68 6c 83 04 08       	push   $0x804836c
+ 80482ad:	51                   	push   %ecx
+ 80482ae:	56                   	push   %esi
+ 80482af:	68 44 83 04 08       	push   $0x8048344
+ 80482b4:	e8 bf ff ff ff       	call   8048278 <_init+0x28>
+ 80482b9:	f4                   	hlt    
+ 80482ba:	90                   	nop    
+ 80482bb:	90                   	nop    
+
+080482bc <call_gmon_start>:
+ 80482bc:	55                   	push   %ebp
+ 80482bd:	89 e5                	mov    %esp,%ebp
+ 80482bf:	53                   	push   %ebx
+ 80482c0:	e8 00 00 00 00       	call   80482c5 <call_gmon_start+0x9>
+ 80482c5:	5b                   	pop    %ebx
+ 80482c6:	81 c3 77 12 00 00    	add    $0x1277,%ebx
+ 80482cc:	50                   	push   %eax
+ 80482cd:	8b 83 14 00 00 00    	mov    0x14(%ebx),%eax
+ 80482d3:	85 c0                	test   %eax,%eax
+ 80482d5:	74 02                	je     80482d9 <call_gmon_start+0x1d>
+ 80482d7:	ff d0                	call   *%eax
+ 80482d9:	8b 5d fc             	mov    0xfffffffc(%ebp),%ebx
+ 80482dc:	c9                   	leave  
+ 80482dd:	c3                   	ret    
+ 80482de:	90                   	nop    
+ 80482df:	90                   	nop    
+
+080482e0 <__do_global_dtors_aux>:
+ 80482e0:	55                   	push   %ebp
+ 80482e1:	89 e5                	mov    %esp,%ebp
+ 80482e3:	83 ec 08             	sub    $0x8,%esp
+ 80482e6:	80 3d 54 95 04 08 00 	cmpb   $0x0,0x8049554
+ 80482ed:	75 29                	jne    8048318 <__do_global_dtors_aux+0x38>
+ 80482ef:	a1 5c 94 04 08       	mov    0x804945c,%eax
+ 80482f4:	8b 10                	mov    (%eax),%edx
+ 80482f6:	85 d2                	test   %edx,%edx
+ 80482f8:	74 17                	je     8048311 <__do_global_dtors_aux+0x31>
+ 80482fa:	89 f6                	mov    %esi,%esi
+ 80482fc:	83 c0 04             	add    $0x4,%eax
+ 80482ff:	a3 5c 94 04 08       	mov    %eax,0x804945c
+ 8048304:	ff d2                	call   *%edx
+ 8048306:	a1 5c 94 04 08       	mov    0x804945c,%eax
+ 804830b:	8b 10                	mov    (%eax),%edx
+ 804830d:	85 d2                	test   %edx,%edx
+ 804830f:	75 eb                	jne    80482fc <__do_global_dtors_aux+0x1c>
+ 8048311:	c6 05 54 95 04 08 01 	movb   $0x1,0x8049554
+ 8048318:	c9                   	leave  
+ 8048319:	c3                   	ret    
+ 804831a:	89 f6                	mov    %esi,%esi
+
+0804831c <frame_dummy>:
+ 804831c:	55                   	push   %ebp
+ 804831d:	89 e5                	mov    %esp,%ebp
+ 804831f:	83 ec 08             	sub    $0x8,%esp
+ 8048322:	a1 38 95 04 08       	mov    0x8049538,%eax
+ 8048327:	85 c0                	test   %eax,%eax
+ 8048329:	74 16                	je     8048341 <frame_dummy+0x25>
+ 804832b:	b8 00 00 00 00       	mov    $0x0,%eax
+ 8048330:	85 c0                	test   %eax,%eax
+ 8048332:	74 0d                	je     8048341 <frame_dummy+0x25>
+ 8048334:	83 ec 0c             	sub    $0xc,%esp
+ 8048337:	68 38 95 04 08       	push   $0x8049538
+ 804833c:	ff d0                	call   *%eax
+ 804833e:	83 c4 10             	add    $0x10,%esp
+ 8048341:	c9                   	leave  
+ 8048342:	c3                   	ret    
+ 8048343:	90                   	nop    
+
+08048344 <main>:
+ 8048344:	55                   	push   %ebp
+ 8048345:	89 e5                	mov    %esp,%ebp
+ 8048347:	83 ec 08             	sub    $0x8,%esp
+ 804834a:	83 e4 f0             	and    $0xfffffff0,%esp
+ 804834d:	b8 00 00 00 00       	mov    $0x0,%eax
+ 8048352:	29 c4                	sub    %eax,%esp
+ 8048354:	83 ec 0c             	sub    $0xc,%esp
+ 8048357:	68 40 84 04 08       	push   $0x8048440
+ 804835c:	e8 27 ff ff ff       	call   8048288 <_init+0x38>
+ 8048361:	83 c4 10             	add    $0x10,%esp
+ 8048364:	b8 00 00 00 00       	mov    $0x0,%eax
+ 8048369:	c9                   	leave  
+ 804836a:	c3                   	ret    
+ 804836b:	90                   	nop    
+
+0804836c <__libc_csu_init>:
+ 804836c:	55                   	push   %ebp
+ 804836d:	89 e5                	mov    %esp,%ebp
+ 804836f:	57                   	push   %edi
+ 8048370:	56                   	push   %esi
+ 8048371:	53                   	push   %ebx
+ 8048372:	83 ec 0c             	sub    $0xc,%esp
+ 8048375:	e8 00 00 00 00       	call   804837a <__libc_csu_init+0xe>
+ 804837a:	5b                   	pop    %ebx
+ 804837b:	81 c3 c2 11 00 00    	add    $0x11c2,%ebx
+ 8048381:	e8 ca fe ff ff       	call   8048250 <_init>
+ 8048386:	8d 93 18 ff ff ff    	lea    0xffffff18(%ebx),%edx
+ 804838c:	8d 8b 18 ff ff ff    	lea    0xffffff18(%ebx),%ecx
+ 8048392:	29 ca                	sub    %ecx,%edx
+ 8048394:	c1 fa 02             	sar    $0x2,%edx
+ 8048397:	31 f6                	xor    %esi,%esi
+ 8048399:	39 d6                	cmp    %edx,%esi
+ 804839b:	73 0f                	jae    80483ac <__libc_csu_init+0x40>
+ 804839d:	89 d7                	mov    %edx,%edi
+ 804839f:	90                   	nop    
+ 80483a0:	ff 94 b3 18 ff ff ff 	call   *0xffffff18(%ebx,%esi,4)
+ 80483a7:	46                   	inc    %esi
+ 80483a8:	39 fe                	cmp    %edi,%esi
+ 80483aa:	72 f4                	jb     80483a0 <__libc_csu_init+0x34>
+ 80483ac:	83 c4 0c             	add    $0xc,%esp
+ 80483af:	5b                   	pop    %ebx
+ 80483b0:	5e                   	pop    %esi
+ 80483b1:	5f                   	pop    %edi
+ 80483b2:	c9                   	leave  
+ 80483b3:	c3                   	ret    
+
+080483b4 <__libc_csu_fini>:
+ 80483b4:	55                   	push   %ebp
+ 80483b5:	89 e5                	mov    %esp,%ebp
+ 80483b7:	56                   	push   %esi
+ 80483b8:	53                   	push   %ebx
+ 80483b9:	e8 00 00 00 00       	call   80483be <__libc_csu_fini+0xa>
+ 80483be:	5b                   	pop    %ebx
+ 80483bf:	81 c3 7e 11 00 00    	add    $0x117e,%ebx
+ 80483c5:	8d 8b 18 ff ff ff    	lea    0xffffff18(%ebx),%ecx
+ 80483cb:	8d 83 18 ff ff ff    	lea    0xffffff18(%ebx),%eax
+ 80483d1:	29 c1                	sub    %eax,%ecx
+ 80483d3:	c1 f9 02             	sar    $0x2,%ecx
+ 80483d6:	85 c9                	test   %ecx,%ecx
+ 80483d8:	8d 71 ff             	lea    0xffffffff(%ecx),%esi
+ 80483db:	75 0b                	jne    80483e8 <__libc_csu_fini+0x34>
+ 80483dd:	e8 3a 00 00 00       	call   804841c <_fini>
+ 80483e2:	5b                   	pop    %ebx
+ 80483e3:	5e                   	pop    %esi
+ 80483e4:	c9                   	leave  
+ 80483e5:	c3                   	ret    
+ 80483e6:	89 f6                	mov    %esi,%esi
+ 80483e8:	ff 94 b3 18 ff ff ff 	call   *0xffffff18(%ebx,%esi,4)
+ 80483ef:	89 f2                	mov    %esi,%edx
+ 80483f1:	4e                   	dec    %esi
+ 80483f2:	85 d2                	test   %edx,%edx
+ 80483f4:	75 f2                	jne    80483e8 <__libc_csu_fini+0x34>
+ 80483f6:	eb e5                	jmp    80483dd <__libc_csu_fini+0x29>
+
+080483f8 <__do_global_ctors_aux>:
+ 80483f8:	55                   	push   %ebp
+ 80483f9:	89 e5                	mov    %esp,%ebp
+ 80483fb:	53                   	push   %ebx
+ 80483fc:	52                   	push   %edx
+ 80483fd:	a1 28 95 04 08       	mov    0x8049528,%eax
+ 8048402:	83 f8 ff             	cmp    $0xffffffff,%eax
+ 8048405:	bb 28 95 04 08       	mov    $0x8049528,%ebx
+ 804840a:	74 0c                	je     8048418 <__do_global_ctors_aux+0x20>
+ 804840c:	83 eb 04             	sub    $0x4,%ebx
+ 804840f:	ff d0                	call   *%eax
+ 8048411:	8b 03                	mov    (%ebx),%eax
+ 8048413:	83 f8 ff             	cmp    $0xffffffff,%eax
+ 8048416:	75 f4                	jne    804840c <__do_global_ctors_aux+0x14>
+ 8048418:	58                   	pop    %eax
+ 8048419:	5b                   	pop    %ebx
+ 804841a:	c9                   	leave  
+ 804841b:	c3                   	ret    
+Disassembly of section .fini:
+
+0804841c <_fini>:
+ 804841c:	55                   	push   %ebp
+ 804841d:	89 e5                	mov    %esp,%ebp
+ 804841f:	53                   	push   %ebx
+ 8048420:	e8 00 00 00 00       	call   8048425 <_fini+0x9>
+ 8048425:	5b                   	pop    %ebx
+ 8048426:	81 c3 17 11 00 00    	add    $0x1117,%ebx
+ 804842c:	52                   	push   %edx
+ 804842d:	e8 ae fe ff ff       	call   80482e0 <__do_global_dtors_aux>
+ 8048432:	8b 5d fc             	mov    0xfffffffc(%ebp),%ebx
+ 8048435:	c9                   	leave  
+ 8048436:	c3                   	ret    

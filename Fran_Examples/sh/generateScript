@@ -1,0 +1,75 @@
+#!/bin/sh
+
+#
+# An example using:
+# - temporary files
+# - "here documents"
+# - trap/signals
+#
+# Try running with and without flags -a and -b to set strings in the script:
+#	generatescript -aAvalue
+#	generatescript -bbbbbb
+#
+
+SCRIPT=/tmp/myScript.$$
+
+trap "echo 'Cleaning up . . .' >&2 ; \
+			rm -rf ${SCRIPT} ; \
+			exit 1" \
+		1 2 15
+
+# ensure script is empty
+> ${SCRIPT}
+
+DATE=`date`
+
+cat << __EOF__ >> ${SCRIPT}
+#!/bin/sh
+
+# An auto-generated script
+# generated at ${DATE}
+#
+
+__EOF__
+
+while [ $# -gt 1 ]
+do
+	echo '$1'" is $1"
+	case "$1" in
+	-a*)	ASTRING=`echo $1 | sed -e 's/^-.//'`	;;
+	-b*)	BSTRING=`echo $1 | sed -e 's/^-.//'`	;;
+	-*)		;;
+	*) break ;;
+	esac
+	# shift argument list based on removal of options
+	shift
+done
+
+echo "aString='${ASTRING:-a very fine string}'" >> ${SCRIPT}
+echo "bString=\"${BSTRING:-Bartholomew, where are you?}\"" >> ${SCRIPT}
+echo "" >> ${SCRIPT}
+
+if [ $# -gt 0 ]
+then
+cat << __END_OF_LOOP >> ${SCRIPT}
+
+for loopitem in $@
+do
+	echo "item : \$loopitem"
+done
+__END_OF_LOOP
+else
+	echo "echo There were no loop items" >> ${SCRIPT}
+fi
+
+echo "echo \"A : \${aString}\"" >> ${SCRIPT}
+echo "echo \"B : \"${bString}\"\"" >> ${SCRIPT}
+
+echo "I am about to run this script:"
+cat ${SCRIPT} | sed -e 's/^/	/'
+
+sh -x ${SCRIPT}
+
+echo "Done script!"
+
+rm -f ${SCRIPT}

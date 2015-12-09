@@ -1,0 +1,67 @@
+#!/bin/sh
+
+#
+# This program parses its command line arguments, and then
+# responds to commands from a named file.  Run with a command
+# line such as this:
+#	./parsearguments -verbose -version -other ./parse-data.txt
+#
+
+CURFILE=""
+
+for arg in "$@"
+do
+	case "${arg}" in
+	-[hH]*)	
+		echo "Help:  this program prints its arguments out"
+		;;
+	-verbose*)
+		echo 'option "-verbose" was seen'
+		;;
+	-v*)
+		echo 'option "-v" was seen'
+		;;
+	-*)	
+		echo "unknown option '${arg}'" >&2
+		;;
+	*)
+		echo "Reading commands from file '${arg}' . . ."
+		{
+			while read firsttoken args
+			do
+				case ${firsttoken} in
+				[#]*)
+					# a comment -- do nothing
+					;;
+
+				ls*)
+					echo "COMMAND:  ls"
+					ls ${args}
+					;;
+
+				[Pp]*)
+					echo "COMMAND:  print"
+					head ${args}
+					;;
+
+				test*)
+					echo "COMMAND:  TEST"
+					for f in ${args}
+					do
+						if [ -f "${f}" ]
+						then
+							echo "TESTING: $f is a file"
+						else
+							echo "TESTING: $f is not a file"
+						fi
+					done
+					;;
+
+				*)
+					# ignore anything else
+					;;
+				esac
+			done
+		} < ${arg}
+	esac
+done

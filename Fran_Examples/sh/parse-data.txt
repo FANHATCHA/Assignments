@@ -1,0 +1,14 @@
+
+# this file is to be used with the "parsearguments" script,
+# as the commands in it match those the script uses
+
+# call ls with an argument
+ls -l parse-data.txt
+
+# use more to print a file
+print parse-data.txt
+
+# test for a file that does, and does not exist
+test parse-data.txt
+test missing-data.txt
+

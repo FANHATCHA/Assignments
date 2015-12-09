@@ -1,0 +1,40 @@
+## Generated on:
+## Intel(R) Pentium(R) III CPU family 1133MHz; cpu family: 6, model: 11
+## nodename   : hopper.mta.ca
+## Intel/AMD: little-endian
+##
+
+&c = 0xbfffa8c3
+&e = 0xbfffa8af
+sizeof(char) = 1
+sizeof(char *) = 4
+Life as a char *
+0xBFFFA8C3 :   long: ffffff5a  char: 5a 'Z'
+0xBFFFA8C2 :   long: ffff5a7c  char: 7c '|'
+0xBFFFA8C1 :   long: ff5a7cd9  char: d9 '\331'
+0xBFFFA8C0 :   long: 5a7cd9f3  char: f3 '\363'
+0xBFFFA8BF :   long: 7cd9f308  char: 08 '\10'
+0xBFFFA8BE :   long: d9f30804  char: 04 '\4'
+0xBFFFA8BD :   long: f3080485  char: 85 '\205'
+0xBFFFA8BC :   long: 080485ea  char: ea '\352'
+0xBFFFA8BB :   long: 0485eac0  char: c0 '\300'
+0xBFFFA8BA :   long: 85eac0de  char: de '\336'
+0xBFFFA8B9 :   long: eac0debe  char: be '\276'
+0xBFFFA8B8 :   long: c0debeef  char: ef '\357'
+0xBFFFA8B7 :   long: debeef00  char: 00 '\0'
+0xBFFFA8B6 :   long: beef0000  char: 00 '\0'
+0xBFFFA8B5 :   long: ef000000  char: 00 '\0'
+0xBFFFA8B4 :   long: 0000006f  char: 6f 'o'
+0xBFFFA8B3 :   long: 00006f6c  char: 6c 'l'
+0xBFFFA8B2 :   long: 006f6c6c  char: 6c 'l'
+0xBFFFA8B1 :   long: 6f6c6c65  char: 65 'e'
+0xBFFFA8B0 :   long: 6c6c6548  char: 48 'H'
+
+sizeof(int) = 4
+sizeof(int *) = 4
+Life as an int *
+0xBFFFA8C3 :   long: ffffff5a  char:  'Z'
+0xBFFFA8BF :   long: 7cd9f308  char:  '\10'
+0xBFFFA8BB :   long: 0485eac0  char:  '\300'
+0xBFFFA8B7 :   long: debeef00  char:  '\0'
+0xBFFFA8B3 :   long: 00006f6c  char:  'l'

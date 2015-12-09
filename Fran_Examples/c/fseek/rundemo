@@ -1,0 +1,12 @@
+#!/bin/sh
+
+echo "Creating data file"
+createFile
+
+
+echo "Dumping entire file"
+fseek numbers.dat
+
+
+echo "Dumping only numbers 8-12"
+fseek -b8 -e12 numbers.dat

@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# this script demonstrates some of the variable
+# substitutions that are possible
+
+# setting up some variables with values (note that
+# all are really strings)
+a="hi      there,   ${USER}"
+b="have a nice day"
+i=3
+
+# print these out
+echo $a
+echo $b
+echo $i
+
+# if the name would be confusing, we can delineate the
+# variable name with {} characters
+echo "There is a difference between '$ia' and '${i}a'"
+
+# substitution using double-quotes simply ignores spaces
+bigone="${a} ${b}"
+bigtwo='${a} ${b}'
+
+echo "Are these the same?"
+echo "    bigone: [${bigone}]"
+echo "    bigtwo: [${bigtwo}]"
+
+# any environment variables are simply inherited from the shell
+echo "My username is ${USER}"
+
+# default values can be assigned like this:
+v=${SOMETHING:-a default string}
+echo "v is currently \"${v}\""
+
+# to see the defaults, run this script, note the output, and 
+# then set the environment varible "SOMETHING" in the shell,
+# and run it again
+

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dramatispersonae>
+
+  <character id="1">
+	  <name>
+		  <common>Alice</common>
+		  <last metacharacter="true">Liddell</last>
+		  <nickname>Serpent!</nickname>
+	  </name>
+	  <sex>female</sex>
+	  <temperament>curious</temperament>
+	  <sanity>mad</sanity>
+  </character> 
+
+  <character id="2">
+	  <name>
+		  <common>White Rabbit</common>
+		  <nickname>Herald</nickname>
+	  </name>
+	  <sanity>mad</sanity>
+	  <sex>male</sex>
+	  <temperament>nervous</temperament>
+  </character> 
+
+  <character id="3">
+	  <name>
+		  <common>Queen</common>
+		  <affiliation>Hearts</affiliation>
+	  </name>
+	  <sex>female</sex>
+	  <temperament>imperious</temperament>
+	  <aspect>terrifying</aspect>
+	  <relation>4</relation>
+  </character> 
+
+  <character id="4">
+	  <name>
+		  <common>King</common>
+		  <affiliation>Hearts</affiliation>
+	  </name>
+	  <sex>male</sex>
+	  <temperament>confused</temperament>
+	  <aspect>ineffectual</aspect>
+	  <relation>3</relation>
+  </character> 
+
+  <character id="5">
+	  <name>
+		  <common>Hatter</common>
+	  </name>
+	  <sex>male</sex>
+	  <temperament>contrary</temperament>
+	  <sanity>mad</sanity>
+  </character> 
+
+  <character id="6">
+	  <name>
+		  <common>Hare</common>
+		  <affiliation>March</affiliation>
+	  </name>
+	  <sex>male</sex>
+	  <temperament>contrary</temperament>
+	  <sanity>mad</sanity>
+  </character> 
+
+  <character id="7">
+	  <name>
+		  <common>Cat</common>
+		  <affiliation>Cheshire</affiliation>
+	  </name>
+	  <sex>unknown</sex>
+	  <temperament>sly knowing helpful</temperament>
+	  <sanity>mad</sanity>
+  </character> 
+
+  <character id="8">
+	  <name>
+		  <common>Doormouse</common>
+	  </name>
+	  <sex>unknown</sex>
+	  <temperament>sleepy</temperament>
+	  <sanity>mad</sanity>
+  </character> 
+
+</dramatispersonae> 

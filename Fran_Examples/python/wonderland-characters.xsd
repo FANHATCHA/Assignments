@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="dramatispersonae">
+	<xs:complexType>
+	  <xs:sequence minOccurs="1" maxOccurs="unbounded">
+		<xs:element name="character">
+		  <xs:complexType mixed="true">
+			<xs:all minOccurs="0">
+			  <xs:element name="name">
+				<xs:complexType>
+				  <xs:all minOccurs="0">
+					<xs:element name="common" type="xs:string"/>
+					<xs:element name="nickname" type="xs:string"/>
+					<xs:element name="last">
+					  <xs:complexType>
+						<xs:simpleContent>
+						  <xs:extension base="xs:string">
+							<xs:attribute name="metacharacter" type="xs:boolean"/>
+						  </xs:extension>
+						</xs:simpleContent>
+					  </xs:complexType>
+					</xs:element>
+					<xs:element name="affiliation">
+					  <xs:simpleType>
+						<xs:restriction base="xs:string">
+						  <xs:whiteSpace value="preserve"/>
+						</xs:restriction>
+					  </xs:simpleType>
+					</xs:element>
+				  </xs:all>
+				</xs:complexType>
+			  </xs:element>
+			  <xs:element name="sex">
+				<xs:simpleType>
+				  <xs:restriction base="xs:string">
+					<xs:pattern value="female|male|other|unknown"/>
+				  </xs:restriction>
+				</xs:simpleType>
+			  </xs:element>
+			  <xs:element name="temperament" type="valuelist"/>
+			  <xs:element name="sanity">
+				<xs:simpleType>
+				  <xs:restriction base="xs:string">
+					<xs:pattern value="mad|sane|unknown"/>
+				  </xs:restriction>
+				</xs:simpleType>
+			  </xs:element>
+			  <xs:element name="aspect" type="xs:string"/>
+			  <xs:element name="relation" type="xs:string"/>
+			</xs:all>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+		  </xs:complexType>
+		</xs:element>
+	  </xs:sequence>
+	</xs:complexType>
+  </xs:element>
+  <xs:simpleType name="valuelist">
+	<xs:list itemType="xs:string"/>
+  </xs:simpleType>
+</xs:schema>

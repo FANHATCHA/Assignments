@@ -1,0 +1,33 @@
+#!/bin/sh
+
+
+FILENAME=""
+KEY=""
+
+while read command arguments
+do
+	CMD=""
+	echo "Read command [${command}]"
+	case "${command}" in
+	file)	FILENAME=${arguments}
+	  		continue;;
+	[Kk][Ee][Yy])	KEY=${arguments}
+	  		continue;;
+	list)	ARGS="/bin/ls"	;;
+	view)	ARGS="/bin/more ${FILENAME}"	;;
+	search)	ARGS="/usr/bin/grep ${KEY} ${FILENAME}"	;;
+	*)
+		echo "Unknown command"
+		continue
+		;;
+	esac
+	echo "Running: ${ARGS}"
+	if 
+		eval ${ARGS}
+	then
+		echo ". . . OK"
+	else
+		echo ". . . FAIL"
+	fi
+done
+

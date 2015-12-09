@@ -1,0 +1,10 @@
+#!/bin/sh
+
+for document in ../*rationale*.md
+do
+	echo "Processing ${document}"
+	target=`echo ${document} | sed -e 's/[.]md$/.tex/' -e 's:^[.][.]/::'`
+
+	pandoc -f markdown -t latex+pandoc_title_block -s ${document} > ${target}
+done
+

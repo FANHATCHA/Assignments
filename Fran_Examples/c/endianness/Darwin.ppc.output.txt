@@ -1,0 +1,175 @@
+Set Structure to:  16000, deadbeef, 3.141593
+>> start dump >>
+As struct : (12 bytes)
+   sval : 3e80 (16000)
+   lval : deadbeef (-559038737)
+   fval : 3.141593
+
+As ints : (4 bytes)
+    int[  0] 0x3e8025a4 (1048585636)
+    int[  1] 0xdeadbeef (-559038737)
+    int[  2] 0x40490fdb (1078530011)
+
+As longs : (4 bytes)
+    int[  0] 0x3e8025a4 (1048585636)
+    int[  1] 0xdeadbeef (-559038737)
+    int[  2] 0x40490fdb (1078530011)
+
+As floats : (4 bytes)
+    float[  0] 0.250287 
+    float[  1] -6259853398707798016.000000 
+    float[  2] 3.141593 
+
+As doubles : (8 bytes)
+    double[  0] 0.000000 
+
+As chars : (1 byte)
+    char[  0] 3e   62 '>'
+    char[  1] 80  128 (unprintable)
+    char[  2] 25   37 '%'
+    char[  3] a4  164 (unprintable)
+    char[  4] de  222 (unprintable)
+    char[  5] ad  173 (unprintable)
+    char[  6] be  190 (unprintable)
+    char[  7] ef  239 (unprintable)
+    char[  8] 40   64 '@'
+    char[  9] 49   73 'I'
+    char[ 10] 0f   15 (unprintable)
+    char[ 11] db  219 (unprintable)
+<< done dump <<
+
+Set iptr[  0] to 0xbeadbead (-1095909715)
+Set iptr[  1] to 0xbeadbeae (-1095909714)
+Set iptr[  2] to 0xbeadbeaf (-1095909713)
+>> start dump >>
+As struct : (12 bytes)
+   sval : ffffbead (4294950573)
+   lval : beadbeae (-1095909714)
+   fval : -0.339345
+
+As ints : (4 bytes)
+    int[  0] 0xbeadbead (-1095909715)
+    int[  1] 0xbeadbeae (-1095909714)
+    int[  2] 0xbeadbeaf (-1095909713)
+
+As longs : (4 bytes)
+    int[  0] 0xbeadbead (-1095909715)
+    int[  1] 0xbeadbeae (-1095909714)
+    int[  2] 0xbeadbeaf (-1095909713)
+
+As floats : (4 bytes)
+    float[  0] -0.339345 
+    float[  1] -0.339345 
+    float[  2] -0.339345 
+
+As doubles : (8 bytes)
+    double[  0] -0.000001 
+
+As chars : (1 byte)
+    char[  0] be  190 (unprintable)
+    char[  1] ad  173 (unprintable)
+    char[  2] be  190 (unprintable)
+    char[  3] ad  173 (unprintable)
+    char[  4] be  190 (unprintable)
+    char[  5] ad  173 (unprintable)
+    char[  6] be  190 (unprintable)
+    char[  7] ae  174 (unprintable)
+    char[  8] be  190 (unprintable)
+    char[  9] ad  173 (unprintable)
+    char[ 10] be  190 (unprintable)
+    char[ 11] af  175 (unprintable)
+<< done dump <<
+
+Set fptr[  0] to inf
+Set fptr[  1] to 1.000000
+Set fptr[  2] to 0.500000
+>> start dump >>
+As struct : (12 bytes)
+   sval : 7f80 (32640)
+   lval : 3f800000 (1065353216)
+   fval : 0.500000
+
+As ints : (4 bytes)
+    int[  0] 0x7f800000 (2139095040)
+    int[  1] 0x3f800000 (1065353216)
+    int[  2] 0x3f000000 (1056964608)
+
+As longs : (4 bytes)
+    int[  0] 0x7f800000 (2139095040)
+    int[  1] 0x3f800000 (1065353216)
+    int[  2] 0x3f000000 (1056964608)
+
+As floats : (4 bytes)
+    float[  0] inf 
+    float[  1] 1.000000 
+    float[  2] 0.500000 
+
+As doubles : (8 bytes)
+    double[  0] 1404448093841636238108709525152512561957965269921750951849961926418564173857877380106334677900142150539449088428007615414447690573665977721926258093384893546583880051095166731327882367118249476255769939689184892099541783386197595987990405163899060727786671506945486867643839639381332895907721809295189213184.000000 
+
+As chars : (1 byte)
+    char[  0] 7f  127 (unprintable)
+    char[  1] 80  128 (unprintable)
+    char[  2] 00    0 (unprintable)
+    char[  3] 00    0 (unprintable)
+    char[  4] 3f   63 '?'
+    char[  5] 80  128 (unprintable)
+    char[  6] 00    0 (unprintable)
+    char[  7] 00    0 (unprintable)
+    char[  8] 3f   63 '?'
+    char[  9] 00    0 (unprintable)
+    char[ 10] 00    0 (unprintable)
+    char[ 11] 00    0 (unprintable)
+<< done dump <<
+
+Set cptr[  0] to !
+Set cptr[  1] to "
+Set cptr[  2] to #
+Set cptr[  3] to $
+Set cptr[  4] to %
+Set cptr[  5] to &
+Set cptr[  6] to '
+Set cptr[  7] to (
+Set cptr[  8] to )
+Set cptr[  9] to *
+Set cptr[ 10] to +
+Set cptr[ 11] to ,
+>> start dump >>
+As struct : (12 bytes)
+   sval : 2122 (8482)
+   lval : 25262728 (623257384)
+   fval : 0.000000
+
+As ints : (4 bytes)
+    int[  0] 0x21222324 (555885348)
+    int[  1] 0x25262728 (623257384)
+    int[  2] 0x292a2b2c (690629420)
+
+As longs : (4 bytes)
+    int[  0] 0x21222324 (555885348)
+    int[  1] 0x25262728 (623257384)
+    int[  2] 0x292a2b2c (690629420)
+
+As floats : (4 bytes)
+    float[  0] 0.000000 
+    float[  1] 0.000000 
+    float[  2] 0.000000 
+
+As doubles : (8 bytes)
+    double[  0] 0.000000 
+
+As chars : (1 byte)
+    char[  0] 21   33 '!'
+    char[  1] 22   34 '"'
+    char[  2] 23   35 '#'
+    char[  3] 24   36 '$'
+    char[  4] 25   37 '%'
+    char[  5] 26   38 '&'
+    char[  6] 27   39 '''
+    char[  7] 28   40 '('
+    char[  8] 29   41 ')'
+    char[  9] 2a   42 '*'
+    char[ 10] 2b   43 '+'
+    char[ 11] 2c   44 ','
+<< done dump <<
+

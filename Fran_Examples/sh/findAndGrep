@@ -1,0 +1,6 @@
+#!/bin/sh
+
+#
+# A common pattern in find is to do something with the found file
+#
+find /usr/include -name '*.h' -exec grep -il "$1" {} \;

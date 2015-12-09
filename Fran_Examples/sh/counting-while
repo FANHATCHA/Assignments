@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# initialize the counter
+i=0
+
+# use test(1) (aka '[') to determine if we have reached the limit
+# of the range we wish to count to
+while [ $i -lt 3 ]
+do
+	echo "Loop variable is now ${i}"
+
+	# use expr(1) to calculate a mathematical expression; use
+	# back-quotes to substitute this into a line of shell script
+	# (ie; here the value printed by expr(1), which will be a
+	# number, is substituted into the line below.  This is the
+	# ``old way'' of doing things, but still common
+	i=`expr $i + 1`
+done
+
+
+#
+while [ $i -lt 6 ]
+do
+	echo "Loop variable is now ${i}"
+
+	# The new (faster) way is to use the built in expression
+	# evaluation in the shell
+	i=$(( $i + 1 ))
+done

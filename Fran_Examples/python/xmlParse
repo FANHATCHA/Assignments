@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+
+# Extremely simple XML parser that just prints out the arguments
+
+import sys
+import xml.parsers.expat
+
+global indent
+
+# create 3 handler functions
+def start_element(name, attrs):
+	global indent
+	for i in range(0, indent):
+		sys.stdout.write("  ")
+	sys.stdout.write("%s (%s)\n" % (name, attrs))
+	indent = indent + 1
+
+def end_element(name):
+	global indent
+	for i in range(0, indent):
+		sys.stdout.write("  ")
+	sys.stdout.write("%s\n" % name)
+	indent = indent - 1
+
+def char_data(data):
+	global indent
+	for i in range(0, indent):
+		sys.stdout.write("  ")
+	sys.stdout.write("Data: [%s]\n" % repr(data))
+
+indent = 0
+
+memParser = xml.parsers.expat.ParserCreate()
+memParser.StartElementHandler = start_element
+memParser.EndElementHandler = end_element
+memParser.CharacterDataHandler = char_data
+
+sys.stdout.write("Parsing a string:\n")
+memParser.Parse("""<?xml version="1.0"?>
+	<parent id="top"><child1 name="paul">Text goes here</child1>
+	<child2 name="fred">More text</child2>
+	</parent>""", 1)
+
+sys.stdout.write("Done\n")
+sys.stdout.write("\n")
+
+fileParser = xml.parsers.expat.ParserCreate()
+fileParser.StartElementHandler = start_element
+fileParser.EndElementHandler = end_element
+fileParser.CharacterDataHandler = char_data
+
+xmlFile = open("wonderland-characters.xml", "r")
+sys.stdout.write("Parsing a file:\n")
+fileParser.ParseFile(xmlFile)
+sys.stdout.write("Done\n")
+

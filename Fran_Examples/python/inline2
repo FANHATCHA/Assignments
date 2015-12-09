@@ -1,0 +1,9 @@
+#!/bin/sh
+
+wc "$@" | python -c '
+import sys
+line = sys.stdin.readline()
+while len(line) > 0:
+	sys.stdout.write("%s\n" % line.split()[0])
+	line = sys.stdin.readline()
+	' -

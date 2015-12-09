@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# a for loop operates by iterating over
+# list of values separated by spaces
+for i in 0 1 2	4   8 16
+do
+	echo "Loop variable is now '${i}'"
+done
+
+echo " . . . Done first for loop"
+
+for i in hi there	how   "are   you?"
+do
+	echo "Loop variable is now '${i}'"
+done

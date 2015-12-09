@@ -1,0 +1,40 @@
+#!/bin/sh
+
+A="This is only a T.  E.  S.  T. "
+echo '${A}='"${A}"
+
+B="This is only a \"T.  E.  S.  T. \""
+echo '${B}='"${B}"
+
+C="This is only a 'T.  E.  S.  T. '"
+echo '${C}='"${C}"
+
+D='This is only a "T.  E.  S.  T. "'
+echo '${D}='"${D}"
+
+E='I said "This is only a '"'T.  E.  S.  T. '"'"'
+echo '${E}='"${E}"
+
+F="I said 'This is only a "'"T.  E.  S.  T. "'"'"
+echo '${F}='"${F}"
+
+G='I said "This is only a '\''T.  E.  S.  T. '\''"'
+echo '${G}='"${G}"
+
+echo
+
+# `back quotes` substitute the result of the contained command:
+echo "The current date and time is "`date`
+
+echo
+
+# variable substitution occurs before the command line is broken up into
+# space delimited segments
+b="ec"
+e="ho"
+
+first="That has sur"
+last="prising results"
+
+$b$e $first$last
+

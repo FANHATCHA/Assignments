@@ -1,0 +1,57 @@
+\relax 
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
+\gdef \LT@i {\LT@entry 
+    {1}{112.94917pt}\LT@entry 
+    {1}{223.3517pt}}
+\@writefile{toc}{\contentsline {subsection}{Design:}{1}{section*.1}}
+\newlabel{design}{{}{1}{Design:\relax }{section*.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Structure:}{2}{section*.2}}
+\newlabel{structure}{{}{2}{Structure:\relax }{section*.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{Summary:}{11}{section*.3}}
+\newlabel{summary}{{}{11}{Summary:\relax }{section*.3}{}}
+\@writefile{toc}{\contentsline {section}{Testing:}{11}{section*.4}}
+\newlabel{testing}{{}{11}{Testing:\relax }{section*.4}{}}
+\@writefile{toc}{\contentsline {subsection}{tests for basic copy behaviour}{12}{section*.5}}
+\newlabel{tests-for-basic-copy-behaviour}{{}{12}{tests for basic copy behaviour\relax }{section*.5}{}}
+\@writefile{toc}{\contentsline {subsubsection}{single file present, no \texttt  {backup} directory present}{12}{section*.6}}
+\newlabel{single-file-present-no-backup-directory-present}{{}{12}{single file present, no \texttt {backup} directory present\relax }{section*.6}{}}
+\@writefile{toc}{\contentsline {subsubsection}{multiple files present, no \texttt  {backup} directory present}{12}{section*.7}}
+\newlabel{multiple-files-present-no-backup-directory-present}{{}{12}{multiple files present, no \texttt {backup} directory present\relax }{section*.7}{}}
+\@writefile{toc}{\contentsline {subsubsection}{single file not present, no \texttt  {backup} directory present}{12}{section*.8}}
+\newlabel{single-file-not-present-no-backup-directory-present}{{}{12}{single file not present, no \texttt {backup} directory present\relax }{section*.8}{}}
+\@writefile{toc}{\contentsline {subsubsection}{multiple files not present, no \texttt  {backup} directory present}{12}{section*.9}}
+\newlabel{multiple-files-not-present-no-backup-directory-present}{{}{12}{multiple files not present, no \texttt {backup} directory present\relax }{section*.9}{}}
+\@writefile{toc}{\contentsline {subsubsection}{multiple files some present, some not, no \texttt  {backup} directory present}{12}{section*.10}}
+\newlabel{multiple-files-some-present-some-not-no-backup-directory-present}{{}{12}{multiple files some present, some not, no \texttt {backup} directory present\relax }{section*.10}{}}
+\@writefile{toc}{\contentsline {subsubsection}{all of above test cases, backup directory present, contains file with name not used in test}{13}{section*.11}}
+\newlabel{all-of-above-test-cases-backup-directory-present-contains-file-with-name-not-used-in-test}{{}{13}{all of above test cases, backup directory present, contains file with name not used in test\relax }{section*.11}{}}
+\@writefile{toc}{\contentsline {subsection}{tests for options}{13}{section*.12}}
+\newlabel{tests-for-options}{{}{13}{tests for options\relax }{section*.12}{}}
+\@writefile{toc}{\contentsline {subsection}{tests for file versioning}{13}{section*.13}}
+\newlabel{tests-for-file-versioning}{{}{13}{tests for file versioning\relax }{section*.13}{}}
+\@writefile{toc}{\contentsline {subsubsection}{single file, multiple backups}{13}{section*.14}}
+\newlabel{single-file-multiple-backups}{{}{13}{single file, multiple backups\relax }{section*.14}{}}
+\@writefile{toc}{\contentsline {subsubsection}{single file, excessive multiple backups}{13}{section*.15}}
+\newlabel{single-file-excessive-multiple-backups}{{}{13}{single file, excessive multiple backups\relax }{section*.15}{}}
+\@writefile{toc}{\contentsline {subsubsection}{-z option}{13}{section*.16}}
+\newlabel{z-option}{{}{13}{-z option\relax }{section*.16}{}}
+\newlabel{single-file-present--z-option-used}{{}{13}{single file present, \texttt {-z} option used\relax }{section*.17}{}}
+\@writefile{toc}{\contentsline {paragraph}{single file present, \texttt  {-z} option used}{13}{section*.17}}
+\newlabel{multiple-files-present--z-option-used}{{}{13}{multiple files present, \texttt {-z} option used\relax }{section*.18}{}}
+\@writefile{toc}{\contentsline {paragraph}{multiple files present, \texttt  {-z} option used}{13}{section*.18}}
+\@writefile{toc}{\contentsline {subsubsection}{Notes:}{14}{section*.19}}
+\newlabel{notes}{{}{14}{Notes:\relax }{section*.19}{}}

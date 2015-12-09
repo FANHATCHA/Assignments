@@ -1,0 +1,47 @@
+#!/bin/sh
+
+#
+# An example demonstrating how to get formatted data onto standard output
+#
+
+stringval="a fine string value"
+intval="98"
+floatval="12.345"
+
+## if formatting is not required, variable substitution will suffice
+echo "stringval is: '${stringval}'"
+
+## if part of the output string comes from a command, backquotes may
+## work well
+echo "The sum of ${intval} and ${floatval} is "`dc -e "${intval} ${floatval} + p"`", isn't that nice?"
+
+
+## echo _may_ be a "shell builtin" (like "cd", "if", "while", "for" ...)
+## but it is also a command, which _may_ take slightly different options.
+## 
+echo -n "stringval is: "
+echo "'${stringval}'"
+
+/bin/echo -n "stringval is: "
+/bin/echo "'${stringval}'"
+
+
+##
+## This incompatibility is annoying, and not well covered by any standard.
+##
+## There is a POSIX standard covering printf(1), which is recommended in
+## cases where the end of line needs to be controlled.  This provides access
+## to all the other nice specifiers that printf(1) supports (very similar
+## to those supported by printf(3))
+##
+## In spite of this, many script authors cling to the use of "echo -n"
+##
+
+printf "data: '%10s' (%10s) [%10s]" "${stringval}" "${intval}" "${floatval}"
+printf " <- there is our data\n"
+
+printf "data: '%-10s' (%10x) [%10.4f]\n" \
+		"${stringval}" "${intval}" "${floatval}"
+
+printf "What is we forget the EOL?"
+

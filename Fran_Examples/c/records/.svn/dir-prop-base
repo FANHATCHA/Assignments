@@ -1,0 +1,11 @@
+K 10
+svn:ignore
+V 110
+dumpRecordsFD
+dumpRecordsFP
+testdatafile-buffered.dat
+testdatafile-lowlevel.dat
+writeRecordsFD
+writeRecordsFP
+
+END

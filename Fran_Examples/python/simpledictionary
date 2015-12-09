@@ -1,0 +1,47 @@
+#!/usr/bin/env python
+
+# Dictionary example
+#
+
+import sys
+
+ourDict = {}
+
+
+key = "cat"
+value = [ "this", "is", "my", "cat" ]
+
+# This used to be the way that one added a new key
+# and value to a dictionary:
+#	ourDict.setdefault(tokens[0], value)
+#
+# Thankfully, wiser heads have prevailed, and now we
+# can do this:
+ourDict[ key ] = value
+
+
+key = "dog"
+value = "dogs are furry"
+ourDict[ key ] = value
+
+key = "parrot"
+value = "squawk"
+ourDict[ key ] = value
+
+
+print "Printing dictionary:"
+for (key, value) in ourDict.items():
+	print key, " : ", value
+print "Whole dictionary:"
+print ourDict
+
+if ourDict.get("hello") != None:
+	print "'hello' is in the dictionary, with value:", ourDict["hello"]
+else:
+	print "'hello' is NOT the dictionary"
+
+if ourDict.get("cat") != None:
+	print "'cat' is in the dictionary, with value:", ourDict["cat"]
+else:
+	print "'cat' is NOT the dictionary"
+

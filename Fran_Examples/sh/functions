@@ -1,0 +1,63 @@
+#!/bin/sh
+
+A="apple"
+B="banana"
+
+function printItAll() {
+	echo "In $0 - function printItAll"
+	echo '$# is '"$#"
+	echo '$@ is '"$@"
+	for arg in "$@"
+	do
+		echo '    "'"$arg"'"'
+	done
+
+	false
+}
+
+function showScope() {
+	local A="aardvaark"
+	C="cranberry"
+
+	echo '  in showScope()'
+	echo '  > $A = '"$A"
+	echo '  > $B = '"$B"
+
+	echo '  in showScope() -- setting values'
+	A='avocado'
+	B='blueberry'
+
+	echo '  > $A = '"$A"
+	echo '  > $B = '"$B"
+	echo '  in showScope() -- returning'
+
+	true
+}
+
+
+echo '$A = '"$A"
+echo '$B = '"$B"
+
+echo "calling functions . . ."
+
+if
+	showScope
+then
+	echo "showScope succeeded"
+else
+	echo "showScope returned failure"
+fi
+
+if
+	printItAll "this is" "a test" 1 2 3
+then
+	echo "printItAll succeeded"
+else
+	echo "printItAll returned failure"
+fi
+
+echo "after functions . . ."
+echo '$A = '"$A"
+echo '$B = '"$B"
+echo '$C = '"$C"
+

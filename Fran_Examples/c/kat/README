@@ -1,0 +1,8 @@
+
+This directory contains:
+
+kat.c - a file descriptor based program to copy standard input to standard
+  output
+
+fkat.c - the same program, written using FILE * rather than file descriptors
+

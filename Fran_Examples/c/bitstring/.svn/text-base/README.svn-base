@@ -1,0 +1,9 @@
+
+The file simplebitstring.c loads up a newly allocated bitstring with
+some hardcoded values from memory, and then prints them out.
+
+The file flagstorage.c is an example that creates a bitstring of a
+fixed length filled with random values.  String is saved to
+<file>bit.txt and <file>int.txt to allow examination of the required
+size in memory.
+

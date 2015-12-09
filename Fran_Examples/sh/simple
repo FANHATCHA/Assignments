@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# the character '#' begins a comment, except for the case of the
+# short (two byte) "magic number": 8483 decimal, 2123 hex, '#!' ASCII
+# at the very beginning of the file
+
+echo "This is a simple shell script"
+
+# commands are run in order -- like a program made of other programs
+ls
+
+# some commands (such as cd) are built in, and therefore have
+# special powers -- what are these?
+cd
+
+# what is the second output of "ls", versus the first?  Does it
+# matter what the current working directory is when you run the
+# script?
+ls
+
+# what do you see if you run the script as
+#	sh -x /home/MTA/courses/COMP2931/examples/simple
+

@@ -1,0 +1,4 @@
+Here is a short line
+
+That was a blank line
+This is a line that is longer than the number of characters that we have specified as the maximum length of a single line in the read using fgets()

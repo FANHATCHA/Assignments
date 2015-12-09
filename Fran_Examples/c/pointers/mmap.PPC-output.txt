@@ -1,0 +1,35 @@
+## Generated on:
+## Darwin Kernel Version 8.8.0
+## Macintosh powerpc
+## PowerPC processor: big-endian
+##
+
+&c = 0xbfffeb08
+&e = 0xbfffeb18
+sizeof(char) = 1
+sizeof(char *) = 4
+Life as a char *
+0xBFFFEB08 :   long: 5a000001  char: 5a 'Z'
+0xBFFFEB09 :   long: 00000148  char: 00 '\0'
+0xBFFFEB0A :   long: 00014865  char: 00 '\0'
+0xBFFFEB0B :   long: 0148656c  char: 01 '\1'
+0xBFFFEB0C :   long: 48656c6c  char: 48 'H'
+0xBFFFEB0D :   long: 656c6c6f  char: 65 'e'
+0xBFFFEB0E :   long: 6c6c6f00  char: 6c 'l'
+0xBFFFEB0F :   long: 6c6f0000  char: 6c 'l'
+0xBFFFEB10 :   long: 6f000000  char: 6f 'o'
+0xBFFFEB11 :   long: 000000c0  char: 00 '\0'
+0xBFFFEB12 :   long: 0000c0de  char: 00 '\0'
+0xBFFFEB13 :   long: 00c0debe  char: 00 '\0'
+0xBFFFEB14 :   long: c0debeef  char: c0 '\300'
+0xBFFFEB15 :   long: debeefff  char: de '\336'
+0xBFFFEB16 :   long: beefffe0  char: be '\276'
+0xBFFFEB17 :   long: efffe071  char: ef '\357'
+
+sizeof(int) = 4
+sizeof(int *) = 4
+Life as an int *
+0xBFFFEB08 :   long: 5a000001  char:  '\1'
+0xBFFFEB0C :   long: 48656c6c  char:  'l'
+0xBFFFEB10 :   long: 6f000000  char:  '\0'
+0xBFFFEB14 :   long: c0debeef  char:  '\357'

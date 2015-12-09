@@ -1,0 +1,123 @@
+#!/usr/bin/env python
+
+# Read lines of information, load into an array of column
+# and output in a nice format
+#
+
+import sys
+import string
+import math
+
+def loadData(infile):
+
+	nRows = 0
+	name = []
+	column = []
+	formatWidth = []
+
+	# read the first line to start
+	nameline = infile.readline()
+	if len(nameline) <= 0:
+		sys.stderr.write("No data found infile file\n");
+		return (-1, "", "", "")
+
+	# store the name we find
+	for token in string.split(nameline, ','):
+		token = token.strip()
+		name.append(token)
+		column.append([])
+		formatWidth.append(len(token))
+
+	line = infile.readline()
+	while len(line) > 0:
+
+		nRows = nRows + 1
+
+		# split up by commas
+		tokens = string.split(line, ',')
+		if len(tokens) > len(name):
+			sys.stderr.write("%d data values found, but only %d name!"
+					% (len(tokens), len(name)))
+
+		i = 0
+		for token in tokens:
+			token = token.strip()
+			tokenLength = len(token)
+			if formatWidth[i] < tokenLength:
+				formatWidth[i] = tokenLength
+
+			column[i].append(token)
+			i = i + 1
+
+		line = infile.readline()
+
+	return (nRows, name, column, formatWidth)
+
+##
+def printData(ofile, outputColumnNames,
+			numberOfRows, columnName, columnData, formatWidth):
+
+	delimiter = ""
+	for i in range(0,len(columnName)):
+		ofile.write("%s%*s" % (delimiter, formatWidth[i], columnName[i]))
+		delimiter = ", "
+	ofile.write("\n")
+
+	for j in range(0,numberOfRows):
+		delimiter = ""
+		for i in range(0,len(columnName)):
+			data = columnData[i][j]
+			ofile.write("%s%*s" % (delimiter, formatWidth[i], data))
+			delimiter = ", "
+		ofile.write("\n")
+
+
+	return 1
+
+
+##
+def printHelp():
+	sys.stdout.write("\n")
+	sys.stdout.write("Formats a .csv file as an array\n")
+	sys.stdout.write("\n")
+
+##
+outputColumnNames = ""
+delimiter = ','
+processedData = 0
+
+for arg in sys.argv[1:]:
+	if arg[0] == '-':
+		if arg[1] == 'h':
+			printHelp()
+			sys.exit(1)
+
+		elif arg[1] == 'd':
+			delimiter = arg[2]
+
+		elif arg[1] == 'L':
+			outputColumnNames = arg[2:]
+
+		else:
+			sys.stderr.write("Unknown argument '%s'\n" % arg)
+			sys.exit(-1)
+	else:
+		ifile = open(arg, "r")
+		(numberOfRows, columnName, columnData, formatWidth) \
+				= loadData(ifile)
+		if numberOfRows < 0:
+			sys.stderr.write("Failed reading '%s'\n" % arg)
+		processedData = 1
+
+if processedData == 0:
+	(numberOfRows, columnName, columnData, formatWidth) = loadData(sys.stdin)
+	if numberOfRows < 0:
+		sys.stderr.write("Failed reading standard input\n")
+
+if printData(sys.stdout, outputColumnNames,
+			numberOfRows, columnName, columnData, formatWidth) <= 0:
+	sys.stderr.write("Error in output\n")
+	sys.exit(-1)
+
+sys.exit(0)
+

@@ -1,0 +1,50 @@
+#!/bin/sh
+
+#
+# First, if the testcases are still packed up, untar them
+#
+if [ ! -d testdata ]
+then
+	if [ -f testcasedata.tar ]
+	then
+		if
+			tar xf testcasedata.tar
+		then
+			:
+		else
+			echo "Error:  failed unpacking test data -- aborting"
+			exit 1
+		fi
+	else
+		echo "Error:  cannot locate test data -- aborting"
+		exit 1
+	fi
+fi
+
+
+#
+# Now run all of the tests
+#
+for file in test01-simple test02-blanklines test03-fractional test04-verbosity
+do
+	echo ""
+	echo "---- Next test: ----"
+	echo "./calc < testdata/${file}.txt"
+	./calc < testdata/${file}.txt | tee testdata/${file}.raw-output
+
+	## ensure we only compare lines with equals signs
+	egrep '^=' testdata/${file}.raw-output > testdata/${file}.cmp-output
+
+	## see what compare says
+	if
+		cmp -s testdata/${file}.cmp-output testdata/${file}.expected
+	then
+		echo "PASS!"
+	else
+		echo "FAIL - Calculated results differ:"
+		diff testdata/${file}.cmp-output testdata/${file}.expected
+		echo ""
+	fi
+	echo ""
+	echo ""
+done

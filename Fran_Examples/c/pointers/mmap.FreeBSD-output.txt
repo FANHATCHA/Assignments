@@ -1,0 +1,42 @@
+## Generated on:
+## OpenBSD qemg.org 3.9 GENERIC#1 i386
+## AMD-K6(tm) 3D processor ("AuthenticAMD" 586-class) 451MHz
+## Intel/AMD: little-endian
+##
+
+&c = 0x7fffffffe457
+&e = 0x7fffffffe43f
+sizeof(char) = 1
+sizeof(char *) = 8
+Life as a char *
+0x7FFFFFFFE457 :   long: 7fffffffe4575a  char: 5a 'Z'
+0x7FFFFFFFE456 :   long: 7fffffffe4565a00  char: 00 '\0'
+0x7FFFFFFFE455 :   long: ffffffe4555a0000  char: 00 '\0'
+0x7FFFFFFFE454 :   long: ffffe4545a000000  char: 00 '\0'
+0x7FFFFFFFE453 :   long: ffe4535a00000000  char: 00 '\0'
+0x7FFFFFFFE452 :   long: e4525a0000000000  char: 00 '\0'
+0x7FFFFFFFE451 :   long: 515a000000000000  char: 00 '\0'
+0x7FFFFFFFE450 :   long: 5a00000000000001  char: 01 '\1'
+0x7FFFFFFFE44F :   long: 00000100  char: 00 '\0'
+0x7FFFFFFFE44E :   long: 00010000  char: 00 '\0'
+0x7FFFFFFFE44D :   long: 01000000  char: 00 '\0'
+0x7FFFFFFFE44C :   long: 100000008  char: 08 '\10'
+0x7FFFFFFFE44B :   long: 100000008c0  char: c0 '\300'
+0x7FFFFFFFE44A :   long: 100000008c0de  char: de '\336'
+0x7FFFFFFFE449 :   long: 100000008c0debe  char: be '\276'
+0x7FFFFFFFE448 :   long: 8c0debeef  char: ef '\357'
+0x7FFFFFFFE447 :   long: 8c0debeef00  char: 00 '\0'
+0x7FFFFFFFE446 :   long: 8c0debeef0000  char: 00 '\0'
+0x7FFFFFFFE445 :   long: 8c0debeef000000  char: 00 '\0'
+0x7FFFFFFFE444 :   long: c0debeef0000006f  char: 6f 'o'
+0x7FFFFFFFE443 :   long: debeef0000006f6c  char: 6c 'l'
+0x7FFFFFFFE442 :   long: beef0000006f6c6c  char: 6c 'l'
+0x7FFFFFFFE441 :   long: ef0000006f6c6c65  char: 65 'e'
+0x7FFFFFFFE440 :   long: 6f6c6c6548  char: 48 'H'
+
+sizeof(int) = 4
+sizeof(int *) = 8
+Life as an int *
+0x7FFFFFFFE457 :   long: 7fffffffe43f5a  char:  'Z'
+0x7FFFFFFFE44F :   long: 00000100  char:  '\0'
+0x7FFFFFFFE447 :   long: 8c0debeef00  char:  '\0'

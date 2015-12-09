@@ -1,0 +1,29 @@
+/**
+ * Body of reference counter implementation
+ *
+ * $Id$
+ */
+
+
+#ifndef MAKEDEPEND
+# include <stdio.h>
+#endif
+
+#include "CountedMemoryReference.h"
+
+CountedMemoryReference::CountedMemoryReference()
+{
+	referenceCount = 0;
+	wasTouched = 0;
+}
+
+CountedMemoryReference::~CountedMemoryReference()
+{
+}
+
+char *
+CountedMemoryReference::clsId() const
+{
+	return (char *) "CountedMemoryReference";
+}
+

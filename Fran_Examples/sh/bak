@@ -1,0 +1,234 @@
+#! /bin/sh
+
+#		Andrew Hamilton-Wright : original version Summer 94
+#
+#	backup tool -- puts files in the local "backup" dir, creating
+#	this dir if it has to
+#
+#	v1.1	revision numbers -- will add a revision number for
+#			multiple instances of the same file per day
+#	v1.2	compression -- -z option will compress files
+#	v1.3	timestamp -- use time as well as date
+#	v1.4	tag -- use tag as well as date
+#	v1.5	ensure that backup subdir exists if backed up file is
+#			in a relative directory
+#	v1.6	simplification -- got rid of compression and other nonsense
+
+
+
+#	defines -- change these at will
+#	directory name to use for backups
+DIRNAME=backup
+
+#	maximum number of file revisions/day (mostly a sanity check)
+MAXVERSION=19
+
+#	date/time extensions
+DATETIMEEXT=`date +"_%H-%M_%b%d_%y"`
+
+
+echo " "
+
+
+#	runtime variables : do not modify
+Vecho="test -z "
+fileext=""
+
+# print help and exit?
+printhelp="NO"
+
+
+
+if [ $# -lt 1 ]
+then
+	printhelp="YES"
+fi
+
+
+
+#	Check if directory for bakups exists, and create one
+#	if it does not
+
+if [ -d $DIRNAME ]
+then
+	:
+else
+	if [ -f $DIRNAME ]
+	then
+		echo "ERROR:  file '$DIRNAME' exists - cannot create backup directory" >&2
+		echo " " >&2
+		exit 1
+	fi
+
+	echo " "
+	echo "Creating backup directory $DIRNAME"
+	if 
+		mkdir $DIRNAME
+	then
+		:
+	else
+		echo "WARNING:" >&2
+		echo "Could not create dir $DIRNAME" >&2
+		echo "Backup Aborted" >&2
+		echo " " >&2
+		exit 1;
+	fi
+fi
+
+
+
+
+#	strip out options
+for arg in "$@"
+do
+	case $arg in
+	-v*)
+		Vecho="echo"
+		;;
+	-t*)
+		$Vecho "Timestamp mode : time will be appended to filename"
+		$Vecho " "
+		fileext="${fileext}$DATETIMEEXT"
+		;;
+	-n*)
+		$Vecho "Noext mode : only version will be appended to filename"
+		$Vecho " "
+		fileext=""
+		;;
+	-T*)
+		fileext=`echo ${arg} | sed -e 's/-T/./'`
+		$Vecho "Tag mode :  tag $fileext will be appended to filename"
+		$Vecho " "
+		;;
+	-[hH?]*)
+		printhelp="YES"
+		;;
+	-*)
+		echo "Unknown option $arg"
+		;;
+	*)
+		:
+		##	filename - ignore on this pass	##
+		;;
+	esac
+done
+
+
+if [ X"${printhelp}" = X"YES" ]
+then
+	echo "Use:  bak <file> . . ."
+	echo " "
+	echo "Backs up files <file> to the local directory '$DIRNAME'."
+	echo " "
+	echo "bak will create the directory if needed, and if there are other copies with"
+	echo "the same name in the directory, will begin version numbering files with the"
+	echo "further extension '.v<version_no>'"
+	echo " "
+	echo "As a sanity check, the maximum version is `expr $MAXVERSION + 1`."
+	echo " "
+	echo "Options:"
+	echo " "
+	echo " -v  : verbose mode -- prints out all tests done"
+	echo " -t  : use date/time stamp tagging, extension will be ($DATETIMEEXT)"
+	echo " -T  : use tag as well as date, extension will be specified tag"
+	echo " -n  : add no extension -- only extension will be version # (default)"
+	echo " "
+	exit 0
+fi
+
+
+
+#			now do work		MAIN LOOP
+
+for filearg in $@
+do
+	case $filearg in
+	-*)
+		:
+		##	do nothing with options this time around	##
+		;;
+	*)
+
+		##	if file does not exist, then things are cool	##
+
+		if [ ! -r "$DIRNAME/$filearg$fileext" ]
+		then
+			dostr="$DIRNAME/$filearg$fileext"
+		else
+
+			## if things are not cool, try for a valid version ##
+
+			echo "bak: found $DIRNAME/$filearg$fileext" >&2
+			dostr=""
+			attempt="1"
+
+			while 
+				[ -z "$dostr" ]
+			do
+				trystr="$DIRNAME/$filearg$fileext.v$attempt"
+
+				$Vecho "##	 trying $trystr"
+
+
+				if [ ! -r "$trystr" ]
+				then
+
+					$Vecho "##	 $trystr is valid"
+
+					##	string is ok, so save and move on to actual copy	##
+					dostr="$trystr"
+
+				else
+
+					$Vecho "##	 found $trystr"
+				fi
+
+				##	increment attempt	##
+				attempt=`expr $attempt + 1`
+
+			done
+
+		fi
+
+
+		##	ok - we now have a valid name to back up to	##
+
+		dirstr=`dirname "$dostr"`
+		if [ ! -d "$dirstr" ]
+		then
+			echo "Creating directory $dirstr" >&2
+			if
+				mkdir -p $dirstr
+			then
+				:
+			else
+				echo "WARNING:" >&2
+				echo "Could not create directory $dirstr" >&2
+				echo "Backup Aborted" >&2
+				echo " " >&2
+				exit 1
+			fi
+		fi
+
+		## actually do the copy
+		if
+			cp "$filearg" "$dostr"
+		then
+			echo "$filearg backed up to $dostr" >&2
+			:
+		else
+			echo "WARNING:" >&2
+			echo "Could not copy $filearg to $dostr" >&2
+			echo "Backup Aborted" >&2
+			echo " " >&2
+			exit 1
+		fi
+
+		;;
+	esac
+done
+
+echo " "
+
+exit 0
+

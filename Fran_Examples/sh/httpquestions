@@ -1,0 +1,26 @@
+#!/bin/sh
+
+#
+# Some examples to be tried at the command line ...
+#
+
+# see the top of the file
+head ~COMP2931/data/httpd-access.log
+
+# get just the IP numbers from the file
+# (after removing the IPv6 lines that begin with '::1')
+cat ~COMP2931/data/httpd-access.log | egrep -v '^::1' | sed -e 's/ .*//' | head -20
+
+# count the unique IP addresses in the file
+cat ~COMP2931/data/httpd-access.log | egrep -v '^::1' | sed -e 's/ .*//' | sort -u | wc | cut -c1-8
+
+# or
+# cat ~COMP2931/data/httpd-access.log | egrep -v '^::1' | sed -e 's/ .*//' | sort -u | wc | awk '{print $1;}'
+
+
+# count the unique IP addresses coming from Mount A
+cat ~COMP2931/data/httpd-access.log | egrep -v '^::1' | sed -e 's/ .*//' | sort -u | grep '^138.73' | wc | cut -c1-8
+
+# What commands are asked for?
+cat ~COMP2931/data/httpd-access.log | sed -e 's/[^"]*"//' -e 's/ .*//' | sort -u
+

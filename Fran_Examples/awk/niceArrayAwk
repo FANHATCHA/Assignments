@@ -1,0 +1,55 @@
+#!/bin/awk -f
+
+#
+# Awk built-in variables we use:
+#  FS  = field separator
+#  NF  = number of fields in this record
+#  NR  = number of records seen so far (across all files)
+#  FNR = number of records seen so far (in this file)
+
+BEGIN	{
+		# change field separator to comma (followed by whitespace)
+		FS = ",[ \t]*";
+		nData = 0;
+	}
+
+	# for every input line, do these things.
+	#
+	# Note that $0 is the entire input line, and each separate
+	# field is accessible as $1 through $NF
+	{
+		maxwidth = NF > maxwidth ? NF : maxwidth;
+
+		for (i = 1; i <= NF; i++) {
+			if (FNR == 1)
+				name[i] = $i;
+			else
+				data[nData,i] = $i;
+			l = length($i);
+			width[i] = l > width[i] ? l : width[i];
+		}
+
+		# if we loaded data, then update our list maximum
+		if (FNR != 1) nData++;
+	}
+
+END	{
+
+		# print headers
+		delim = "";
+		for (i = 1; i <= maxwidth; i++) {
+			printf("%s%*s", delim, width[i], name[i]);
+			delim = ", "
+		}
+		printf("\n");
+
+		# print all the data
+		for (i = 0; i < nData; i++) {
+			delim = "";
+			for (j = 1; j <= maxwidth; j++) {
+				printf("%s%*s", delim, width[j], data[i,j]);
+				delim = ", "
+			}
+			printf("\n");
+		}
+	}

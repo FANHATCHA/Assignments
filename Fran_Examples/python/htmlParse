@@ -1,0 +1,164 @@
+#!/usr/bin/env python
+
+#
+# dump out the data on an HTML page, formatting using indents to show
+# tag nesting
+#
+
+import sys
+import math
+import random
+import string
+import urllib
+from HTMLParser import HTMLParser
+
+
+class MyHTMLParser(HTMLParser):
+
+	def __init__(self):
+		HTMLParser.__init__(self)
+		self.out = None
+		self.indent = 0
+
+	def handle_starttag(self, tag, attrs):
+		for i in range(0, self.indent):
+			self.out.write(" ")
+		if len(attrs) > 0:
+			self.out.write(">> %s :\n" % tag)
+
+			for (n, v) in attrs:
+				for i in range(0, self.indent):
+					self.out.write(" ")
+				self.out.write(" %s = \"%s\"\n" % (n, v))
+		else:
+			self.out.write(">> %s\n" % tag)
+		self.indent = self.indent + 1
+
+	def handle_endtag(self, tag):
+		self.indent = self.indent - 1
+		if self.indent < 0:
+			self.indent = 0
+			self.out.write("TOO MANY OUTDENTS!\n")
+
+		for i in range(0, self.indent):
+			self.out.write(" ")
+		self.out.write("<< %s\n" % tag)
+
+	def handle_data(self, data):
+		if data != "\n":
+			printdata = data.replace("\n", "\\n")
+			for i in range(0, self.indent):
+				self.out.write(" ")
+			self.out.write("DATA: [%s]\n" % printdata)
+
+
+##
+def processURL(urlname, out):
+
+	sys.stdout.write("Processing %s\n" % urlname);
+
+	## open a connection based on the URL
+	urlsocket = urllib.urlopen(urlname)
+
+	## create an instance of the parser
+	parser = MyHTMLParser()
+	parser.out = out
+
+
+	## process all the lines in the file available at the URL
+	inputline = urlsocket.readline()
+	while len(inputline) > 0:
+		parser.feed(inputline)
+		inputline = urlsocket.readline()
+
+
+
+##
+def printHelp(progname):
+
+	sepIndex = string.rfind(progname, "/")
+	if sepIndex < 0:
+		printProgname = progname
+	else:
+		printProgname = progname[sepIndex + 1:]
+
+	print printProgname, " [ options ] <URL>"
+	print ""
+	print "Options:"
+	print ""
+	print "-o<FILE>  : Place output in <FILE>"
+	print "-v		: Be more verbose"
+	print ""
+	print "Parse simple HTML, dumping the tags"
+
+
+
+##
+## ----------------------------------------------------------------
+## Beginning of mainline
+##
+
+def main(argv):
+	ofile = sys.stdout
+	ifile = sys.stdin
+	pendingOutputFile = 0
+	sawURL = 0
+	status = 0
+
+
+	## process arguments
+	for arg in argv[1:]:
+		if arg[0] == '-':
+			if arg[1] == 'o':
+				if arg[2:] == "":
+					pendingOutputFile = 1
+				else:
+					try:
+						ofile = open(arg[2:], "w")
+					except IOError, (errno, strerror):
+						sys.stderr.write(
+								"Failure opening output file '%s'\n" %
+								arg[2:])
+						sys.stderr.write(
+								"	I/O error(%s) : %s\n" %
+								(errno, strerror))
+						sys.stderr.write("\n")
+						printHelp(argv[0])
+						sys.exit(1)
+
+			else:
+				sys.stderr.write("Unknown argument '%s' -- aborting\n" % arg)
+				printHelp(argv[0])
+				sys.exit(1)
+
+		else:
+			if pendingOutputFile:
+				pendingOutputFile = 0
+				try:
+					ofile = open(arg, "w")
+				except IOError, (errno, strerror):
+					sys.stderr.write("Failure opening output file '%s'\n" % arg)
+					sys.stderr.write("	I/O error(%s) : %s\n" % (errno, strerror))
+					sys.stderr.write("\n")
+					printHelp(argv[0])
+					sys.exit(1)
+
+			else:
+				if processURL(arg, ofile) < 0:
+					status = -1;
+				sawURL = 1
+
+	if sawURL == 0:
+		sys.stderr.write("No URL specified!\n")
+		printHelp(argv[0])
+		sys.exit(1)
+
+	sys.exit(status)
+
+##
+## ----------------------------------------------------------------
+## This causes the main() function to be called if run from
+## the command line; otherwise we can be loaded as an
+## importable module
+if __name__ == "__main__": main(sys.argv)
+

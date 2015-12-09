@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+
+# Simple dictionary get/set
+#
+
+import sys
+
+ourDict = {}
+
+line = sys.stdin.readline()
+while len(line) > 0:
+	if line[0:4] == "quit" or line[0:4] == "exit":
+		break;
+
+	if line[0:4] == "prin":
+		print "Printing dictionary:"
+		for (key, value) in ourDict.items():
+			print key, " : ", value
+		print "Whole dictionary:"
+		print ourDict
+	else:
+
+		## remove whitespace from line, then split
+		tokens = line.strip().split()
+		if len(tokens) < 2:
+			sys.stderr.write("Need at least two tokens for set\n");
+		else:
+			value = tokens[1:]
+			
+			# This used to be the way that one added a new key
+			# and value to a dictionary:
+			#	ourDict.setdefault(tokens[0], value)
+			#
+			# Thankfully, wiser heads have prevailed, and now we
+			# can do this:
+			ourDict[tokens[0]] = value
+
+	line = sys.stdin.readline()
+
+
+if ourDict.get("hello") != None:
+	print "Hello is in the dictionary, with value:", ourDict["hello"]

@@ -1,0 +1,113 @@
+
+perform - a looping tool
+=+==+==+==+==+==+==+==+=
+
+Author: Andrew Hamilton-Wright
+Date  : June 4, 1993
+
+
+Introduction:
+-=-=-=-=-=-=-
+
+The "perform" tool was designed to provide an easy way to wrap
+up a loop for file processing.  There are many tasks having to
+do with file manipulation that essentially involve processing
+a list of files and generating a new name from the old file
+name in a way that can be specified by a simple search-and-replace.
+
+The most common of these involves something like a name update:
+for instance, changing an extension from .JPG to .jpeg or similar.
+Perform operates by taking a command that will be applied to each
+file, a search/replace string, and a list of files to operate
+on, so the above ".JPG" -> ".jpeg" conversion could be achieved
+by:
+	perform -cmv -s/.JPG/.jpeg/ *.JPG
+which will run the command "mv" iteratively on all .JPG files,
+generating a .jpeg version instead.
+
+
+Use:
+-=-=
+
+There are two required flags:
+-c<CMD>     : specify the command to run; complex commands may be
+            : specified by using quotes, such as -c"svn mv", for
+		    : example
+-s/SRC/RPL/ : search for SRC and replace with RPL in order to
+			: generate a new file name
+
+The perform script assumes that by listing file arguments to
+the command in the form
+	yourcommand oldname newname
+that the command will process "oldname" and place the result in
+"newname"
+
+
+
+Redirection option:
+-------------------
+
+-oOP		: where OP is one of ">", "<" or ">>"
+
+This flag is intended to provide more flexibility to the script
+if the above "oldname" "newname" logic doesn't apply; an example
+would be:
+	perform -ccat -s/.JPG/.jpeg/ -o\> *.JPG
+which would process the above-mentioned JPG files using "cat"
+
+
+Other options:
+--------------
+
+-p          : print a large gap between operations (for clarity)
+-uc         : make new filename be all in upper case
+-lc         : make new filename be all in lower case (these two
+			: are primarily useful when dealing with files from
+			: a DOS/Windows or similarly braindead "caseless"
+			: system
+
+
+Design:
+-=-=-=-
+
+The purpose of the script is to iteratively process files, so
+therefore the body of the script is essentially one big loop;
+before the loop starts, there is an if statement to deliver
+help if no arguments are passed.
+
+The loop iterates over each command-line argument in turn.
+The expectation is that flags will precede filenames, so the
+main task in the loop is to recognize flags and take action,
+and once the filename appear, to process these by applying
+the state set up by the flags.
+
+This is achieved by having a case statement recognize all of
+the various flags, and having the default "*" case handle
+files.  Each case particular to a flag therefore sets up
+state in the form of variables to record what is to happen,
+and the file processing case determines that this has been
+done through two variables "found_s" and "found_c" that
+recognize the use of the two flags -s and -c respectively.
+
+If these flags have been given, processing enters the "heart"
+of the routine, in which a new filename is generated, tested
+to ensure it is different than the original one, and then the
+command invoked with any necessary redirection.
+
+This entire section is wrapped in an "if" statement in order
+to catch any invalid exit status of the supplied user command,
+and in that case, abort processing.
+
+
+Summary:
+-=-=-=-=
+
+The script "perform" is a simple looping program that repeatedly
+runs a user-supplied command on a series of user-indicated files,
+performing a name substitution in each case to generate a new
+output name for processing from each unique input name.  If an
+error is encountered, the program will stop.
+
+
+
+
