@@ -1,3 +1,7 @@
+**Command line flags:**
+ - Set maximum Java heap size: `-Xmx<size>` (**For example:** `-Xmx1024k`, `-Xmx512m`, `-Xmx8g`)
+ - Set maxmimum Java thread stack size: `-Xss<size>`
+
 **Input:**
  * Fastest known way to read a large number of space-separated integers from a line (was tested with up to 200000 integers on one lines). NOTE: This method of using a BufferedReader is faster than Scanner for other uses too.
 ```java
@@ -9,58 +13,18 @@ for (int i = 0; i < n; i++)
 
 **Conversions:**
 
-* Character → Integer
-```java    
-Character.getNumericValue(char c);
-```
-* Integer → Character 
-```java    
-Character c = i + ‘0’
-```
-* ArrayList → Set
-```java 
-Set<Foo> listName = new HashSet<Foo>(arrayListName);
-```
-* Set → ArrayList
-```java 
-ArrayList<Integer> arrayListName = new ArrayList<Integer>(mySet);
-```  
-* Base x → Base 10 where 2 <= x <= 36
-```java  
-int base10 = Integer.parseInt(strBaseX, x);
-
-// Examples:
-parseInt("0", 10) returns 0
-parseInt("473", 10) returns 473
-parseInt("+42", 10) returns 42
-parseInt("-0", 10) returns 0
-parseInt("-FF", 16) returns -255
-parseInt("1100110", 2) returns 102
-parseInt("2147483647", 10) returns 2147483647
-parseInt("-2147483648", 10) returns -2147483648
-parseInt("2147483648", 10) throws a NumberFormatException
-parseInt("99", 8) throws a NumberFormatException
-parseInt("Kona", 10) throws a NumberFormatException
-parseInt("Kona", 27) returns 411787
-```
+* Character to Integer: `int val = Character.getNumericValue(char c);`
+* Integer to Character: `Character c = i + '0';`
+* ArrayList to Set: `Set<Foo> listName = new HashSet<Foo>(arrayListName);`
+* Set to ArrayList: `ArrayList<Integer> arrayListName = new ArrayList<Integer>(mySet);`
+* Base x to Base 10 (where 2 <= x <= 36): `int base10 = Integer.parseInt(strBaseX, x);`
 
 **Comparator:**
-
 ``` java
-// Orders Planet objects by ID
-class PlanetIDOrder implements Comparator<Planet> {
-    @Override public int compare(Planet p1, Planet p2) {
-        Integer i1 = new Integer(p1.id);
-        Integer i2 = new Integer(p2.id);
-        return  i1.compareTo(i2);
+// Example: Sort YourObjects by ID
+class YourComparator implements Comparator<YourObject> {
+    @Override public int compare(YourObject a, YourObject b) {
+        return (new Integer(a.id)).compareTo(b.id);
     }
 }
 ```
-
-Usage:
-
-``` java
-Collections.sort( my_planets_arraylist, new PlanetIDOrder() );
-```
-
-
