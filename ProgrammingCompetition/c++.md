@@ -9,6 +9,27 @@ g++ -Wall -g -std=c++11 file.cpp -o executable_name
 # If the above gives you trouble try the following:
 g++ -std=c++0x your_file.cpp -o your_program
 ```
+### Template
+
+``` c++
+#include <iostream> // cin, cout
+#include <stdio.h>  // printf
+using namespace std;
+   
+int main() {
+ 
+  string a;
+  int b;
+  long c;
+  cin >> a >> b >> c;
+ 
+  // Output c style
+  printf("%s %d %ld\n", a.c_str(), b, c);
+  // Output c++ style
+  cout << a << " " << b << " " << c << endl;
+}
+```
+
 ### Input/Ouput Optimizations:
 
 Place `ios_base::sync_with_stdio(false);` in the beginning of the program, before any input/output. This command turns off iostreams and stdio synchronization (description). It is on by default, which means that calls to iostreams and stdio functions can be freely interleaved even for the same underlying stream. When synchronization is turned off, mixing calls is no longer allowed, but iostreams can potentially operate faster.
