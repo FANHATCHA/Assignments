@@ -59,14 +59,12 @@ while (n-- > 0) {
 string myNum = "1903";
 
 // String to int:
-#include <stdio.h> // atoi
+#include <cstdlib> // atoi, atof, atol
 int n = atoi(myNum.c_str());
 int n = std::stoi(myNum);   // c++11 way 
 
 // Int to String:
 string s = std::to_string(n); // c++11. to_string is also overloaded for other primitive types
-
-```
 
 ```
 
