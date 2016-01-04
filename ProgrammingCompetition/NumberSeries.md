@@ -4,7 +4,7 @@
 
 * Catalan: `1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796...`
 
-This series has many appearances in combinatorics. Starting with C_0 = 1, we can calculate using the recurrence relation `C_(n+1) = ((2(2n+1))/(n+2))*C_n`, or the following formulas can be used:
+This series has many appearances in combinatorics. Starting with C_0 = 1, we can calculate using the recurrence relation `C_(n+1) = ((2*(2*n+1)*C_n))/(n+2)`, or the following formulas can be used:
 
 <img src="/ProgrammingCompetition/Images/CatalanSeries.png" alt="Catalan Series Formula" width="50%">
      
