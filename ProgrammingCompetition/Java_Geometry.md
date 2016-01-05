@@ -164,6 +164,20 @@ static double crossProduct(Point2D a, Point2D b) {
 }
 ```
 
+** Determine if Polygon points are given CW or CCW **
+
+``` java
+	static boolean isCounterClockwise(Point2D polygon[]) {
+		double sum = 0.0;
+		for (int i = 0; i < polygon.length; i++) {
+			Point2D p1 = polygon[i];
+			Point2D p2 = polygon[(i+1)%N];
+			sum += (p2.getX() - p1.getX())*(p2.getY() + p1.getY());
+		}
+		return sum <= 0.0;
+	}
+```
+
 **Convex Hull:**
 
 ``` java
