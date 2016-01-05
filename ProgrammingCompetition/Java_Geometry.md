@@ -164,7 +164,7 @@ static double crossProduct(Point2D a, Point2D b) {
 }
 ```
 
-** Determine if Polygon points are given CW or CCW **
+**Determine if Polygon points are given CW or CCW**
 
 ``` java
 	static boolean isCounterClockwise(Point2D polygon[]) {
