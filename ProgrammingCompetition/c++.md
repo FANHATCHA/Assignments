@@ -51,6 +51,13 @@ cin >> n;
 while (n-- > 0) {
  cin >> s >> s1 >> a; // reads a line with a string, another string and a long.
 }
+
+// You can also use this method:
+
+int x, y, z;
+while( cin >> x >> y >> z)
+   // do something
+
 ```
 ### Type conversions:
 
