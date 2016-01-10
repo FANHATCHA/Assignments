@@ -80,8 +80,8 @@ static Point2D findCenter(double x1, double y1, double x2, double y2, double x3,
 
 ![CircleSector](/ProgrammingCompetition/Images/circular_sector.jpg)
 
-Area of Sector = (r^2) x theta/2,
-Arc length = r x theta
+Area of Sector = θr²/2 <br>
+Arc length = rθ
 
 **Inradius:**
 
