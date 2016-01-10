@@ -72,6 +72,10 @@ static Point2D findCenter(double x1, double y1, double x2, double y2, double x3,
 }
 ```
 
+**Circle Line Intersection**
+<br>
+<a href="https://github.com/micahstairs/Assignments/edit/master/ProgrammingCompetition/c++_geometry.md"> View C++_geometry </a>
+
 **Circle Arc Length/Sector Area**
 
 ![CircleSector](/ProgrammingCompetition/Images/circular_sector.jpg)
