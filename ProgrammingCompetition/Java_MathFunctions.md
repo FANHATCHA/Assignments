@@ -63,7 +63,7 @@ static boolean[] sieve(int limit) {
 
 **GCF (Greatest Common Factor):**
 ``` java
-static int gcf( int a, int b ) {
+static int gcf( long a, long b ) {
     if (b == 0) return a;
     return gcf( b, a % b );
 } 
@@ -72,7 +72,7 @@ static int gcf( int a, int b ) {
 **Co-Prime:**
 ```java
 // Co-prime is a fancy way of saying that two numbers share no factors 
-static boolean areCoprime(int a, int b) {
+static boolean areCoprime(long a, long b) {
 	return gcf(a, b) == 1;
 }
 ```
