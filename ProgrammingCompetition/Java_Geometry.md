@@ -105,17 +105,6 @@ static double angleBetweenPoints(Point2D a, Point2D b) {
   return Math.atan2(b.getY() - a.getY(), b.getX() - a.getX());
 }
 ```
-**Angle of ABC:**
-```java
-// Returns the angle of the corner ABC in radians (0 <= return_value <= PI)
-// NOTE: THERE SEEMS TO BE A MISTAKE HERE, SHOULDN'T THAT BE % Math.PI??
-static double angleOfCorner(Point2D a, Point2D b, Point2D c) {
-	double TWO_PI = Math.PI*2.0;
-	double angle1 = findAngleBetweenPoints(a, b);
-	double angle2 = findAngleBetweenPoints(b, c);
-        return Math.PI - (((angle1 - angle2) % TWO_PI + TWO_PI) % TWO_PI);
-}
-```
 **Area of Triangle:**
 ```java
 static double area(Point2D a, Point2D b, Point2D c) {
