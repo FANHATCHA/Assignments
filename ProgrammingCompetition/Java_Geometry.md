@@ -251,3 +251,5 @@ static double crossProduct(Point2D a, Point2D b) {
         return true;
     }
 ```
+**Distance from point to plane:**
+Given a plane of the form ax+by+cz+d=0 and point P=(u,v,w). The distance from the point P, to the plane is given by D=(au+bv+cw+d)/sqrt(a^2+b^2+c^2)
