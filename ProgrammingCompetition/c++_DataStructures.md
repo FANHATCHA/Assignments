@@ -94,3 +94,48 @@ Core Methods:
 	
 ```
 
+### Map
+Core Methods:
+* .count(key) - used to test existance of a key
+* .size()
+* .empty()
+
+``` c++
+
+#include <iostream>
+#include <map>
+int main() {
+
+
+	map<int, string> myMap;
+    	myMap[2] = "Two";
+    	myMap[0] = "Zero";
+    	myMap[1] = "One";
+
+	// Loop Map:
+	// Requires c++11
+	for ( const auto &keyValPair: myMap ) {
+		int key    = keyValPair.first;
+		string val = keyValPair.second; //myMap[key];
+		std::cout << key << " : " << val << "\n";
+	}
+	
+	// Loop With map::iterator:
+	for ( map<int, string>::iterator iter = myMap.begin(); iter != myMap.end(); ++iter ) {
+	
+		int key    = iter->first;
+	    	string val = iter->second; // myMap[key];
+	    	cout << key << " : " << val << "\n";
+	
+	}
+	
+	// Key exists:
+	if ( myMap.count(2)) {
+		cout << myMap[2] << " exists!" << endl; 
+	}
+	
+	
+
+}
+
+```

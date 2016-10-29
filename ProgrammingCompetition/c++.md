@@ -9,13 +9,27 @@ g++ -Wall -g -std=c++11 file.cpp -o executable_name
 # If the above gives you trouble try the following:
 g++ -std=c++0x your_file.cpp -o your_program
 ```
-### Input/Ouput Optimizations:
+### Template
 
-Place `ios_base::sync_with_stdio(false);` in the beginning of the program, before any input/output. This command turns off iostreams and stdio synchronization (description). It is on by default, which means that calls to iostreams and stdio functions can be freely interleaved even for the same underlying stream. When synchronization is turned off, mixing calls is no longer allowed, but iostreams can potentially operate faster.
+``` c++
+#include <iostream> // cin, cout
+#include <stdio.h>  // printf
+using namespace std;
+   
+int main() {
+ 
+  string a;
+  int b;
+  long c;
+  cin >> a >> b >> c;
+ 
+  // Output c style
+  printf("%s %d %ld\n", a.c_str(), b, c);
+  // Output c++ style
+  cout << a << " " << b << " " << c << endl;
+}
+```
 
-Untie cin from cout using `cin.tie(NULL);`. By default, cin is tied to cout, which means that cout is flushed before any operation on cin (description). Turning this feature off allows iostreams, again, to operate faster.
-
-Frequent use of `endl` also negatively affects iostreams performance, because `endl` not only outputs a newline character, but also flushes the stream's buffer (decription). You can simply output `\n` instead of `endl`.
 
 **Standard Input (stdin):**
 
@@ -37,6 +51,27 @@ cin >> n;
 while (n-- > 0) {
  cin >> s >> s1 >> a; // reads a line with a string, another string and a long.
 }
+
+// You can also use this method:
+
+int x, y, z;
+while( cin >> x >> y >> z)
+   // do something
+
+```
+### Type conversions:
+
+``` c++
+
+string myNum = "1903";
+
+// String to int:
+#include <cstdlib> // atoi, atof, atol
+int n = atoi(myNum.c_str());
+int n = std::stoi(myNum);   // c++11 way 
+
+// Int to String:
+string s = std::to_string(n); // c++11. to_string is also overloaded for other primitive types
 
 ```
 
@@ -65,3 +100,15 @@ while (n-- > 0) {
 - FLT_MIN 
 - DBL_MIN
 ```
+
+
+
+### Input/Ouput Optimizations:
+
+Place `ios_base::sync_with_stdio(false);` in the beginning of the program, before any input/output. This command turns off iostreams and stdio synchronization (description). It is on by default, which means that calls to iostreams and stdio functions can be freely interleaved even for the same underlying stream. When synchronization is turned off, mixing calls is no longer allowed, but iostreams can potentially operate faster.
+
+Untie cin from cout using `cin.tie(NULL);`. By default, cin is tied to cout, which means that cout is flushed before any operation on cin (description). Turning this feature off allows iostreams, again, to operate faster.
+
+Frequent use of `endl` also negatively affects iostreams performance, because `endl` not only outputs a newline character, but also flushes the stream's buffer (decription). You can simply output `\n` instead of `endl`.
+
+

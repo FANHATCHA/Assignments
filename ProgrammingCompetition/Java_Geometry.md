@@ -72,12 +72,16 @@ static Point2D findCenter(double x1, double y1, double x2, double y2, double x3,
 }
 ```
 
+**Circle Line Intersection:**
+<br>
+<a href="https://github.com/micahstairs/Assignments/edit/master/ProgrammingCompetition/c++_geometry.md"> View in C++_geometry </a>
+
 **Circle Arc Length/Sector Area**
 
 ![CircleSector](/ProgrammingCompetition/Images/circular_sector.jpg)
 
-Area of Sector = (r^2) x theta/2,
-Arc length = r x theta
+Area of Sector = θr²/2 <br>
+Arc length = rθ
 
 **Inradius:**
 
@@ -99,17 +103,6 @@ static Point2D polarToCartesian(double degrees, double radius) {
 // Find the angle from point A to point B in radians
 static double angleBetweenPoints(Point2D a, Point2D b) {
   return Math.atan2(b.getY() - a.getY(), b.getX() - a.getX());
-}
-```
-**Angle of ABC:**
-```java
-// Returns the angle of the corner ABC in radians (0 <= return_value <= PI)
-// NOTE: THERE SEEMS TO BE A MISTAKE HERE, SHOULDN'T THAT BE % Math.PI??
-static double angleOfCorner(Point2D a, Point2D b, Point2D c) {
-	double TWO_PI = Math.PI*2.0;
-	double angle1 = findAngleBetweenPoints(a, b);
-	double angle2 = findAngleBetweenPoints(b, c);
-        return Math.PI - (((angle1 - angle2) % TWO_PI + TWO_PI) % TWO_PI);
 }
 ```
 **Area of Triangle:**
@@ -162,6 +155,20 @@ static Point2D subtract(Point2D a, Point2D b) {
 static double crossProduct(Point2D a, Point2D b) {
   return a.getX()*b.getY() - a.getY()*b.getX();
 }
+```
+
+**Determine if Polygon points are given CW or CCW**
+
+``` java
+	static boolean isCounterClockwise(Point2D polygon[]) {
+		double sum = 0.0;
+		for (int i = 0; i < polygon.length; i++) {
+			Point2D p1 = polygon[i];
+			Point2D p2 = polygon[(i+1)%N];
+			sum += (p2.getX() - p1.getX())*(p2.getY() + p1.getY());
+		}
+		return sum <= 0.0;
+	}
 ```
 
 **Convex Hull:**
@@ -244,3 +251,5 @@ static double crossProduct(Point2D a, Point2D b) {
         return true;
     }
 ```
+**Distance from point to plane:**
+Given a plane of the form ax+by+cz+d=0 and point P=(u,v,w). The distance from the point P, to the plane is given by D=(au+bv+cw+d)/sqrt(a^2+b^2+c^2)
