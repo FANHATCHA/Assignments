@@ -1,0 +1,67 @@
+NO GUI
+
+- add / remove things to shopping cart
+- finalize order (get cost, process payment, shipping information, etc.)
+- construct items
+- ship items (ships right away, return items)
+
+Main
+
+Store (like a controller)
+  -have a reference to inventory
+  -have a reference to shopping cart
+  -boolean addItem(Item) returns false if not available
+  -boolean removeItem(Item) returns false if not included
+  -emptyShoppingCart()
+  -enterShippingAddress(Address address)
+  -enterPaymentInformation(PaymentMethod paymentMethod)
+  -List<Product> purchase(), throw exception if missing information or transaction failed
+
+Address
+  -street
+  -state/province
+  -country
+  -postal code
+  -etc?
+
+Inventory
+-map from item to stock count
+
+enum Item
+  -name
+  -description
+  -cost
+  -FactoryType (enum)
+  -String variationType
+
+ShoppingCart
+  -map from item to purchase count
+  -getTotalCost()
+  -empty()
+
+AbstractFactory
+  LollipopFactory
+  SlipperFactory
+
+PaymentMethod (interface)
+  -Account number
+  boolean charge()
+  CreditCard
+    -Address billingAddress
+    -String name
+    -int securityCode
+    -YearMonth expirationDate
+  DebitPaymentMethod (abstract class)
+    -balance
+    GiftCard
+    PayPal
+    BitCoin
+
+Product (abstract)
+  (gets produced by a factory)
+  -name
+  -description
+  Slipper
+    -String soundtrack
+  Lollipop
+    -String flavour
