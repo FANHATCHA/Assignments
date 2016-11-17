@@ -10,15 +10,24 @@ public class LollipopFactory {
   }
 
   private static Lollipop createNemoLollipop() {
-    return null;
+    String name = Item.NEMO_LOLLIPOP.getName();
+    String description = Item.NEMO_LOLLIPOP.getDescription();
+    String flavour = Item.NEMO_LOLLIPOP.getVariationType();
+    return new Lollipop(name, description, flavour);
   }
 
   private static Lollipop createBlinkyLollipop() {
-    return null;
+    String name = Item.BLINKY_LOLLIPOP.getName();
+    String description = Item.BLINKY_LOLLIPOP.getDescription();
+    String flavour = Item.BLINKY_LOLLIPOP.getVariationType();
+    return new Lollipop(name, description, flavour);
   }
 
   private static Lollipop createCleoLollipop() {
-    return null;
+    String name = Item.BLINKY_LOLLIPOP.getName();
+    String description = Item.BLINKY_LOLLIPOP.getDescription();
+    String flavour = Item.BLINKY_LOLLIPOP.getVariationType();
+    return new Lollipop(name, description, flavour);
   }  
 
 }

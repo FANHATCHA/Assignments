@@ -9,11 +9,17 @@ public class SlipperFactory {
   }
 
   private static Slipper createBoogieWonderlandSlippers() {
-    return null;
+    String name = Item.BOOGIE_WONDERLAND_SLIPPERS.getName();
+    String description = Item.BOOGIE_WONDERLAND_SLIPPERS.getDescription();
+    String soundtrack = Item.BOOGIE_WONDERLAND_SLIPPERS.getVariationType();
+    return new Slipper(name, description, soundtrack);
   }
 
   private static Slipper createSomebodyToLoveSlippers() {
-    return null;
+    String name = Item.SOMEBODY_TO_LOVE_SLIPPERS.getName();
+    String description = Item.SOMEBODY_TO_LOVE_SLIPPERS.getDescription();
+    String soundtrack = Item.SOMEBODY_TO_LOVE_SLIPPERS.getVariationType();
+    return new Slipper(name, description, soundtrack);
   }
 
 }
