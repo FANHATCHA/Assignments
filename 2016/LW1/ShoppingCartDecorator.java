@@ -3,7 +3,7 @@ import java.util.*;
 
 public abstract class ShoppingCartDecorator implements ShoppingCart {
 
-  protected final ShoppingCart shoppingCart;
+  private final ShoppingCart shoppingCart;
 
   public ShoppingCartDecorator(ShoppingCart shoppingCart) {
     this.shoppingCart = shoppingCart;

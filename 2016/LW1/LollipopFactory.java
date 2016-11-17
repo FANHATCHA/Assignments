@@ -1,3 +1,3 @@
-public class LollipopFactory extends AbstractFactory {
+public class LollipopFactory {
 
 }
