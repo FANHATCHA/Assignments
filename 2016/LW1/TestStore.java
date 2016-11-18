@@ -49,7 +49,12 @@ public class TestStore {
 
   // test ordering no items
 
+  // test ordering items
+  // test ordering repeated items
+
   // test ordering with no shipping address  
+
+  // test ordering with no payment method
 
   // test ordering with bad payment method (low balance)
 
