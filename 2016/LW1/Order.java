@@ -1,15 +1,13 @@
 import java.math.*;
 import java.util.*;
 
-public class Store {
+public class Order {
 
-  private Inventory inventory;
   private ShoppingCart shoppingCart;
   private Address shippingAddress;
   private PaymentMethod paymentMethod;
 
-  public Store() {
-    inventory = new Inventory();
+  public Order() {
     shoppingCart = new EmptyShoppingCart();
     shippingAddress = null;
     paymentMethod = null;

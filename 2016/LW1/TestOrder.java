@@ -4,7 +4,7 @@ import java.util.*;
 import static org.junit.Assert.*;
 import org.junit.*;
 
-public class TestStore {
+public class TestOrder {
   
   // Sample address
   private static final Address ADDRESS
@@ -37,12 +37,12 @@ public class TestStore {
   private static final String EMAIL_ADDRESS = "john.smith@email.com";
   private static final PayPal PAYPAL_ACCOUNT = new PayPal(EMAIL_ADDRESS, ITEM_1.getCost());
 
-  // Reference to the store
-  private Store store;
+  // Reference to the order
+  private Order order;
 
-  /** This resets the store before each test case. */
+  /** This resets the order before each test case. */
   @Before public void setup() {
-    store = new Store();
+    order = new Order();
   }
 
   /** Tests adding a couple items to the shopping cart and getting the total cost. */
@@ -50,17 +50,17 @@ public class TestStore {
 
     // Check total cost before adding any items
     BigInteger expectedTotal = BigInteger.ZERO;
-    assertEquals(expectedTotal, store.getTotalCost());
+    assertEquals(expectedTotal, order.getTotalCost());
 
     // Add one item and check total cost
-    store.addItemToCart(ITEM_1);
+    order.addItemToCart(ITEM_1);
     expectedTotal = expectedTotal.add(ITEM_1.getCost());
-    assertEquals(expectedTotal, store.getTotalCost());
+    assertEquals(expectedTotal, order.getTotalCost());
 
     // Add another item and check total cost
-    store.addItemToCart(ITEM_2);
+    order.addItemToCart(ITEM_2);
     expectedTotal = expectedTotal.add(ITEM_2.getCost());
-    assertEquals(expectedTotal, store.getTotalCost());
+    assertEquals(expectedTotal, order.getTotalCost());
 
   }
 
@@ -70,49 +70,49 @@ public class TestStore {
     BigInteger expectedTotal = BigInteger.ZERO;
 
     // Add an item to the cart
-    store.addItemToCart(ITEM_1);
+    order.addItemToCart(ITEM_1);
     expectedTotal = expectedTotal.add(ITEM_1.getCost());
-    assertEquals(expectedTotal, store.getTotalCost());
+    assertEquals(expectedTotal, order.getTotalCost());
 
     // Add the same item to the cart again
-    store.addItemToCart(ITEM_1);
+    order.addItemToCart(ITEM_1);
     expectedTotal = expectedTotal.add(ITEM_1.getCost());
-    assertEquals(expectedTotal, store.getTotalCost());
+    assertEquals(expectedTotal, order.getTotalCost());
 
   }
 
   /** Tests placing an order which did not specify a payment method. */
   @Test public void testOrderingWithoutPaymentMethod() {
 
-    store.addItemToCart(ITEM_1);
-    store.enterShippingAddress(ADDRESS);
-    assertNull(store.placeOrder());
+    order.addItemToCart(ITEM_1);
+    order.enterShippingAddress(ADDRESS);
+    assertNull(order.placeOrder());
 
   }
 
   /** Tests placing an empty order which did not specify a payment method. */
   @Test public void testEmptyOrderWithoutPaymentMethod() {
 
-    store.enterShippingAddress(ADDRESS);
-    assertNotNull(store.placeOrder());
+    order.enterShippingAddress(ADDRESS);
+    assertNotNull(order.placeOrder());
 
   }
 
   /** Tests placing an order which did not specify a shipping address. */
   @Test public void testOrderingWithoutShippingAddress() {
 
-    store.enterPaymentMethod(CREDIT_CARD);
-    assertNull(store.placeOrder());
+    order.enterPaymentMethod(CREDIT_CARD);
+    assertNull(order.placeOrder());
 
   }
 
   /** Tests placing an order with a payment method that has a low balance. */
   @Test public void testPaymentMethodWithLowBalance() {
 
-    store.addItemToCart(ITEM_1);
-    store.enterShippingAddress(ADDRESS);
-    store.enterPaymentMethod(EMPTY_GIFT_CARD);
-    assertNull(store.placeOrder());
+    order.addItemToCart(ITEM_1);
+    order.enterShippingAddress(ADDRESS);
+    order.enterPaymentMethod(EMPTY_GIFT_CARD);
+    assertNull(order.placeOrder());
 
   }
 
@@ -121,19 +121,19 @@ public class TestStore {
 
     assertEquals(ITEM_1.getCost(), PAYPAL_ACCOUNT.getBalance());
 
-    store.addItemToCart(ITEM_1);
-    store.enterShippingAddress(ADDRESS);
-    store.enterPaymentMethod(PAYPAL_ACCOUNT);
-    assertNotNull(store.placeOrder());
+    order.addItemToCart(ITEM_1);
+    order.enterShippingAddress(ADDRESS);
+    order.enterPaymentMethod(PAYPAL_ACCOUNT);
+    assertNotNull(order.placeOrder());
 
   }
 
   /** Tests placing an order with no items in the shopping cart. */
   @Test public void testOrderingNoItems() {
 
-    store.enterShippingAddress(ADDRESS);
-    store.enterPaymentMethod(BIT_COIN_ACCOUNT);
-    List<Product> products = store.placeOrder();
+    order.enterShippingAddress(ADDRESS);
+    order.enterPaymentMethod(BIT_COIN_ACCOUNT);
+    List<Product> products = order.placeOrder();
     assertNotNull(products);
     assertEquals(0, products.size());
 
@@ -143,16 +143,16 @@ public class TestStore {
   @Test public void testEmptyingShoppingCart() {
 
     // Add item to shopping cart
-    store.addItemToCart(ITEM_1);
-    assertNotEquals(BigInteger.ZERO, store.getTotalCost());
+    order.addItemToCart(ITEM_1);
+    assertNotEquals(BigInteger.ZERO, order.getTotalCost());
 
     // Empty shopping cart
-    store.emptyShoppingCart();
-    assertEquals(BigInteger.ZERO, store.getTotalCost());
+    order.emptyShoppingCart();
+    assertEquals(BigInteger.ZERO, order.getTotalCost());
 
     // Place order and ensure 0 products are recieved
-    store.enterShippingAddress(ADDRESS);
-    List<Product> products = store.placeOrder();
+    order.enterShippingAddress(ADDRESS);
+    List<Product> products = order.placeOrder();
     assertNotNull(products);
     assertEquals(0, products.size());
 
@@ -162,13 +162,13 @@ public class TestStore {
   @Test public void testOrderingItems() {
 
     // Add items to cart
-    store.addItemToCart(LOLLIPOP_ITEM);
-    store.addItemToCart(SLIPPERS_ITEM);
+    order.addItemToCart(LOLLIPOP_ITEM);
+    order.addItemToCart(SLIPPERS_ITEM);
 
     // Place order
-    store.enterShippingAddress(ADDRESS);
-    store.enterPaymentMethod(BIT_COIN_ACCOUNT);
-    List<Product> products = store.placeOrder();
+    order.enterShippingAddress(ADDRESS);
+    order.enterPaymentMethod(BIT_COIN_ACCOUNT);
+    List<Product> products = order.placeOrder();
     assertNotNull(products);
     assertEquals(2, products.size());
 
@@ -183,13 +183,13 @@ public class TestStore {
   @Test public void testOrderingRepeatedItems() {
 
     // Add items to cart
-    store.addItemToCart(LOLLIPOP_ITEM);
-    store.addItemToCart(LOLLIPOP_ITEM);
+    order.addItemToCart(LOLLIPOP_ITEM);
+    order.addItemToCart(LOLLIPOP_ITEM);
 
     // Place order
-    store.enterShippingAddress(ADDRESS);
-    store.enterPaymentMethod(BIT_COIN_ACCOUNT);
-    List<Product> products = store.placeOrder();
+    order.enterShippingAddress(ADDRESS);
+    order.enterPaymentMethod(BIT_COIN_ACCOUNT);
+    List<Product> products = order.placeOrder();
     assertNotNull(products);
     assertEquals(2, products.size());
 
