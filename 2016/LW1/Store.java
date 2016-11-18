@@ -43,16 +43,22 @@ public class Store {
   /** Attempts to order the items in the shopping cart, create the products, and deliver them. */
   public List<Product> placeOrder() {
 
-    // Return null if no shipping address or payment method was specified
-    if (shippingAddress == null || paymentMethod == null) {
+    // Return null if no shipping address was specified
+    if (shippingAddress == null) {
       return null;
     }
 
     // Compute total cost
     BigInteger totalCost = getTotalCost();
 
-    // Return null if the payment did not go through
-    if (!paymentMethod.charge(totalCost)) {
+    // Return null if the total cost is nonzero and no payment method was specified
+    if (!totalCost.equals(BigInteger.ZERO) && paymentMethod == null) {
+      return null;
+    }
+
+    // Return null if the payment did not go through 
+    // NOTE: No charge is made if the total cost is zero
+    if (!totalCost.equals(BigInteger.ZERO) && !paymentMethod.charge(totalCost)) {
       return null;
     }
 

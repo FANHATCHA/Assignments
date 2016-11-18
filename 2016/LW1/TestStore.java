@@ -1,5 +1,6 @@
 import java.math.*;
 import java.time.*;
+import java.util.*;
 import static org.junit.Assert.*;
 import org.junit.*;
 
@@ -12,6 +13,8 @@ public class TestStore {
   // Sample items
   private static final Item ITEM_1 = Item.CLEO_LOLLIPOP;
   private static final Item ITEM_2 = Item.BOOGIE_WONDERLAND_SLIPPERS;
+  private static final Item LOLLIPOP_ITEM = Item.NEMO_LOLLIPOP;
+  private static final Item SLIPPERS_ITEM = Item.SOMEBODY_TO_LOVE_SLIPPERS;
 
   // Sample credit card
   private static final String CARD_NUMBER = "4111 1111 1111 1111";
@@ -47,17 +50,17 @@ public class TestStore {
 
     // Check total cost before adding any items
     BigInteger expectedTotal = BigInteger.ZERO;
-    assertEquals(store.getTotalCost(), expectedTotal);
+    assertEquals(expectedTotal, store.getTotalCost());
 
     // Add one item and check total cost
     store.addItemToCart(ITEM_1);
     expectedTotal = expectedTotal.add(ITEM_1.getCost());
-    assertEquals(store.getTotalCost(), expectedTotal);
+    assertEquals(expectedTotal, store.getTotalCost());
 
     // Add another item and check total cost
     store.addItemToCart(ITEM_2);
     expectedTotal = expectedTotal.add(ITEM_2.getCost());
-    assertEquals(store.getTotalCost(), expectedTotal);
+    assertEquals(expectedTotal, store.getTotalCost());
 
   }
 
@@ -69,12 +72,12 @@ public class TestStore {
     // Add an item to the cart
     store.addItemToCart(ITEM_1);
     expectedTotal = expectedTotal.add(ITEM_1.getCost());
-    assertEquals(store.getTotalCost(), expectedTotal);
+    assertEquals(expectedTotal, store.getTotalCost());
 
     // Add the same item to the cart again
     store.addItemToCart(ITEM_1);
     expectedTotal = expectedTotal.add(ITEM_1.getCost());
-    assertEquals(store.getTotalCost(), expectedTotal);
+    assertEquals(expectedTotal, store.getTotalCost());
 
   }
 
@@ -87,10 +90,17 @@ public class TestStore {
 
   }
 
+  /** Tests placing an empty order which did not specify a payment method. */
+  @Test public void testEmptyOrderWithoutPaymentMethod() {
+
+    store.enterShippingAddress(ADDRESS);
+    assertNotNull(store.placeOrder());
+
+  }
+
   /** Tests placing an order which did not specify a shipping address. */
   @Test public void testOrderingWithoutShippingAddress() {
 
-    store.addItemToCart(ITEM_1);
     store.enterPaymentMethod(CREDIT_CARD);
     assertNull(store.placeOrder());
 
@@ -118,14 +128,83 @@ public class TestStore {
 
   }
 
-  // test ordering no items
+  /** Tests placing an order with no items in the shopping cart. */
+  @Test public void testOrderingNoItems() {
 
-  // test ordering items (ensure proper products are sent)
+    store.enterShippingAddress(ADDRESS);
+    store.enterPaymentMethod(BIT_COIN_ACCOUNT);
+    List<Product> products = store.placeOrder();
+    assertNotNull(products);
+    assertEquals(0, products.size());
 
-  // test ordering repeated items
+  }
 
-  // test ordering items (ensure proper products are sent)
+  /** Tests emptying the shopping cart. */
+  @Test public void testEmptyingShoppingCart() {
 
+    // Add item to shopping cart
+    store.addItemToCart(ITEM_1);
+    assertNotEquals(BigInteger.ZERO, store.getTotalCost());
 
+    // Empty shopping cart
+    store.emptyShoppingCart();
+    assertEquals(BigInteger.ZERO, store.getTotalCost());
+
+    // Place order and ensure 0 products are recieved
+    store.enterShippingAddress(ADDRESS);
+    List<Product> products = store.placeOrder();
+    assertNotNull(products);
+    assertEquals(0, products.size());
+
+  }
+
+  /** Tests placing an order with a few items in the shopping cart. */
+  @Test public void testOrderingItems() {
+
+    // Add items to cart
+    store.addItemToCart(LOLLIPOP_ITEM);
+    store.addItemToCart(SLIPPERS_ITEM);
+
+    // Place order
+    store.enterShippingAddress(ADDRESS);
+    store.enterPaymentMethod(BIT_COIN_ACCOUNT);
+    List<Product> products = store.placeOrder();
+    assertNotNull(products);
+    assertEquals(2, products.size());
+
+    // These will be equal iff we get back one lollipop and one pair of slippers
+    Product product1 = products.get(0);
+    Product product2 = products.get(1);
+    assertEquals(product1 instanceof Lollipop, product2 instanceof Slipper);
+
+  }
+
+  /** Tests placing an order with repeated items in the shopping cart. */
+  @Test public void testOrderingRepeatedItems() {
+
+    // Add items to cart
+    store.addItemToCart(LOLLIPOP_ITEM);
+    store.addItemToCart(LOLLIPOP_ITEM);
+
+    // Place order
+    store.enterShippingAddress(ADDRESS);
+    store.enterPaymentMethod(BIT_COIN_ACCOUNT);
+    List<Product> products = store.placeOrder();
+    assertNotNull(products);
+    assertEquals(2, products.size());
+
+    // Ensure that both products are lollipops
+    Product product1 = products.get(0);
+    Product product2 = products.get(1);
+    assertTrue(product1 instanceof Lollipop);
+    assertTrue(product2 instanceof Lollipop);
+
+    // Asser that the name and description match
+    assertEquals(LOLLIPOP_ITEM.getName(), product1.getName());
+    assertEquals(LOLLIPOP_ITEM.getName(), product2.getName());
+    assertEquals(LOLLIPOP_ITEM.getDescription(), product1.getDescription());
+    assertEquals(LOLLIPOP_ITEM.getDescription(), product2.getDescription());
+
+  }
 
 }
