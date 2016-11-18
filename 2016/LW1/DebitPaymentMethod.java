@@ -10,7 +10,7 @@ public abstract class DebitPaymentMethod implements PaymentMethod {
 
   /** Returns true if the transaction went through. */
   @Override public boolean charge(BigInteger cost) {
-    if (balance.compareTo(cost) <= 0) {
+    if (balance.compareTo(cost) >= 0) {
       balance = balance.subtract(cost);
       return true;
     } else {
