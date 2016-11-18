@@ -1,10 +1,12 @@
-public class Shop {
+import java.math.*;
+
+public class Store {
 
   private Inventory inventory;
   private ShoppingCart shoppingCart;
   private Address shippingAddress;
 
-  public Shop() {
+  public Store() {
     inventory = new Inventory();
     shoppingCart = new EmptyShoppingCart();
     shippingAddress = null;
@@ -20,8 +22,14 @@ public class Shop {
     shoppingCart = new EmptyShoppingCart();
   }
 
+  /** Sets the shipping address. */
   public void enterShippingAddress(Address shippingAddress) {
     this.shippingAddress = shippingAddress;
+  }
+
+  /** Gets the total cost of the shopping cart. */
+  public BigInteger getTotalCost() {
+    return shoppingCart.getTotalCost();
   }
 
 }
