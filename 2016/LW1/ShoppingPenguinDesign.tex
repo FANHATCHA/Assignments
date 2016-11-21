@@ -42,4 +42,21 @@ With these functionalities in mind, we designed a solution that incorporates sev
 \tab We wanted our design to only construct the Lollipop and Slipper objects once the order was placed. Furthermore, we didn't want to require that the part of the structure responsible for placing orders must know how to build the Lollipop and Slipper objects. To satisfy these desires we made use of 2 factory classes and an abstract factory class. The abstract factory defines the common behaviour of the Lollipop and Slipper factories, and then these 2 concrete factory classes handle the creation of Lollipop and Slipper objects according to the orders that are placed.\\
 \tab Finally, we wanted to allow orders to be processed using a variety of different payment methods. We provided functionality for 3 different debit-based payment methods (gift card, PayPal, and Bitcoin) and 1 credit based method (credit card). These payment methods were separated out according to the differences and similarities between them. In particular, they are all payment methods through which money can be charged. However, the way in which the accounts/cards are charged differs depending on whether they are credit or debit based. This is reflected in our design.\\
 \tab Overall, our code is designed to meet Shopping Penguin's requirements while adhering to Object Oriented design principles. We believe that we have achieved this through our choice of design patterns, and the structure of the relationships and dependencies in our design.
+\vspace{1in}
+
+\begin{figure}[h]
+	\caption{Classes and enum involved in the Factories in our design}
+	\includegraphics[scale=0.9]{FactoryUML}
+\end{figure}
+\newpage
+
+\begin{figure}[h]
+	\caption{Classes, interface, and enum involved in the Decorator in our design}
+	\noin\includegraphics{DecoratorUML}
+\end{figure}
+\newpage
+\begin{figure}[h]
+	\caption{Classes and interface involved in the Payment Method part of our design}
+	\noin\includegraphics[scale=0.9]{PaymentUML}
+\end{figure}
 \end{document}
