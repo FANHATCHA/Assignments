@@ -1,4 +1,20 @@
-public class Address {
+/**
+ * Micah Stairs and Finn Lidbetter
+ * Shopping Penguin
+ * COMP 3721
+ * Dr. Ricker
+ * November 21, 2016
+ **/
+
+/**
+ * Micah Stairs and Finn Lidbetter
+ * Shopping Penguin
+ * COMP 3721
+ * Dr. Ricker
+ * November 21, 2016
+ **/
+
+ public class Address {
   
   private final String street;
   private final String city;
