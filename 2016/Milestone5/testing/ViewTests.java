@@ -9,17 +9,19 @@ import org.junit.*;
 
 public class ViewTests {
 
+  private IView baseView = new View();
+
   @Test(expected=Exception.class)
   public void testIllegalHeaderViewCreation() {
-    new HeaderView(null);
+    new HeaderView(baseView, null);
   }
 
   @Test
   public void testViewCreation() {
     
     IView view = new View();
-    IView headerView = new HeaderView("A Header");
-    IView announcementView = new AnnouncementView();
+    IView headerView = new HeaderView(view, "A Header");
+    IView announcementView = new AnnouncementView(view);
 
   }
 
@@ -27,8 +29,8 @@ public class ViewTests {
   public void testDisplay() {
     
     IView view = new View();
-    IView headerView = new HeaderView("A Header");
-    IView announcementView = new AnnouncementView();
+    IView headerView = new HeaderView(view, "A Header");
+    IView announcementView = new AnnouncementView(view);
 
     view.display(null);
     headerView.display(null);

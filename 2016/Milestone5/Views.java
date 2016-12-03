@@ -115,17 +115,19 @@ class AnnouncementView extends ViewDecorator {
   }
 
   @Override public void display(Object obj) {
+    
+    if (obj != null) {
+      String str = obj.toString();
+      int len = str.length();
 
-    String str = obj.toString();
-    int len = str.length();
-
-    String top = "\n" + generateBorder(len + 2*PADDING) + "\n";
-    String strOutput = generateBorder(PADDING) + obj.toString().toUpperCase() + generateBorder(PADDING) + "\n";
-    String bottom = generateBorder(len + 2*PADDING) + "\n\n";
-  
-    super.display(top);
-    super.display(strOutput);
-    super.display(bottom);
+      String top = "\n" + generateBorder(len + 2*PADDING) + "\n";
+      String strOutput = generateBorder(PADDING) + obj.toString().toUpperCase() + generateBorder(PADDING) + "\n";
+      String bottom = generateBorder(len + 2*PADDING) + "\n\n";
+    
+      super.display(top);
+      super.display(strOutput);
+      super.display(bottom);
+    }
 
   }
 
