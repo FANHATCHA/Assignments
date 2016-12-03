@@ -12,6 +12,7 @@ public class GameController {
   private IView view, headerView, inputView, announcementView;
   private QuestController questController;
   private InventoryController inventoryController;
+  private ShopController shopController;
   private int numQuestCompleted = 0;
 
   private static final int TICK_DAMAGE = -175;
@@ -25,6 +26,7 @@ public class GameController {
     player = new Player();
     questController = new QuestController(player);
     inventoryController = new InventoryController(player);
+    shopController = new ShopController(player);
     view = new View();
     headerView = new HeaderView(view, "MENU: ");
     inputView = new HeaderView(view, "ENTER QUEST ID: ");
@@ -68,13 +70,6 @@ public class GameController {
 
       displayHelp();
 
-    } else if (command.equals("sell all")) {
-
-      int totalValue = player.sellAllItems();
-      if (totalValue != 0) {
-        headerView.display("You sold all your items for a total value of " + totalValue + "$\n");
-      }
-
     } else if (command.equals("items") || command.equals("inventory")) {
 
       inventoryController.invoke();
@@ -101,6 +96,10 @@ public class GameController {
     } else if ( command.equals("tickcheck") ) {
 
       doTickCheck();
+
+    } else if ( command.equals("shop") ) {
+
+      shopController.invoke();
 
     } else {
       headerView.display("Unknown command: '" + command + "'\n");
@@ -203,7 +202,7 @@ public class GameController {
     headerView.display("'reset'          - reset game\n");
     headerView.display("'tickcheck'      - perform a tickcheck (Do this after every quest!)\n");
     headerView.display("'quests'         - display and select a quest you wish to do\n");
-    headerView.display("'sell all'       - sell all of your items on the black market\n");
+    headerView.display("'shop'           - Go to the shop and buy and sell Items\n");
 
   }
 
