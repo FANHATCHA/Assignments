@@ -8,8 +8,8 @@ import java.util.*;
 
 public class ShopController {
 
-  private IView view, headerView;
   private Player player;
+  private IView view, headerView;
 
   public ShopController (Player player) {
     this.player = player;
@@ -19,9 +19,17 @@ public class ShopController {
 
   public void buyItems() {
 
+
+
+  }
+
+  private void displayShopItems() {
+    
   }
 
   public void sellItems() {
+
+    
 
   }
 

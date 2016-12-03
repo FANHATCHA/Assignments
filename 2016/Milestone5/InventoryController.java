@@ -8,8 +8,8 @@ import java.util.*;
 
 public class InventoryController {
 
-  private IView view, headerView;
   private Player player;
+  private IView view, headerView;
 
   public InventoryController (Player player) {
     this.player = player;
