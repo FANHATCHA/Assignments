@@ -39,7 +39,7 @@ public class ItemFactory {
 	}
 	
 	public Item createPotionOne() {
-		return new Item(104, "Potion 1", "[INSERT DESCRIPTION HERE]");
+		return new Item(104, "Potion 1", "[INSERT DESCRIPTION HERE. DESCRIPTION SHOULD CONTAIN ingredients]");
 	}
 	
 	public Item createEelEye() {
@@ -51,7 +51,7 @@ public class ItemFactory {
 	}
 	
 	public Item createPotionTwo() {
-		return new Item(107, "Potion 2", "[INSERT DESCRIPTION HERE");
+		return new Item(107, "Potion 2", "[INSERT DESCRIPTION HERE DESCRIPTION SHOULD CONTAIN ingredients");
 	}
 	
 	public Item createDragonScale() {
@@ -59,15 +59,15 @@ public class ItemFactory {
 	}
 	
 	public Item createHipsterCoffee() {
-		return new Item(109, "Hipster Coffee, you wouldn't know what's in it", "An ingredient for Potion 3");
+		return new Item(109, "Hipster Coffee", "An ingredient for Potion 3");
 	}
 	
 	public Item createMountiePride() {
-		return new Item(110, "Mountie Pride, at least we're not Acadia", "An ingredient for Potion 3");
+		return new Item(110, "Mountie Pride", "Mountie Pride tops Acadia Pride. This is an ingredient for Potion 3");
 	}
 	
 	public Item createPotion3() {
-		return new Item(111, "Potion 3", "[INSERT DESCRIPTION HERE");
+		return new Item(111, "Potion 3", "[INSERT DESCRIPTION HERE DESCRIPTION SHOULD CONTAIN ingredients");
 	}
 	
 }

@@ -5,6 +5,7 @@
  **/
 
 import java.util.Scanner;
+import java.util.Formatter;
 import java.io.*;
 
 public class View implements IView {
@@ -31,8 +32,14 @@ public class View implements IView {
     } catch (IOException e) { e.printStackTrace(); }
   }
 
+  public void display(String format, Object... args) {
+    if (format != null && args != null) {
+      display( String.format(format, args) );
+    }
+  }
+
   // Grab a single line of input from the user
-  public String readLine() {
+  @Override public String readLine() {
     return scanner.nextLine();
   }
 

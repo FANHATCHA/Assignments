@@ -9,7 +9,8 @@ import java.util.*;
 public class ShopController {
 
   private Player player;
-  private IView view, headerView;
+  private HeaderView headerView;
+  private View view;
 
   private static Item [] SHOP_ITEMS;
   private static ItemFactory factory;
@@ -31,8 +32,47 @@ public class ShopController {
 
     displayShopItems();
 
+    headerView.display("You currently have " + player.getMoney() + "$ you can spend!\n");
     headerView.display("Please enter the id of the item you wish to buy or 'exit'\n");
-    String userInput = view.readLine();
+    view.display("Item id: ");
+
+    String userInput = headerView.readLine().toLowerCase().replaceAll("[\"')]", "").trim();
+  
+    if (userInput.equals("exit")) return;
+
+    try {
+
+      boolean foundId = false;
+      Integer id = Integer.parseInt(userInput);
+
+      for (Item shopItem : SHOP_ITEMS) {
+        if (shopItem.getID() == id) {
+
+          int itemPrice = shopItem.getItemValue();
+          long playerMoney = player.getMoney();
+
+          // Check if player can actually buy this item
+          if ( playerMoney - itemPrice >= 0 ) {
+
+            // Add item to player inventory and
+            // charge them for it
+            player.obtainItem(shopItem);
+            player.obtainMoney(-itemPrice);
+            headerView.display("You purchased '%s' for %d$\n", shopItem.getName(), itemPrice );
+            headerView.display("Your new total is " + player.getMoney() + "\n" );
+
+          } else {
+
+            headerView.display("Looks like you don't have enough money to buy that\n");
+
+          }
+
+        }
+      }
+
+    } catch (NumberFormatException e) {
+      view.display("Error, please enter a valid ID!\n");
+    }
 
   }
 
@@ -41,7 +81,8 @@ public class ShopController {
     headerView.display("The shop currently contains the following items:\n");
     for (int i = 0; i < SHOP_ITEMS.length; i++) {
       Item item = SHOP_ITEMS[i];
-      view.display(item.getID() + ") " + item.getName());
+      view.display("%d) %s - %d$\n", item.getID(), item.getName(), item.getItemValue());
+      view.display("Description: " + item.getDescription() + "\n\n");
     }
 
   }
@@ -52,7 +93,7 @@ public class ShopController {
     view.display(player.getInventoryStr());
 
     // display player inventory
-    // There should alreday be an easy way to do this, right?
+    // There should already be an easy way to do this, right?
 
   }
 
@@ -70,7 +111,7 @@ public class ShopController {
     } else if (userInput.equals("sell")) {
       sellItems();
     } else {
-      headerView.display("Unknown command '" + userInput + "'");
+      headerView.display("Unknown command '" + userInput + "'\n");
     }
 
   }

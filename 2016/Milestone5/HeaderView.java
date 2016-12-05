@@ -30,6 +30,12 @@ public class HeaderView extends ViewDecorator {
     super.display(header);
   }
 
+  public void display(String format, Object... args) {
+    if (format != null && args != null) {
+      display( String.format(format, args) );
+    }
+  }
+
   @Override public void display(Object obj) {
     displayHeader();
     super.display(obj);
