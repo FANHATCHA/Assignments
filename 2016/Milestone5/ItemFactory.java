@@ -3,6 +3,7 @@ public class ItemFactory {
 
 	public static final int[] FACTORY_ITEMS = { 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 11 };
 
+	// Create an Item by ID
 	public Item createItemById(int id) {
 		switch(id) {
 			case 101: return createWolfsbane();

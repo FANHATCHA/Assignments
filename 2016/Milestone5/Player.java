@@ -118,6 +118,14 @@ public class Player {
     money += amount;
   }
 
+  public String getInventoryStr() {
+    return inv.toString();
+  }
+
+  public int getItemCount() {
+    return inv.size();
+  }
+
   @Override public String toString() {
 
     StringBuilder sb = new StringBuilder();

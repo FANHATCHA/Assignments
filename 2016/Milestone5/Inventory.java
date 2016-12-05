@@ -40,6 +40,10 @@ public class Inventory implements Iterable <Item> {
     return null;
   }
 
+  public int size() {
+    return items.size();
+  }
+
   public String getItemNameFromID(int itemID) {
     for (Item item : items)
       if (item.getID() == itemID)
@@ -66,9 +70,24 @@ public class Inventory implements Iterable <Item> {
   }
 
   @Override public String toString() {
+
+    // Count item occurences
+    Map <Item, Integer> counts = new TreeMap<>();
+    for (Item item : items) {
+      if (counts.containsKey(item)) {
+        counts.put(item, counts.get(item) + 1);
+      } else {
+        counts.put(item, 1);
+      }
+    }
+
+    // Create printable inventory sting
     StringBuilder sb = new StringBuilder();
-    for (Item item : items)
-      sb.append(item.getName() + " ");
+    for (Item item : counts.keySet()) {
+      int quantity = counts.get(item);
+      sb.append( quantity + " x " + item.getName() + " - " + item.getItemValue() + "$" + "\n" );
+    }
+
     return sb.toString();
   }
 

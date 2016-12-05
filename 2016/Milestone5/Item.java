@@ -8,6 +8,7 @@ public class Item implements Comparable <Item> {
   private int itemValue;
   private String itemName;
   private String description;
+  
   private static Random rand = new Random();
 
   public Item(int price, int id, String itemName, String description) {
@@ -20,7 +21,7 @@ public class Item implements Comparable <Item> {
     this.itemId = id;
 
   }
-  
+
   public Item(int id, String itemName, String description) {
     this( rand.nextInt(250*(id+1)), id, itemName, description );
   }
@@ -41,6 +42,12 @@ public class Item implements Comparable <Item> {
     return itemName;
   }
 
+  // Hash Items by their id
+  @Override public int hashCode() {
+    return itemId;
+  }
+
+  // Two Items are equal if their names are equal
   @Override public int compareTo(Item other) {
     return itemName.compareTo(other.getName());
   }

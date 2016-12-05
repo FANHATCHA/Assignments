@@ -11,6 +11,16 @@ public class ShopController {
   private Player player;
   private IView view, headerView;
 
+  private static Item [] SHOP_ITEMS;
+  private static ItemFactory factory;
+
+  static {
+    factory = new ItemFactory();
+    SHOP_ITEMS = new Item[ItemFactory.FACTORY_ITEMS.length];
+    for (int i = 0; i < ItemFactory.FACTORY_ITEMS.length; i++ )
+      SHOP_ITEMS[i] = factory.createItemById(ItemFactory.FACTORY_ITEMS[i]);
+  }
+
   public ShopController (Player player) {
     this.player = player;
     view = new View();
@@ -19,17 +29,35 @@ public class ShopController {
 
   public void buyItems() {
 
+    displayShopItems();
 
+    headerView.display("Please enter the id of the item you wish to buy or 'exit'\n");
+    String userInput = view.readLine();
 
   }
 
   private void displayShopItems() {
     
+    headerView.display("The shop currently contains the following items:\n");
+    for (int i = 0; i < SHOP_ITEMS.length; i++) {
+      Item item = SHOP_ITEMS[i];
+      view.display(item.getID() + ") " + item.getName());
+    }
+
   }
 
   public void sellItems() {
 
-    
+    headerView.display("You currently have the following items in your indentory:\n");
+
+    if (player.getItemCount() == 0) {
+      headerView.display("You have no items!\n");
+    } else {
+      view.display(player.getInventoryStr());
+    }
+
+    // display player inventory
+    // There should alreday be an easy way to do this, right?
 
   }
 
