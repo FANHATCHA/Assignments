@@ -10,13 +10,19 @@ public class Item implements Comparable <Item> {
   private String description;
   private static Random rand = new Random();
 
-  public Item(int id, String itemName, String description) {
-    if (itemName == null || description == null)
+  public Item(int price, int id, String itemName, String description) {
+    
+    if (itemName == null || description == null || price < 0)
       throw new IllegalArgumentException();
-    this.itemId = id;
-    this.itemValue = rand.nextInt(250*(id+1));
-    this.itemName = itemName;
     this.description = description;
+    this.itemName = itemName;
+    this.itemValue = price;
+    this.itemId = id;
+
+  }
+  
+  public Item(int id, String itemName, String description) {
+    this( rand.nextInt(250*(id+1)), id, itemName, description );
   }
 
   public String getDescription() {

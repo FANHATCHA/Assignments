@@ -1,6 +1,25 @@
 
 public class ItemFactory {
 
+	public static final int[] FACTORY_ITEMS = { 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 11 };
+
+	public Item createItemById(int id) {
+		switch(id) {
+			case 101: return createWolfsbane();
+			case 102: return createUnicornHair();
+			case 103: return createStudentsTears();
+			case 104: return createPotionOne();
+			case 105: return createEelEye();
+			case 106: return createNightShade();
+			case 107: return createPotionTwo();
+			case 108: return createDragonScale();
+			case 109: return createHipsterCoffee();
+			case 110: return createMountiePride();
+			case 111: return createPotion3();
+			default: return null;
+		}
+	}
+
 	public Item createWolfsbane() {
 		return new Item(101, "Wolfsbane", "An ingredient for potion 1");
 	}
