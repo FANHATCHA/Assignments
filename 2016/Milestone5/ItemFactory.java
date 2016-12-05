@@ -1,7 +1,12 @@
+/**
+ * @author William Fiset, Drew Chaboyer
+ * Object Oriented Design - COMP 3721
+ * Tick Attack milestone #5
+ **/
 
 public class ItemFactory {
 
-	public static final int[] FACTORY_ITEMS = { 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 11 };
+	public static final int[] FACTORY_ITEMS = { 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111 };
 
 	// Create an Item by ID
 	public Item createItemById(int id) {

@@ -1,8 +1,8 @@
-/*
- * @author William Fiset, Jonathan Whitaker
- * Tick Attack milestone #3
+/**
+ * @author William Fiset, Drew Chaboyer
  * Object Oriented Design - COMP 3721
- */
+ * Tick Attack milestone #5
+ **/
 
 import java.util.*;
 
@@ -11,9 +11,8 @@ public class GameController {
   private Player player;
   private IView view, headerView, inputView, announcementView;
   private QuestController questController;
-  private InventoryController inventoryController;
   private ShopController shopController;
-  private int numQuestCompleted = 0;
+  private int numQuestsCompleted = 0;
 
   private static final int TICK_DAMAGE = -175;
 
@@ -25,7 +24,6 @@ public class GameController {
 
     player = new Player();
     questController = new QuestController(player);
-    inventoryController = new InventoryController(player);
     shopController = new ShopController(player);
     view = new View();
     headerView = new HeaderView(view, "MENU: ");
@@ -35,13 +33,13 @@ public class GameController {
   }
 
   public void startGame() {
-    
+
     resetGame();
     displayIntro();
-    
+
     // Kickstart game
     while (player.isAlive()) {
-  
+
       // View gets input
       String userInput = headerView.readLine();
 
@@ -49,7 +47,7 @@ public class GameController {
       executeUserCommand(userInput);
 
     }
-    
+
     announcementView.display("you have died. game over.");
 
   }
@@ -69,10 +67,6 @@ public class GameController {
     if (command.equals("help")) {
 
       displayHelp();
-
-    } else if (command.equals("items") || command.equals("inventory")) {
-
-      inventoryController.invoke();
 
     } else if (command.equals("reset") || command.equals("restart")) {
 
@@ -101,6 +95,12 @@ public class GameController {
 
       shopController.invoke();
 
+    } else if ( command.equals("sell") ) {
+      shopController.sellItems();
+
+    } else if ( command.equals("buy") ) {
+      shopController.buyItems();
+
     } else {
       headerView.display("Unknown command: '" + command + "'\n");
     }
@@ -119,6 +119,7 @@ public class GameController {
     headerView.display("Select one of the quests by typing the quest number\n");
 
     return true;
+
   }
 
   public void selectQuest() {
@@ -136,7 +137,7 @@ public class GameController {
             checkForTicks();
             if (player.isAlive()) {
               questController.playQuest(id);
-              numQuestCompleted++;
+              numQuestsCompleted++;
             } else return;
             player.setDidTickCheck(false);
 
@@ -166,7 +167,7 @@ public class GameController {
 
   private void checkForTicks() {
 
-    if (numQuestCompleted > 0) {
+    if (numQuestsCompleted > 0) {
       if (!player.didTickCheck()) {
 
         headerView.display("You forgot to do a tick check! (type 'tickcheck' before starting any quest)\n");
@@ -174,7 +175,7 @@ public class GameController {
         if (player.hasTicks()) {
           headerView.display("Ticks were found on your body! You lose "+Math.abs(TICK_DAMAGE)+" ♥\n");
           player.obtainHealth(TICK_DAMAGE);
-          displayPlayerStatus();
+          headerView.display("New player health is " + player.getHealth() +"♥\n" );
         } else {
           headerView.display("Luckily no Ticks were found on your body, but never forget to do tickchecks.\n");
         }
@@ -197,12 +198,11 @@ public class GameController {
   public void displayHelp() {
     headerView.display("'help'           - display this help menu\n");
     headerView.display("'exit/quit'      - exit game\n");
-    headerView.display("'items'          - display the inventory of items you hold\n");
     headerView.display("'status'         - display player status\n");
-    headerView.display("'reset'          - reset game\n");
     headerView.display("'tickcheck'      - perform a tickcheck (Do this after every quest!)\n");
     headerView.display("'quests'         - display and select a quest you wish to do\n");
-    headerView.display("'shop'           - Go to the shop and buy and sell Items\n");
+    headerView.display("'shop/buy/sell'  - Go to the shop and buy and sell Items\n");
+    headerView.display("'reset'          - reset game\n");
 
   }
 

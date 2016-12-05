@@ -1,8 +1,8 @@
-/*
- * @author William Fiset, Jonathan Whitaker
- * Tick Attack milestone #3
+/**
+ * @author William Fiset, Drew Chaboyer
  * Object Oriented Design - COMP 3721
- */
+ * Tick Attack milestone #5
+ **/
 
 import java.util.*;
 
@@ -119,7 +119,9 @@ public class Player {
   }
 
   public String getInventoryStr() {
-    return inv.toString();
+    if (getItemCount() == 0)
+      return "You have no items!\n";
+    else return inv.toString();
   }
 
   public int getItemCount() {
@@ -131,6 +133,7 @@ public class Player {
     StringBuilder sb = new StringBuilder();
     sb.append("Health hp = " + getHealth() + "\n" );
     sb.append("Money $ = " + getMoney() + "\n" );
+    sb.append(getInventoryStr());
     return sb.toString();
 
   }

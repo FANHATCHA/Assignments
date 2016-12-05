@@ -1,8 +1,8 @@
-/*
- * @author William Fiset, Jonathan Whitaker
- * Tick Attack milestone #3
+/**
+ * @author William Fiset, Drew Chaboyer
  * Object Oriented Design - COMP 3721
- */
+ * Tick Attack milestone #5
+ **/
 
 import java.util.*;
 
@@ -48,13 +48,8 @@ public class ShopController {
 
   public void sellItems() {
 
-    headerView.display("You currently have the following items in your indentory:\n");
-
-    if (player.getItemCount() == 0) {
-      headerView.display("You have no items!\n");
-    } else {
-      view.display(player.getInventoryStr());
-    }
+    headerView.display("You currently have the following items in your inventory:\n");
+    view.display(player.getInventoryStr());
 
     // display player inventory
     // There should alreday be an easy way to do this, right?
