@@ -76,6 +76,7 @@ public class ShopController {
 
   }
 
+  // Print the shop items and their prices
   private void displayShopItems() {
     
     headerView.display("The shop currently contains the following items:\n");
@@ -89,18 +90,39 @@ public class ShopController {
 
   public void sellItems() {
 
+    int sellId = -1;
+    Item item = null;
+    
     headerView.display("You currently have the following items in your inventory:\n");
     view.display(player.getInventoryStr());
 
-    // display player inventory
-    // There should already be an easy way to do this, right?
+    // Get the name of the item you want to sell
+    view.display("Please enter the name of the item to sell\n");
+    String userInput = view.readLine().toLowerCase().trim();
+
+    // Loop through all the players items
+    Iterator <Item> iter = player.getItemsIterator();
+    while (iter.hasNext()) {
+      item = iter.next();
+      if (item.getName().toLowerCase().equals(userInput)) {
+        sellId = item.getID();
+        break;
+      }
+    }
+
+    // Sell item if it existed
+    if (sellId != -1) {
+      player.sellItem(sellId);
+      headerView.display("You have sold '%s' for %d$\n", item.getName(), item.getItemValue() );
+    } else {
+      headerView.display( "'%s' is not an item in your inventory\n", userInput );
+    }
 
   }
 
   public void invoke() {
 
     view.display("\n\nWELCOME TO THE SHOP!\n\n");
-
     view.display("Would you like to buy or sell items?\n");
     headerView.display("buy/sell: ");
 

@@ -196,6 +196,7 @@ public class GameController {
   }
 
   public void displayHelp() {
+    
     headerView.display("'help'           - display this help menu\n");
     headerView.display("'exit/quit'      - exit game\n");
     headerView.display("'status'         - display player status\n");

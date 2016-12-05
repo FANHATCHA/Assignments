@@ -113,6 +113,13 @@ public class Player {
     return inv.contains(itemId);
   }
 
+  // Return true/false on whether the user has an item
+  public boolean hasItem(Item item) {
+    if (item != null)
+      return hasItem(item.getID());
+    return false;
+  }
+
   // You are allowed to add a negative amount of money
   public void obtainMoney(long amount) {
     money += amount;
