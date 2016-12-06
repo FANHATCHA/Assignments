@@ -1,8 +1,8 @@
-/*
- * @author William Fiset, Jonathan Whitaker
- * Tick Attack milestone #3
+/**
+ * @author William Fiset, Drew Chaboyer
  * Object Oriented Design - COMP 3721
- */
+ * Tick Attack milestone #5
+ **/
 
 import java.util.*;
 import java.io.*;

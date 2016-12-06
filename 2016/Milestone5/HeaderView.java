@@ -1,3 +1,8 @@
+/**
+ * @author William Fiset, Drew Chaboyer
+ * Object Oriented Design - COMP 3721
+ * Tick Attack milestone #5
+ **/
 
 import java.util.Scanner;
 import java.io.*;
@@ -23,6 +28,12 @@ public class HeaderView extends ViewDecorator {
   // Added decorator method
   public void displayHeader() {
     super.display(header);
+  }
+
+  public void display(String format, Object... args) {
+    if (format != null && args != null) {
+      display( String.format(format, args) );
+    }
   }
 
   @Override public void display(Object obj) {
