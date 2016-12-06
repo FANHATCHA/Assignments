@@ -1,5 +1,8 @@
-
-
+/**
+ * @author William Fiset, Drew Chaboyer
+ * Object Oriented Design - COMP 3721
+ * Tick Attack milestone #5
+ **/
 
 public class AnnouncementView extends ViewDecorator {
 

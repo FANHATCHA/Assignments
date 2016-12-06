@@ -1,7 +1,16 @@
-import java.util.*;
+/**
+ * @author William Fiset, Drew Chaboyer
+ * Object Oriented Design - COMP 3721
+ * Tick Attack milestone #5
+ **/
+
+import java.util.List;
+
 public interface IPotion {
-  public ArrayList<Integer> getRequirements();
+
+  public int [] getRequirements();
   public void usePotion(Player player);
+
 }
   
  

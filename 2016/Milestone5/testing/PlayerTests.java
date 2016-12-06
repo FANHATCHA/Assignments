@@ -1,8 +1,8 @@
-/*
+/**
  * @author William Fiset, Drew Chaboyer
- * Tick Attack milestone #3
  * Object Oriented Design - COMP 3721
- */
+ * Tick Attack milestone #5
+ **/
 
 import static org.junit.Assert.*;
 import org.junit.*;

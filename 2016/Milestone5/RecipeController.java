@@ -15,32 +15,31 @@ public class RecipeController {
   public void craftPotionOne() {
     PotionOne potion = factory.createPotionOne();
 
-    ArrayList<Integer> ingredientIDs = potion.getRequirements();
-    for(Integer id : ingredientIDs) {
+    int [] ingredientIDs = potion.getRequirements();
+    for(int id : ingredientIDs) {
       if(!player.hasItem(id)) {
         view.display("Sorry, you do not have all the required ingredients\n");
         return;
       }
     }
-    for(Integer id : ingredientIDs) {
+    for(Integer id : ingredientIDs)
       player.removeItem(id);
-    }
     player.obtainItem(potion);
   }
 
   public void craftPotionTwo() {
+
     PotionTwo potion = factory.createPotionTwo();
 
-    ArrayList<Integer> ingredientIDs = potion.getRequirements();
-    for(Integer id : ingredientIDs) {
+    int [] ingredientIDs = potion.getRequirements();
+    for(int id : ingredientIDs) {
       if(!player.hasItem(id)) {
         view.display("Sorry, you do not have all the required ingredients\n");
         return;
       }
     }
-    for(Integer id : ingredientIDs) {
+    for(int id : ingredientIDs)
       player.removeItem(id);
-    }
     player.obtainItem(potion);
  
   }
@@ -48,15 +47,15 @@ public class RecipeController {
   public void craftPotionThree() {
 
     PotionThree potion = factory.createPotionThree();
-    ArrayList<Integer> ingredientIDs = potion.getRequirements();
+    int [] ingredientIDs = potion.getRequirements();
   
-    for(Integer id : ingredientIDs) {
+    for(int id : ingredientIDs) {
       if(!player.hasItem(id)) {
         view.display("Sorry, you do not have all the required ingredients\n");
         return;
       }
     }
-    for(Integer id : ingredientIDs) {
+    for(int id : ingredientIDs) {
       player.removeItem(id);
     }
     player.obtainItem(potion);

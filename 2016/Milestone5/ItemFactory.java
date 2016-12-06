@@ -6,23 +6,43 @@
 
 public class ItemFactory {
 
-	public static final int[] FACTORY_ITEMS = { 101, 102, 103, 105, 106, 108, 109, 110};
+	// These are the ID values of all the items the
+	// factory is able to create
+	public static final int WOLFS_BANE      = 101;
+	public static final int UNICORN_HAIR    = 102;
+	public static final int STUDENTS_TEARS  = 103;
+	public static final int EEL_EYE         = 104;
+	public static final int NIGHT_SHADE     = 105;
+	public static final int DRAGON_SCALE    = 106;
+	public static final int HIPSTER_COFFEE  = 107;
+	public static final int MOUNTIE_PRIDE   = 108;
+
+	public static final int[] FACTORY_ITEMS = {
+		WOLFS_BANE,
+		UNICORN_HAIR,
+		STUDENTS_TEARS,
+		EEL_EYE,
+		NIGHT_SHADE,
+		DRAGON_SCALE,
+		HIPSTER_COFFEE,
+		MOUNTIE_PRIDE
+	};
 
 	// Create an Item by ID
 	public Item createItemById(int id) {
 		switch(id) {
-			case 101: return createWolfsbane();
-			case 102: return createUnicornHair();
-			case 103: return createStudentsTears();
-		//	case 104: return createPotionOne();
-			case 105: return createEelEye();
-			case 106: return createNightShade();
-		//	case 107: return createPotionTwo();
-			case 108: return createDragonScale();
-			case 109: return createHipsterCoffee();
-			case 110: return createMountiePride();
-		//	case 111: return createPotionThree();
+
+			case WOLFS_BANE: return createWolfsbane();
+			case UNICORN_HAIR: return createUnicornHair();
+			case STUDENTS_TEARS: return createStudentsTears();
+			case EEL_EYE: return createEelEye();
+			case NIGHT_SHADE: return createNightShade();
+			case DRAGON_SCALE: return createDragonScale();
+			case HIPSTER_COFFEE: return createHipsterCoffee();
+			case MOUNTIE_PRIDE: return createMountiePride();
+
 			default: return null;
+
 		}
 	}
 

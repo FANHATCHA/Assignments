@@ -87,6 +87,12 @@ public class Player {
     return null;
   }
 
+  // remove an item from the player's inventory
+  public Item removeItem(Item item) {
+    if (item == null) return null;
+    return removeItem(item.getID());
+  }
+
   // Sell a specific item
   public Item sellItem(int itemId) {
     Item item = inv.getItem(itemId);
@@ -94,18 +100,6 @@ public class Player {
     obtainMoney(itemValue);
     removeItem(itemId);
     return item;
-  }
-
-  // Sell all the items the player has
-  public int sellAllItems() {
-
-    int total = 0;
-    for (Integer itemID : getItems()) {
-      Item item = sellItem(itemID);
-      total += item.getItemValue();
-    }
-    return total;
-
   }
 
   // Return true/false on whether the user has an item

@@ -35,7 +35,6 @@ public class Inventory implements Iterable <Item> {
     for (Item item : newItems) {
       if (item != null) {
         items.add(item);
-        // inventoryMap.put(item.getID(), item);
       }
     }
   }

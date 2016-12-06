@@ -1,23 +1,31 @@
+/**
+ * @author William Fiset, Drew Chaboyer
+ * Object Oriented Design - COMP 3721
+ * Tick Attack milestone #5
+ **/
+
 import java.util.*;
 
 public class PotionTwo extends Item implements IPotion {
 
-  private ArrayList<Integer> requiredIngredientIDs;
-  
+  private static final int POTION_ID = 97;
+  private static final int MONEY_BOOST = 5000;
+
+  private static int[] requiredIngredientIDs = {
+    ItemFactory.EEL_EYE,
+    ItemFactory.NIGHT_SHADE
+  };  
+
   public PotionTwo() {
-    super(107, "Potion 2", "This potion boosts your money, it requires Potion 1, Eel's Eye, and NightShade.\n");
-    requiredIngredientIDs = new ArrayList<Integer>();
-    requiredIngredientIDs.add(104);
-    requiredIngredientIDs.add(105);
-    requiredIngredientIDs.add(106);
+    super(POTION_ID, "Potion 2", "This potion boosts your money, it requires Potion 1, Eel's Eye, and NightShade.\n");
   }
 
-  public ArrayList<Integer> getRequirements() {
+  public int [] getRequirements() {
     return requiredIngredientIDs;
   }
 
   public void usePotion(Player player) {
-    player.obtainMoney(5000);
+    player.obtainMoney(MONEY_BOOST);
   }
 }
 

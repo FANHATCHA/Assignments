@@ -1,8 +1,8 @@
-/*
- * @author William Fiset, Jonathan Whitaker
- * Tick Attack milestone #3
+/**
+ * @author William Fiset, Drew Chaboyer
  * Object Oriented Design - COMP 3721
- */
+ * Tick Attack milestone #5
+ **/
 
 import static org.junit.Assert.*;
 import org.junit.*;
@@ -67,10 +67,59 @@ public class InventoryTests {
 
   }
 
+  // Test adding multiple items to the inventory
+  // Also test removing multiple items from the inventory
   @Test public void testAddingMultipleItems() {
 
     Inventory inv = new Inventory();
-    // Item item1 = 
+    
+    inv.add(item1,item1,item1);
+    assertEquals(inv.size(), 3);
+    inv.remove(item1.getID());
+    inv.remove(item1.getID());
+    inv.remove(item1.getID());
+
+    assertEquals(inv.size(), 0);
+
+    inv.add(item1, item2, item3, item4, item5);
+    assertEquals(inv.size(), 5);
+    inv.remove(item1.getID());
+    inv.remove(item2.getID());
+    inv.remove(item3.getID());
+    inv.remove(item4.getID());
+    inv.remove(item5.getID());
+
+    assertEquals(inv.size(), 0);
+
+  }
+
+  // Test getting names from ID numbers
+  @Test public void testGetNameFromID() {
+
+    Inventory inv = new Inventory();
+
+    inv.add(item1, item2, item3, item4, item5, item6);
+    inv.add(item1, item2, item3, item4, item5, item6);
+    inv.add(item1, item2, item3, item4, item5, item6);
+    inv.add(item1, item2, item3, item4, item5, item6);
+
+    String name = inv.getItemNameFromID( item1.getID() );
+    assertEquals( name, item1.getName() );
+
+    name = inv.getItemNameFromID( item2.getID() );
+    assertEquals( name, item2.getName() );
+
+    name = inv.getItemNameFromID( item3.getID() );
+    assertEquals( name, item3.getName() );
+    
+    name = inv.getItemNameFromID( item4.getID() );
+    assertEquals( name, item4.getName() );
+    
+    name = inv.getItemNameFromID( item5.getID() );
+    assertEquals( name, item5.getName() );
+    
+    name = inv.getItemNameFromID( item6.getID() );
+    assertEquals( name, item6.getName() );
 
   }
 

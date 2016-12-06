@@ -36,7 +36,7 @@ public class Item implements Comparable <Item> {
   }
 
   public Item(int id, String itemName, String description) {
-    this( rand.nextInt(250*(id+1)), id, itemName, description );
+    this( rand.nextInt(1000), id, itemName, description );
   }
 
   public String getDescription() {
