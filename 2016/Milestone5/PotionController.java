@@ -81,7 +81,7 @@ public class PotionController {
       Collections.sort( potions, (x,y) -> (Integer.compare(x.getID(), y.getID())));
 
       for (Item item : potions)
-        headerView.display(potion1.getName() + "\n");
+        headerView.display(item.getName() + "\n");
 
       headerView.display("Enter '1' to consume potion one,\n");
       headerView.display("Enter '2' to consume potion two,\n");
