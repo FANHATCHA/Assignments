@@ -10,25 +10,37 @@ import org.junit.*;
 
 public class FactoryTests {
 
-  // ItemFactory factory;// = new ItemFactory()
+  ItemFactory factory;
+  Item item1, item2, item3, item4, item5;
+  Item item6, item7, item8, item9, item10, item11;
 
-  // @Before
+  @Before public void reset() {
+    factory = new ItemFactory();
+  }
+
+  @Test public void testItemCreation() {
+
+    item1 = factory.createWolfsbane();
+    item2 = factory.createUnicornHair();
+    item3 = factory.createStudentsTears();
+    item4 = factory.createPotionOne();
+    item5 = factory.createEelEye();
+    item6 = factory.createNightShade();
+    item7 = factory.createPotionTwo();
+    item8 = factory.createDragonScale();
+    item9 = factory.createHipsterCoffee();
+    item10 = factory.createMountiePride();
+    item11 = factory.createPotionThree();
+
+  }
 
   // Test getting names from ID numbers
-  @Test public void testGetNameFromID() {
+  @Test public void testCreationWithID() {
 
-    // item1 = factory.createWolfsbane();
-    // item2 = factory.createUnicornHair();
-    // item3 = factory.createStudentsTears();
-    // item4 = factory.createPotionOne();
-    // item5 = factory.createEelEye();
-    // item6 = factory.createNightShade();
-    // item7 = factory.createPotionTwo();
-    // item8 = factory.createDragonScale();
-    // item9 = factory.createHipsterCoffee();
-    // item10 = factory.createMountiePride();
-    // item11 = factory.createPotion3();
-
+    for (int id : ItemFactory.FACTORY_ITEMS ) {
+      Item item = factory.createItemById(id);
+      assertNotNull(item);
+    }
 
   }
 
