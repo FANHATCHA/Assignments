@@ -13,6 +13,7 @@ public class GameController {
   private QuestController questController;
   private InventoryController inventoryController;
   private ShopController shopController;
+  private RecipeController recipeController;
   private int numQuestCompleted = 0;
 
   private static final int TICK_DAMAGE = -175;
@@ -27,6 +28,7 @@ public class GameController {
     questController = new QuestController(player);
     inventoryController = new InventoryController(player);
     shopController = new ShopController(player);
+    recipeController = new RecipeController(player);
     view = new View();
     headerView = new HeaderView(view, "MENU: ");
     inputView = new HeaderView(view, "ENTER QUEST ID: ");
@@ -96,6 +98,10 @@ public class GameController {
     } else if ( command.equals("tickcheck") ) {
 
       doTickCheck();
+
+    } else if (command.equals("recipes") || command.equals("recipe")) {
+      
+      recipeController.invoke();
 
     } else if ( command.equals("shop") ) {
 
@@ -203,6 +209,7 @@ public class GameController {
     headerView.display("'tickcheck'      - perform a tickcheck (Do this after every quest!)\n");
     headerView.display("'quests'         - display and select a quest you wish to do\n");
     headerView.display("'shop'           - Go to the shop and buy and sell Items\n");
+    headerView.display("'recipes'        - Use your potions recipe book to craft potions\n");
 
   }
 

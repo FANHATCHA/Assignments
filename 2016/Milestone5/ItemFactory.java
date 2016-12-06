@@ -13,8 +13,8 @@ public class ItemFactory {
 		return new Item(103, "Students' Tears", "An ingredient for potion 1");
 	}
 	
-	public Item createPotionOne() {
-		return new Item(104, "Potion 1", "[INSERT DESCRIPTION HERE]");
+	public PotionOne createPotionOne() {
+		return new PotionOne();
 	}
 	
 	public Item createEelEye() {
@@ -25,8 +25,8 @@ public class ItemFactory {
 		return new Item(106, "Nightshade", "An ingredient for Potion 2");
 	}
 	
-	public Item createPotionTwo() {
-		return new Item(107, "Potion 2", "[INSERT DESCRIPTION HERE");
+	public PotionTwo createPotionTwo() {
+		return new PotionTwo();
 	}
 	
 	public Item createDragonScale() {
@@ -41,8 +41,8 @@ public class ItemFactory {
 		return new Item(110, "Mountie Pride, at least we're not Acadia", "An ingredient for Potion 3");
 	}
 	
-	public Item createPotion3() {
-		return new Item(111, "Potion 3", "[INSERT DESCRIPTION HERE");
+	public PotionThree createPotionThree() {
+		return new PotionThree();
 	}
 	
 }
