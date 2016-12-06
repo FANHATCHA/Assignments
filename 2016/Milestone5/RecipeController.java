@@ -56,7 +56,7 @@ public class RecipeController {
     } else {
       removeIngredients(ingredients);
       player.obtainTempItem(potion);
-      headerView.display("Congratz! You successfully crafted the potion!\n");
+      headerView.display("Congrats! You successfully crafted the potion!\n");
       headerView.display("Your potion will become available once you complete your next quest.\n");
 
     }
@@ -70,7 +70,7 @@ public class RecipeController {
 
     headerView.display("There are three potions in this game!\n");
     headerView.display("Potion 1 Description:\n");
-    headerView.display( potion1.getDescription());
+    headerView.display(potion1.getDescription());
     headerView.display("Potion 2 Description:\n");
     headerView.display(potion2.getDescription());
     headerView.display("Potion 3 Description:\n");

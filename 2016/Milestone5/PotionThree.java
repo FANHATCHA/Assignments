@@ -10,8 +10,7 @@ public class PotionThree extends Item implements IPotion {
   private static int[] requiredIngredientIDs = {
     ItemFactory.DRAGON_SCALE,
     ItemFactory.HIPSTER_COFFEE,
-    ItemFactory.MOUNTIE_PRIDE,
-    PotionTwo.POTION_ID
+    ItemFactory.MOUNTIE_PRIDE
   };
 
   public PotionThree() {
