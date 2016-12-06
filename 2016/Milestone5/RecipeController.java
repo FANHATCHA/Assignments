@@ -47,6 +47,7 @@ public class RecipeController {
     } else {
       removeIngredients(ingredients);
       player.obtainItem(potion);
+      headerView.display("Congratz! You successfully crafted the potion!\n");
     }
 
   }
@@ -54,7 +55,7 @@ public class RecipeController {
   public void invoke() {
 
     view.display("\n\nWELCOME TO THE RECIPE BOOK!\n\n");
-    
+
     headerView.display("There are three potions in this game!\n");
     headerView.display("Potion 1 Description:\n");
     headerView.display( potion1.getDescription());

@@ -43,7 +43,7 @@ public class ShopController {
     try {
 
       boolean foundId = false;
-      Integer id = Integer.parseInt(userInput);
+      Integer id = Integer.parseInt(userInput) + 100;
 
       for (Item shopItem : SHOP_ITEMS) {
         if (shopItem.getID() == id) {
@@ -82,7 +82,7 @@ public class ShopController {
     headerView.display("The shop currently contains the following items:\n");
     for (int i = 0; i < SHOP_ITEMS.length; i++) {
       Item item = SHOP_ITEMS[i];
-      view.display("%d) %s - %d$ - %s\n", item.getID(), item.getName(), item.getItemValue(), item.getDescription());
+      view.display("%d) %s - %d$ - %s\n", item.getID() % 100, item.getName(), item.getItemValue(), item.getDescription());
     }
 
   }

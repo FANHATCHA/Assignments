@@ -10,6 +10,7 @@ public interface IPotion {
 
   public int [] getRequirements();
   public void usePotion(Player player);
+  public String effectDescription();
 
 }
   

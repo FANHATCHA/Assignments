@@ -47,15 +47,15 @@ public class ItemFactory {
 	}
 
 	public Item createWolfsbane() {
-		return new Item(101, "Wolfsbane", "An ingredient for potion 1");
+		return new Item(WOLFS_BANE, "Wolfsbane", "An ingredient for potion 1");
 	}
 	
 	public Item createUnicornHair() {
-		return new Item(102, "Unicorn Hair", "An ingredient for potion 1");
+		return new Item(UNICORN_HAIR, "Unicorn Hair", "An ingredient for potion 1");
 	}
 	
 	public Item createStudentsTears() {
-		return new Item(103, "Students' Tears", "An ingredient for potion 1");
+		return new Item(STUDENTS_TEARS, "Students' Tears", "An ingredient for potion 1");
 	}
 	
 	public PotionOne createPotionOne() {
@@ -63,11 +63,11 @@ public class ItemFactory {
 	}
 	
 	public Item createEelEye() {
-		return new Item(105, "Eel's Eye", "An ingredient for Potion 2");
+		return new Item(EEL_EYE, "Eel's Eye", "An ingredient for Potion 2");
 	}
 	
 	public Item createNightShade() {
-		return new Item(106, "Nightshade", "An ingredient for Potion 2");
+		return new Item(NIGHT_SHADE, "Nightshade", "An ingredient for Potion 2");
 	}
 	
 	public PotionTwo createPotionTwo() {
@@ -75,15 +75,15 @@ public class ItemFactory {
 	}
 	
 	public Item createDragonScale() {
-		return new Item(108, "Dragon Scale", "An ingredient for Potion 3");
+		return new Item(DRAGON_SCALE, "Dragon Scale", "An ingredient for Potion 3");
 	}
 	
 	public Item createHipsterCoffee() {
-		return new Item(109, "Hipster Coffee", "An ingredient for Potion 3");
+		return new Item(HIPSTER_COFFEE, "Hipster Coffee", "An ingredient for Potion 3");
 	}
 	
 	public Item createMountiePride() {
-		return new Item(110, "Mountie Pride", "An ingredient for Potion 3");
+		return new Item(MOUNTIE_PRIDE, "Mountie Pride", "An ingredient for Potion 3");
 	}
 	
 	public PotionThree createPotionThree() {

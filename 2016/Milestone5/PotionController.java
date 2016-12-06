@@ -37,12 +37,14 @@ public class PotionController {
     if(player.hasItem(potion.getID())) {
       pot.usePotion(player);
       player.removeItem(potion.getID());
+      headerView.display( pot.effectDescription()  + "\n");
     } else {
       view.display("Sorry, you do not possess that potion.\n");
     }
 
   }
 
+  // Determine if an item is a potion
   private boolean isPotion(Item item) {
     int id = item.getID();
     return id == potion1.getID() || id == potion2.getID() || id == potion3.getID();
