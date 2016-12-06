@@ -10,11 +10,12 @@ public class PotionThree extends Item implements IPotion {
   private static int[] requiredIngredientIDs = {
     ItemFactory.DRAGON_SCALE,
     ItemFactory.HIPSTER_COFFEE,
-    ItemFactory.MOUNTIE_PRIDE
+    ItemFactory.MOUNTIE_PRIDE,
+    PotionTwo.POTION_ID
   };
 
   public PotionThree() {
-    super(POTION_ID, "Potion 3", "This potion boosts your health and money, it requires Dragon Scale, Hipster Coffe, and Mountie Pride\n");
+    super(POTION_ID, "Potion 3", "This potion boosts your health and money, it requires Dragon Scale, Hipster Coffee, Mountie Pride and Potion Two\n");
   }
 
   @Override public int [] getRequirements() {
