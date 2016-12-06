@@ -48,6 +48,8 @@ public class RecipeController {
       removeIngredients(ingredients);
       player.obtainTempItem(potion);
       headerView.display("Congratz! You successfully crafted the potion!\n");
+      headerView.display("Your potion will become available once you complete your next quest.\n");
+
     }
 
   }

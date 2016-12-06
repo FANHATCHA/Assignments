@@ -8,7 +8,7 @@
 import static org.junit.Assert.*;
 import org.junit.*;
 
-public class InventoryTests {
+public class FactoryTests {
 
   // ItemFactory factory;// = new ItemFactory()
 

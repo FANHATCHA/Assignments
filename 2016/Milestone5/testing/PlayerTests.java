@@ -37,6 +37,19 @@ public class PlayerTests {
     
   }
 
+  @Test public void testGettingPotions() {
+
+    Player p = new Player();
+    PotionOne p1 = new PotionOne();
+
+    assertEquals(p.getItemCount(),0);
+    p.obtainTempItem(p1);
+    assertEquals(p.getItemCount(),0);
+    p.transferPotions();
+    assertEquals(p.getItemCount(),1);
+
+
+  }
 
   @Test public void testItemsAquiring() {
     

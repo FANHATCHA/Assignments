@@ -27,7 +27,7 @@ public class InventoryTests {
     item8 = factory.createDragonScale();
     item9 = factory.createHipsterCoffee();
     item10 = factory.createMountiePride();
-    item11 = factory.createPotion3();
+    item11 = factory.createPotionThree();
 
   }
 
