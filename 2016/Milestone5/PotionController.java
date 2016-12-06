@@ -4,6 +4,8 @@
  * Tick Attack milestone #5
  **/
 
+import java.util.*;
+
 public class PotionController {
 
   private Player player;
@@ -25,71 +27,80 @@ public class PotionController {
 
     this.player = player;
     view = new View();
-    headerView = new HeaderView(view, "Potion Menu: ");
+    headerView = new HeaderView(view, "POTION MENU: ");
 
   }
 
-  public void usePotionOne() {
-    if(player.hasItem(potion1.getID())) {
-      PotionOne pot1 = (PotionOne) player.removeItem(potion1);
-      pot1.usePotion(player);
+  public void usePotion(Item potion) {
+
+    IPotion pot = (IPotion) potion;
+    if(player.hasItem(potion.getID())) {
+      pot.usePotion(player);
+      player.removeItem(potion.getID());
     } else {
       view.display("Sorry, you do not possess that potion.\n");
     }
+
   }
 
-  public void usePotionTwo() {
-    if(player.hasItem(potion2.getID())) {
-      PotionTwo pot2 = (PotionTwo) player.removeItem(potion2);
-      pot2.usePotion(player);
-    } else {
-      view.display("Sorry, you do not possess that potion.\n");
-    }
+  private boolean isPotion(Item item) {
+    int id = item.getID();
+    return id == potion1.getID() || id == potion2.getID() || id == potion3.getID();
   }
 
-  public void usePotionThree() {
-    if(player.hasItem(potion3.getID())) {
-      PotionThree pot3 = (PotionThree) player.removeItem(potion3);
-      pot3.usePotion(player);
-    } else {
-      view.display("Sorry, you do not possess that potion.\n");
+  public List <Item> getPotions() {
+
+    int count = 0;
+    List <Item> potions = new LinkedList<>();
+    Iterator <Item> iter = player.getItemsIterator();
+
+    while(iter.hasNext()) {
+      Item item = iter.next();
+      if (isPotion(item)) potions.add(item);
     }
+
+    return potions;
   }
 
   public void invoke() {
     
     view.display("\n\nWELCOME TO THE POTION USE MENU!\n\n");
-    headerView.display("You currently have the following potions in your inventory:\n");
-    
-    if (player.hasItem(potion1.getID())) {
-      headerView.display(potion1.getName() + "\n");
-    }
+    List <Item> potions = getPotions();
 
-    if (player.hasItem(potion2.getID())) {
-      headerView.display(potion2.getName() + "\n");
-    }
+    if (potions.size() == 0) {
 
-    if (player.hasItem(potion3.getID())) {
-      headerView.display(potion3.getName() + "\n");
-    }
+      headerView.display("You do not have any potions\n");
 
-    headerView.display("Enter '1' to consume potion one,\n");
-    headerView.display("'2' to consume potion two,\n");
-    headerView.display("'3' to consume potion three,\n");
-    headerView.display("or 'exit' to return to the main menu\n");
-
-    String userInput = view.readLine();
-
-    if(userInput.equals("1")) {
-      usePotionOne();  
-    } else if(userInput.equals("2")) {
-      usePotionTwo();
-    } else if(userInput.equals("3")) {
-      usePotionThree();
-    } else if(userInput.equals("exit")) {
-      return;
     } else {
-      headerView.display("This is not a valid potion option\n");
+
+      headerView.display("You currently have the following potions in your inventory:\n");
+      
+      // Sort potions by ID
+      Collections.sort( potions, (x,y) -> (Integer.compare(x.getID(), y.getID())));
+
+      for (Item item : potions)
+        headerView.display(potion1.getName() + "\n");
+
+      headerView.display("Enter '1' to consume potion one,\n");
+      headerView.display("Enter '2' to consume potion two,\n");
+      headerView.display("Enter '3' to consume potion three,\n");
+      headerView.display("or 'exit' to return to the main menu\n");
+
+      String userInput = view.readLine();
+
+      if(userInput.equals("1")) {
+        usePotion(potion1);  
+      } else if(userInput.equals("2")) {
+        usePotion(potion2);
+      } else if(userInput.equals("3")) {
+        usePotion(potion3);
+      } else if(userInput.equals("exit")) {
+        return;
+      } else {
+        headerView.display("This is not a valid potion option\n");
+      }
+
     }
+
   }
 }  

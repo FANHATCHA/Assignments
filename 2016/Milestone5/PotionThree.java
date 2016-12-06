@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class PotionThree extends Item implements IPotion {
 
-  private static final int POTION_ID = 98;
+  private static final int POTION_ID = 97;
 
   private static final int HEALTH_BOOST = 500;
   private static final int MONEY_BOOST = 1000;

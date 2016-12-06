@@ -6,7 +6,7 @@
 
 public class PotionOne extends Item implements IPotion {
 
-  private static final int POTION_ID = 99;
+  private static final int POTION_ID = 95;
   private static final int HEALTH_BOOST = 250;
 
   private static int[] requiredIngredientIDs = {

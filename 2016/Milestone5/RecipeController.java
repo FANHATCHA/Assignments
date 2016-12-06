@@ -1,9 +1,21 @@
 import java.util.*;
 
 public class RecipeController {
+
   private IView view, headerView;
   private Player player;
-  private ItemFactory factory;
+
+  private static ItemFactory factory;
+  private static PotionOne potion1;
+  private static PotionTwo potion2;
+  private static PotionThree potion3;
+  
+  static {
+    factory = new ItemFactory();
+    potion1 = factory.createPotionOne();
+    potion2 = factory.createPotionTwo();
+    potion3 = factory.createPotionThree();    
+  }
 
   public RecipeController(Player player) {
     this.player = player;
@@ -42,19 +54,20 @@ public class RecipeController {
   public void invoke() {
 
     view.display("\n\nWELCOME TO THE RECIPE BOOK!\n\n");
+    
     headerView.display("There are three potions in this game!\n");
     headerView.display("Potion 1 Description:\n");
-    headerView.display(factory.createPotionOne().getDescription());
+    headerView.display( potion1.getDescription());
     headerView.display("Potion 2 Description:\n");
-    headerView.display(factory.createPotionTwo().getDescription());
+    headerView.display(potion2.getDescription());
     headerView.display("Potion 3 Description:\n");
-    headerView.display(factory.createPotionThree().getDescription());
+    headerView.display(potion3.getDescription());
     headerView.display("Enter '1' to craft potion one,\n");
-    headerView.display("'2' to craft potion two,\n");
-    headerView.display("'3' to craft potion three,\n");
+    headerView.display("Enter '2' to craft potion two,\n");
+    headerView.display("Enter '3' to craft potion three,\n");
     headerView.display("or 'exit' to return to the main menu\n:");
 
-    String userInput = view.readLine();
+    String userInput = view.readLine().trim();
     
     if(userInput.equals("1")) {
       craftPotion( factory.createPotionOne() );
