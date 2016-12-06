@@ -13,6 +13,7 @@ public class InventoryTests {
   Item item1, item2, item3, item4, item5;
   Item item6, item7, item8, item9, item10, item11;
 
+  // Create all the items a-new before each test
   @Before public void reset() {
 
     factory = new ItemFactory();

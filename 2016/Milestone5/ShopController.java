@@ -12,6 +12,8 @@ public class ShopController {
   private HeaderView headerView;
   private View view;
 
+  private static int ID_OFFSET = 100;
+
   private static Item [] SHOP_ITEMS;
   private static ItemFactory factory;
 
@@ -28,6 +30,7 @@ public class ShopController {
     headerView = new HeaderView(view, "SHOP: ");
   }
 
+  // Buy items from the shop!
   public void buyItems() {
 
     displayShopItems();
@@ -43,7 +46,7 @@ public class ShopController {
     try {
 
       boolean foundId = false;
-      Integer id = Integer.parseInt(userInput) + 100;
+      Integer id = Integer.parseInt(userInput) + ID_OFFSET;
 
       for (Item shopItem : SHOP_ITEMS) {
         if (shopItem.getID() == id) {
@@ -82,11 +85,12 @@ public class ShopController {
     headerView.display("The shop currently contains the following items:\n");
     for (int i = 0; i < SHOP_ITEMS.length; i++) {
       Item item = SHOP_ITEMS[i];
-      view.display("%d) %s - %d$ - %s\n", item.getID() % 100, item.getName(), item.getItemValue(), item.getDescription());
+      view.display("%d) %s - %d$ - %s\n", item.getID() % ID_OFFSET, item.getName(), item.getItemValue(), item.getDescription());
     }
 
   }
 
+  // Sell items in the inventory
   public void sellItems() {
 
     int sellId = -1;
@@ -119,8 +123,10 @@ public class ShopController {
 
   }
 
+  // Start this controller
   public void invoke() {
 
+    // Welcome the user to the shop and ask them if they want to by or sell
     view.display("\n\nWELCOME TO THE SHOP!\n\n");
     view.display("Would you like to buy or sell items?\n");
     headerView.display("buy/sell: ");

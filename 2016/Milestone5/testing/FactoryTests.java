@@ -18,6 +18,7 @@ public class FactoryTests {
     factory = new ItemFactory();
   }
 
+  // Test creating all the items in out factory!
   @Test public void testItemCreation() {
 
     item1 = factory.createWolfsbane();

@@ -37,6 +37,7 @@ public class PlayerTests {
     
   }
 
+  // Test potion inventory tranfer
   @Test public void testGettingPotions() {
 
     Player p = new Player();

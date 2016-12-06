@@ -1,3 +1,9 @@
+/**
+ * @author William Fiset, Drew Chaboyer
+ * Object Oriented Design - COMP 3721
+ * Tick Attack milestone #5
+ **/
+
 import java.util.*;
 
 public class RecipeController {
@@ -17,6 +23,7 @@ public class RecipeController {
     potion3 = factory.createPotionThree();    
   }
 
+  // Init class
   public RecipeController(Player player) {
     this.player = player;
     factory = new ItemFactory();
@@ -24,6 +31,7 @@ public class RecipeController {
     headerView = new HeaderView(view, "Recipe Book: ");
   }
 
+  // Check if we have all the ingredients to create this potion
   private boolean canCreatePotion(int[] ingredients) {
     for (int ingredient : ingredients)
       if (!player.hasItem(ingredient))
@@ -31,12 +39,13 @@ public class RecipeController {
     return true;
   }
 
+  // Remove all the ingredients
   private void removeIngredients(int[] ingredients) {
     for (int ingredient : ingredients)
       player.removeItem(ingredient);
   }
 
-
+  // Create the potion!
   public void craftPotion( Item potion ) {
 
     IPotion _potion = (IPotion) potion;
@@ -54,6 +63,7 @@ public class RecipeController {
 
   }
 
+  // Kickstart this controller
   public void invoke() {
 
     view.display("\n\nWELCOME TO THE RECIPE BOOK!\n\n");
@@ -84,4 +94,5 @@ public class RecipeController {
       headerView.display("This is not a valid potion option.\n");
     }
   }
+
 }
