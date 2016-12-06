@@ -83,7 +83,7 @@ public class ItemFactory {
 	}
 	
 	public Item createMountiePride() {
-		return new Item(110, "Mountie Pride", "Mountie Pride tops Acadia Pride. This is an ingredient for Potion 3");
+		return new Item(110, "Mountie Pride", "An ingredient for Potion 3");
 	}
 	
 	public PotionThree createPotionThree() {

@@ -36,7 +36,7 @@ public class ShopController {
     headerView.display("Please enter the id of the item you wish to buy or 'exit'\n");
     view.display("Item id: ");
 
-    String userInput = headerView.readLine().toLowerCase().replaceAll("[\"')]", "").trim();
+    String userInput = view.readLine().toLowerCase().replaceAll("[\"')]", "").trim();
   
     if (userInput.equals("exit")) return;
 
@@ -82,8 +82,7 @@ public class ShopController {
     headerView.display("The shop currently contains the following items:\n");
     for (int i = 0; i < SHOP_ITEMS.length; i++) {
       Item item = SHOP_ITEMS[i];
-      view.display("%d) %s - %d$\n", item.getID(), item.getName(), item.getItemValue());
-      view.display("Description: " + item.getDescription() + "\n\n");
+      view.display("%d) %s - %d$ - %s\n", item.getID(), item.getName(), item.getItemValue(), item.getDescription());
     }
 
   }
@@ -92,7 +91,7 @@ public class ShopController {
 
     int sellId = -1;
     Item item = null;
-    
+
     headerView.display("You currently have the following items in your inventory:\n");
     view.display(player.getInventoryStr());
 

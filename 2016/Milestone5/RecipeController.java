@@ -12,53 +12,31 @@ public class RecipeController {
     headerView = new HeaderView(view, "Recipe Book: ");
   }
 
-  public void craftPotionOne() {
-    PotionOne potion = factory.createPotionOne();
-
-    int [] ingredientIDs = potion.getRequirements();
-    for(int id : ingredientIDs) {
-      if(!player.hasItem(id)) {
-        view.display("Sorry, you do not have all the required ingredients\n");
-        return;
-      }
-    }
-    for(Integer id : ingredientIDs)
-      player.removeItem(id);
-    player.obtainItem(potion);
+  private boolean canCreatePotion(int[] ingredients) {
+    for (int ingredient : ingredients)
+      if (!player.hasItem(ingredient))
+        return false;
+    return true;
   }
 
-  public void craftPotionTwo() {
-
-    PotionTwo potion = factory.createPotionTwo();
-
-    int [] ingredientIDs = potion.getRequirements();
-    for(int id : ingredientIDs) {
-      if(!player.hasItem(id)) {
-        view.display("Sorry, you do not have all the required ingredients\n");
-        return;
-      }
-    }
-    for(int id : ingredientIDs)
-      player.removeItem(id);
-    player.obtainItem(potion);
- 
+  private void removeIngredients(int[] ingredients) {
+    for (int ingredient : ingredients)
+      player.removeItem(ingredient);
   }
 
-  public void craftPotionThree() {
 
-    PotionThree potion = factory.createPotionThree();
-    int [] ingredientIDs = potion.getRequirements();
-  
-    for(int id : ingredientIDs) {
-      if(!player.hasItem(id)) {
-        view.display("Sorry, you do not have all the required ingredients\n");
-        return;
-      }
+  public void craftPotion( Item potion ) {
+
+    IPotion _potion = (IPotion) potion;
+    int [] ingredients = _potion.getRequirements();
+
+    if (!canCreatePotion(ingredients)) {
+      view.display("Sorry, you do not have all the required ingredients\n");
+    } else {
+      removeIngredients(ingredients);
+      player.obtainItem(potion);
     }
-    for(int id : ingredientIDs) {
-      player.removeItem(id);
-    }
-    player.obtainItem(potion);
+
   }
 
   public void invoke() {
@@ -75,20 +53,18 @@ public class RecipeController {
     headerView.display("'2' to craft potion two,\n");
     headerView.display("'3' to craft potion three,\n");
     headerView.display("or 'exit' to return to the main menu\n:");
+
     String userInput = view.readLine();
+    
     if(userInput.equals("1")) {
-      craftPotionOne();
-    }
-    else if(userInput.equals("2")) {
-      craftPotionTwo();
-    } 
-    else if(userInput.equals("3")) {
-      craftPotionThree();
-    }
-    else if(userInput.equals("exit")) {
+      craftPotion( factory.createPotionOne() );
+    } else if(userInput.equals("2")) {
+      craftPotion( factory.createPotionTwo() );
+    } else if(userInput.equals("3")) {
+      craftPotion( factory.createPotionThree() );
+    } else if(userInput.equals("exit")) {
       return;
-    }
-    else {
+    } else {
       headerView.display("This is not a valid potion option.\n");
     }
   }
