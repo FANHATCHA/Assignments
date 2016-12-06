@@ -12,6 +12,8 @@ public class GameController {
   private IView view, headerView, inputView, announcementView;
   private QuestController questController;
   private ShopController shopController;
+  private RecipeController recipeController;
+  private PotionController potionController;
   private int numQuestsCompleted = 0;
 
   private static final int TICK_DAMAGE = -175;
@@ -25,6 +27,8 @@ public class GameController {
     player = new Player();
     questController = new QuestController(player);
     shopController = new ShopController(player);
+    recipeController = new RecipeController(player);
+    potionController = new PotionController(player);
     view = new View();
     headerView = new HeaderView(view, "MENU: ");
     inputView = new HeaderView(view, "ENTER QUEST ID: ");
@@ -90,6 +94,14 @@ public class GameController {
     } else if ( command.equals("tickcheck") ) {
 
       doTickCheck();
+
+    } else if (command.equals("recipes") || command.equals("recipe")) {
+    	
+    	recipeController.invoke();
+    	
+    } else if (command.equals("potions") || command.equals("potion")) {
+
+      potionController.invoke();
 
     } else if ( command.equals("shop") ) {
 
@@ -203,6 +215,8 @@ public class GameController {
     headerView.display("'tickcheck'      - perform a tickcheck (Do this after every quest!)\n");
     headerView.display("'quests'         - display and select a quest you wish to do\n");
     headerView.display("'shop/buy/sell'  - Go to the shop and buy and sell Items\n");
+    headerView.display("'recipes'        - Use your potions recipe book to create potions\n");
+    headerView.display("'potions'        - Consume the potions you have crafted\n");
     headerView.display("'reset'          - reset game\n");
 
   }
