@@ -46,7 +46,7 @@ public class RecipeController {
       view.display("Sorry, you do not have all the required ingredients\n");
     } else {
       removeIngredients(ingredients);
-      player.obtainItem(potion);
+      player.obtainTempItem(potion);
       headerView.display("Congratz! You successfully crafted the potion!\n");
     }
 

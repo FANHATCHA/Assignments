@@ -149,10 +149,11 @@ public class GameController {
             checkForTicks();
             if (player.isAlive()) {
               questController.playQuest(id);
+              player.transferPotions();
               numQuestsCompleted++;
             } else return;
             player.setDidTickCheck(false);
-
+            
           } else {
             headerView.display("Quest " +id+ " has not been unlocked yet!\n");
             headerView.display("\n");

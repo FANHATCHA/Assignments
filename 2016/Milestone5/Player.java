@@ -15,7 +15,16 @@ public class Player {
   private long money;
   private boolean hasTicks = true;
   private boolean didTickCheck = false;;
+  
+  // This is the regular inventory that holds items
   private Inventory inv = new Inventory();
+
+  // This inventory holds potions for when they are created
+  // but not yet obtainable by players since a certain amount of time
+  // needs to pass before the player can access them. Once the
+  // player can indeed access the potions they get transfered 
+  // to the permanent inventory.
+  private Inventory tmp_potion_inv = new Inventory();
 
   public Player() {
     this.health = MAX_HEALTH;
@@ -74,6 +83,23 @@ public class Player {
 
   public Iterator <Item> getItemsIterator () {
     return inv.iterator();
+  }
+
+  // Transfer potions from the temporary inventory 
+  // to the permanent inventory 
+  public void transferPotions() {
+
+    Iterator <Item> tmp_potion_iter = tmp_potion_inv.iterator();
+    while(tmp_potion_iter.hasNext()) {
+      Item item = tmp_potion_iter.next();
+      obtainItem(item);
+    }
+    tmp_potion_inv.clear();
+
+  }
+
+  public void obtainTempItem(Item item) {
+    tmp_potion_inv.add(item);
   }
 
   public void obtainItem(Item item) {

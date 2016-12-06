@@ -18,6 +18,10 @@ public class Inventory implements Iterable <Item> {
     return false;
   }
 
+  public void clear() {
+    items.clear();
+  }
+
   public boolean contains(Item item) {
     if (item == null) return false;
     return contains(item.getID());
@@ -62,7 +66,7 @@ public class Inventory implements Iterable <Item> {
   }  
 
 
-  // An inventory can act as an iterable when you use a for-each loop
+  // An inventory can act as an iterable 
   @Override public Iterator <Item> iterator() {
     return new Iterator <Item> () {
       
