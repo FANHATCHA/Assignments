@@ -18,6 +18,11 @@ public class Inventory implements Iterable <Item> {
     return false;
   }
 
+  public boolean contains(Item item) {
+    if (item == null) return false;
+    return contains(item.getID());
+  }
+
   public Item getItem(int itemID) {
     for (Item item : items)
       if (item.getID() == itemID)
